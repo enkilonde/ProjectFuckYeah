@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1375,14 +1375,14 @@ MonoBehaviour:
   accel_minSensitivity: 0.1
   horizontalRot_minSensitivity: 0.415
   boost_minSensitivity: 0.2
-  currentFwdSpeed: 0
+  currentFwdSpeed: 113.621574
   minAltMaxSpeed: 138
   maxAltMaxSpeed: 84
   minAltAccel: 20
   maxAltAccel: 12
   deccelNoInput: 5
-  maxLacetSpeed: 70
-  lacetTransitionSpeed: 100
+  maxLacetSpeed: 100
+  lacetTransitionSpeed: 250
   currentAltitude: 0
   minAltitude: 0
   maxAltitude: 91
@@ -1393,9 +1393,9 @@ MonoBehaviour:
   maxLateralSpeed: 50
   lateralBoostAcceleration: 40
   useInertyFeature: 1
-  inertieVector: {x: 0, y: 0, z: 1}
-  transitionAngleDelta: 45
-  airResistance: 50
+  inertieVector: {x: 0.93247175, y: 0, z: -0.33603486}
+  transitionAngleDelta: 2
+  airResistance: 30
   transitionTimeToReflectVector: 0.2
   maxSpeedRebondForce: 10
   minSpeedRebondForce: 2
@@ -1405,7 +1405,7 @@ MonoBehaviour:
   I_lateralBoostRight: 0
   I_lateralPlayerRot: 0
   _verticalBoostInput: 0
-  lateralBoostDirInput: {x: 1, y: 0, z: 0}
+  lateralBoostDirInput: {x: -0, y: 0, z: -0}
   I_verticalBoost: 0
 --- !u!1001 &314620325
 Prefab:

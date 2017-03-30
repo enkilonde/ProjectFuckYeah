@@ -135,7 +135,13 @@ public class CharacterV3 : MonoBehaviour {
 		if(useInertyFeature)
 		{
 			if(I_accel > accel_minSensitivity)
-			inertieVector = Vector3.RotateTowards(inertieVector, transform.forward, Mathf.Deg2Rad * transitionAngleDelta * Time.deltaTime, 1);
+            {
+                //inertieVector = Vector3.RotateTowards(inertieVector, transform.forward, Mathf.Deg2Rad * transitionAngleDelta * Time.deltaTime, 1);
+
+                // enki : faire un lerp entre 'inertieVector' et 'transform.forward', le RotateTowards n'a pas toujours l'effet désiré.
+                inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.deltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
+            }
+
 
 			dirToMove = inertieVector * currentFwdSpeed;
 
@@ -170,15 +176,15 @@ public class CharacterV3 : MonoBehaviour {
 		//Apply
 		float _verticalBoost = currentVerticalForce;
 		dirToMove.y += _verticalBoost;
-		//Clamp
-//		dirToMove.y = Mathf.Clamp(currentAltitude + dirToMove.y, minAltitude, maxAltitude);
+        //Clamp
+        //		dirToMove.y = Mathf.Clamp(currentAltitude + dirToMove.y, minAltitude, maxAltitude);
 
 
-		//Apply
-		myController.Move(dirToMove * Time.deltaTime);
+        //Apply
+        myController.Move(dirToMove * Time.deltaTime);
 
-		//Update Altitude
-		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, minAltitude, maxAltitude), transform.position.z);	//C'est dégeu TODO rendre ça plus propre et + smooth (avec des repbonds et tout)
+        //Update Altitude
+        transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, minAltitude, maxAltitude), transform.position.z);	//C'est dégeu TODO rendre ça plus propre et + smooth (avec des repbonds et tout)
 		currentAltitude = transform.position.y;
 
 	}
@@ -189,7 +195,7 @@ public class CharacterV3 : MonoBehaviour {
 		I_accel = 0f;
 		I_accel = Input.GetAxis(controlerSet.Get_AccelAxisInput());
 //		print(Input.GetAxis(controlerSet.Get_AccelAxisInput()));
-		print(I_accel);
+		//print("Player " + transform.parent.GetComponentInChildren<ControllerV3>().playerNumero + ", speed : " + I_accel);
 		if(I_accel > accel_minSensitivity)
 		{
 //			print("Accelerate Axis");
