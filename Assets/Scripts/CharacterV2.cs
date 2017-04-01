@@ -53,7 +53,7 @@ public class CharacterV2 : MonoBehaviour {
 	private float max_YawRotSpeed = 100f;
 	#endregion
 
-	private ControllerScriptV1 controllerScriptInstance;
+//	private ControllerScriptV1 controllerScriptInstance;
 	private CharacterController myController;
 	private float current_PitchRotSpeed = 0f;
 	private float current_YawRotSpeed = 0f;
@@ -68,7 +68,7 @@ public class CharacterV2 : MonoBehaviour {
 
 
 	void OnEnable () {
-		controllerScriptInstance = transform.parent.GetComponentInChildren<ControllerScriptV1>();
+//		controllerScriptInstance = transform.parent.GetComponentInChildren<ControllerScriptV1>();
 		myController = GetComponent<CharacterController>();
 
 		currentMoveSpeed = initialSpeed;

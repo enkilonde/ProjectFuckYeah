@@ -38,9 +38,9 @@ public class GenerateTiledProcedural : MonoBehaviour {
 
 		Vector3 playerPos = player.position;
 
-		float distX = currentBlock.position.x - playerPos.x;
-		float distY = currentBlock.position.y - playerPos.y;
-		float distZ = currentBlock.position.z - playerPos.z;
+//		float distX = currentBlock.position.x - playerPos.x;
+//		float distY = currentBlock.position.y - playerPos.y;
+//		float distZ = currentBlock.position.z - playerPos.z;
 
 		//TODO TODO create
 	}

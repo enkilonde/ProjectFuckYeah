@@ -30,7 +30,7 @@ public class CharacterV3 : MonoBehaviour {
 	public float deccelNoInput = 5f;
 	//Lacet
 	private float currentLacetSpeed = 0f;
-	private float currentMaxLacetSpeed = 5f;
+//	private float currentMaxLacetSpeed = 5f;
 	public float maxLacetSpeed = 70f;
 	public float lacetTransitionSpeed = 45f;
 	//Altitude
@@ -90,9 +90,18 @@ public class CharacterV3 : MonoBehaviour {
 	void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
 		myController = GetComponent<CharacterController>();
+
+		//Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
+		currentFwdSpeed = 0f;
+		currentAltitude = 0f;
+		currentVerticalForce = 0f;
+		inertieVector = transform.forward;
 	}
 	
 	void Update () {
+
+		if(GameState.curGameState != GameState.AllGameStates.Play)
+			return;
 
 		//Reinitialise
 		Vector3 dirToMove = Vector3.zero;

@@ -77,7 +77,7 @@ namespace RobToolsNameSpace
 		/// <param name="newMax">New max.</param>
 		public static float MappedRangeValue(float value, float oldMin, float oldMax, float newMin, float newMax)
 		{
-			float oldRange = oldMax - oldMin;
+			//float oldRange = oldMax - oldMin;
 			float newRange = newMax - newMin;
 			return (((value - oldMin) * newRange) / newRange) + newMin;
 		}
