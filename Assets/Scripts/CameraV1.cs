@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class CameraV1 : MonoBehaviour {
 
+	public static Transform targetToLock;
+
 	public enum camModes
 	{
 		InstantFollow,
 		LockedBehind,
-		AssCombat
+		AssCombat,
+		Hunter,
+		Target
 	}
 
 	public camModes CameraType = camModes.LockedBehind;
@@ -22,6 +26,7 @@ public class CameraV1 : MonoBehaviour {
 	public float maxVerticalRotAngle = 45f;
 	[Header("Angle par seconde de rotation de la camera autour du joueur selon son input")]
 	public float camInputSpeed = 10f;
+
 
 	Vector3 initialPosition;
 	Transform character;
@@ -45,6 +50,12 @@ public class CameraV1 : MonoBehaviour {
 			transform.parent = character;
 			break;
 		case camModes.AssCombat:
+			transform.parent = character;
+			break;
+		case camModes.Hunter:
+			transform.parent = character;
+			break;
+		case camModes.Target:
 			transform.parent = character;
 			break;
 		}
@@ -88,6 +99,26 @@ public class CameraV1 : MonoBehaviour {
 			Vector3 _eulerCamRot = new Vector3(Mathf.Lerp(0, maxVerticalRotAngle, Mathf.Abs(verticalCamRot)) * verticalCamRot, Mathf.Lerp(0, maxLateralRotAngle, Mathf.Abs(lateralCamRot)) * lateralCamRot, 0);
 			transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(_eulerCamRot), camInputSpeed * Time.deltaTime);
 //			Debug.DrawRay(new Vector3(transform.position.x,transform.position.y,transform.position.z - 2f), new Vector3(lateralCamRot, verticalCamRot, 0f), Color.red);
+			break;
+		case camModes.Hunter:
+			if(Input.GetButton(controler.Get_LockOnInput()))
+			{
+				transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetToLock.position - transform.position, Vector3.up), camInputSpeed * Time.deltaTime);
+			}
+			else
+			{
+				transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.identity, camInputSpeed * Time.deltaTime);
+			}
+			break;
+		case camModes.Target:
+			if(Input.GetButton(controler.Get_LockOnInput()))
+			{
+				transform.rotation = Quaternion.LookRotation(-transform.parent.forward, Vector3.up);
+			}
+			else
+			{
+				transform.localRotation = Quaternion.identity;
+			}
 			break;
 		}
 

@@ -18,6 +18,9 @@ public class FlagCollision : MonoBehaviour {
 			transform.localPosition = Vector3.zero;
 			colInfo.transform.GetComponent<ChasingState>().BecomeTarget();
 			onAPlayer = true;
+			colInfo.transform.GetComponentInChildren<CameraV1>().CameraType = CameraV1.camModes.Target;
+			CameraV1.targetToLock = colInfo.transform;
+
 		}
 	}
 

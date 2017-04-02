@@ -18,12 +18,14 @@ public class GameState : MonoBehaviour {
 	private PlayersManager playersManagerScript;
 	private SceneCam sceneCamScript;
 	private GenerateFlag FlagGenerator;
+	private UpdateUIStatePlayers uiManager;
 
 	void Awake()
 	{
 		playersManagerScript = GetComponent<PlayersManager>();
 		sceneCamScript = GetComponentInChildren<SceneCam>();
 		FlagGenerator = GameObject.Find("FlagPoint").GetComponent<GenerateFlag>();
+		uiManager = GameObject.Find("UI").GetComponent<UpdateUIStatePlayers>();
 	}
 
 	void Update()
@@ -35,10 +37,12 @@ public class GameState : MonoBehaviour {
 			{
 				//Self actualisation
 				curGameState = AllGameStates.PresentLevel;
-				//Generate players
-				playersManagerScript.GeneratePlayers();
 				//Generate Flag
 				FlagGenerator.GenerateTheFlag();
+				//Generate players
+				playersManagerScript.GeneratePlayers();
+				//Set the target for everyone
+				CameraV1.targetToLock = GameObject.Find("Flag").transform;
 			}
 			break;
 		case AllGameStates.PresentLevel:
@@ -47,7 +51,11 @@ public class GameState : MonoBehaviour {
 			if(sceneCamScript.introTravellingOver)
 			{
 				curGameState = AllGameStates.CountDown;
+				//Disable cinematic camera
 				sceneCamScript.gameObject.SetActive(false);
+				//generate UI
+				uiManager.SetCanvasForEachPlayer(playersManagerScript.playerAmount.Length);
+				uiManager.allowedToUpdateUi = true;
 			}
 			break;
 		case AllGameStates.CountDown:

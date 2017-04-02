@@ -45,7 +45,8 @@ public class ControllerV3 : MonoBehaviour {
 //	public AllButtons shockWave = AllButtons.XBOX_X;
 	public AllButtons LatLeftBoost = AllButtons.LB;
 	public AllButtons LatRightBoost = AllButtons.RB;
-
+	public AllButtons lockOn = AllButtons.StickD;
+	public AllButtons forwardBoost = AllButtons.XBOX_A;
 
 	#region Axes
 	public string Get_HorizontalRotInput ()
@@ -94,6 +95,14 @@ public class ControllerV3 : MonoBehaviour {
 	public string Get_LatRightBoostInput()
 	{
 		return playerNumero.ToString() + "_" + LatRightBoost.ToString();
+	}
+	public string Get_LockOnInput()
+	{
+		return playerNumero.ToString() + "_" + lockOn.ToString();
+	}
+	public string Get_ForwardBoostInput()
+	{
+		return playerNumero.ToString() + "_" + forwardBoost.ToString();
 	}
 	#endregion
 

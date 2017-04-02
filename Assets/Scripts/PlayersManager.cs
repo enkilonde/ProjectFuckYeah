@@ -10,6 +10,12 @@ public class PlayersManager : MonoBehaviour {
 
 //	private Transform playersStartingPointsContainer;
 	private Transform playersContainer;
+	private UpdateUIStatePlayers uiManager;
+
+	void Start()
+	{
+		uiManager = GameObject.Find("UI").GetComponent<UpdateUIStatePlayers>();
+	}
 
 	/// <summary>
 	/// Generates the players.
@@ -23,11 +29,16 @@ public class PlayersManager : MonoBehaviour {
 //			Debug.Log("No starting point located. No players will be generated. Please, go add players in the Manager gameobject");
 //		}
 
+		//Combien de canvas on doit générer
+		uiManager.SetPlayerCanvasArrayLength(playerAmount.Length);
+
 		for (int i = 0; i < playerAmount.Length; i++) {
 
 			GameObject _lastInstance = (GameObject)Instantiate(playerPrefab, playerAmount[i].position, playerAmount[i].rotation, playersContainer);
 			_lastInstance.name = _lastInstance.name + "_" + (i + 1).ToString();
 			_lastInstance.GetComponentInChildren<ControllerV3>().playerNumero = i + 1;
+			_lastInstance.GetComponentInChildren<TextMesh>().text = (i + 1).ToString();
+			uiManager.SetPlayerCanvasId(i, _lastInstance.GetComponentInChildren<CharacterV3>());
 			CameraSettup(playerAmount.Length, _lastInstance, i);
 		}
 	}
@@ -82,16 +93,16 @@ public class PlayersManager : MonoBehaviour {
 			switch(id)
 			{
 			case 1:
-				_cam.rect = new Rect(0f,0f, 0.5f, 0.5f);
-				break;
-			case 2:
-				_cam.rect = new Rect(0.5f,0f, 0.5f, 0.5f);
-				break;
-			case 3:
 				_cam.rect = new Rect(0f,0.5f, 0.5f, 0.5f);
 				break;
-			case 4:
+			case 2:
 				_cam.rect = new Rect(0.5f,0.5f, 0.5f, 0.5f);
+				break;
+			case 3:
+				_cam.rect = new Rect(0f,0f, 0.5f, 0.5f);
+				break;
+			case 4:
+				_cam.rect = new Rect(0.5f,0f, 0.5f, 0.5f);
 				break;
 			}
 			break;

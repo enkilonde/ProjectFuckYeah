@@ -20,7 +20,7 @@ public class CharacterV3 : MonoBehaviour {
 	private ControllerV3 controlerSet;
 	private CharacterController myController;
 	//Speed
-	[HideInInspector]
+//	[HideInInspector]
 	public float currentFwdSpeed = 0f;
 	private float currentMaxSpeed = 0f;
 	public float minAltMaxSpeed = 140f;
@@ -71,6 +71,21 @@ public class CharacterV3 : MonoBehaviour {
 	[Range(0f, 100f)]
 	public float deccelHitPorcent = 50f;
 
+	//Boost
+	[HideInInspector]
+	public float currentBoostAmountLeft = 0f;
+	public float timeToReload = 10f;
+	public float timeToUnload = 5f;
+	private float currentMaxSpeedWhileBoost = 0f;
+	public float maxSpeedwhileBoost = 200f;
+	public float maxBoostSpeed_DeccelerationSpeed = 50f;	//Amount of speed plafond lost in a second
+	public float accelerationSpeedWhileBoost = 2f;
+
+	//Score
+	private ChasingState chasingStateScript;
+	[HideInInspector]
+	public float currentScore = 0f;
+	public float speedScoreGain = 100f;
 	//Inputs translated as floats
 	[HideInInspector]
 	public float I_accel = 0f;
@@ -86,16 +101,23 @@ public class CharacterV3 : MonoBehaviour {
 	public Vector3 lateralBoostDirInput = Vector3.right;
 	[HideInInspector]
 	public float I_verticalBoost = 0f;
+//	[HideInInspector]
+	public float I_forwardBoost = 0f;
+
+	private float _t_boostLoad = 0f;
+
 
 	void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
 		myController = GetComponent<CharacterController>();
+		chasingStateScript = GetComponent<ChasingState>();
 
 		//Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
 		currentFwdSpeed = 0f;
 		currentAltitude = 0f;
 		currentVerticalForce = 0f;
 		inertieVector = transform.forward;
+		currentScore = 0f;
 	}
 	
 	void Update () {
@@ -103,9 +125,18 @@ public class CharacterV3 : MonoBehaviour {
 		if(GameState.curGameState != GameState.AllGameStates.Play)
 			return;
 
+		//Maj score
+		if(chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target)
+			currentScore += Time.deltaTime * speedScoreGain;
+
 		//Reinitialise
 		Vector3 dirToMove = Vector3.zero;
 
+		//Boost
+		currentBoostAmountLeft = RobToolsClass.GetNormalizedValue(_t_boostLoad, 0f, 1f); //Maj la jauge
+		I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;	//Reste t'il du boost dans la jauge
+		_t_boostLoad += ((I_forwardBoost > 0.5f) ? -1f/timeToUnload : 1f/timeToReload) * Time.deltaTime;	//Are the jauge being used ?
+		_t_boostLoad = Mathf.Clamp(_t_boostLoad, -1f, 1f);
 		//Update Hit wall transition
 		if(hitSomething)
 			UpdateObstacleHitTranslation();
@@ -123,11 +154,33 @@ public class CharacterV3 : MonoBehaviour {
 		//Accel en fonction de l'altitude
 		float _t_alti = RobToolsClass.GetNormalizedValue(currentAltitude, minAltitude, maxAltitude);
 		float _tempAccel = Mathf.Lerp(minAltAccel, maxAltAccel, _t_alti);
-		_tempAccel *= I_accel;		//Multiply by input
+		if(I_forwardBoost > 0.5f)
+		{
+			//If boost, we accelerate fully
+			_tempAccel *= accelerationSpeedWhileBoost;
+		}
+		else
+		{
+			//If not boost, so we use the accelerate basic axis
+			_tempAccel *= I_accel;		//Multiply by input
+		}
 		//MaxSpeed
 		currentMaxSpeed = Mathf.Lerp(minAltMaxSpeed, maxAltMaxSpeed, _t_alti);
+		//MaxSpeedBoost
+		if(I_forwardBoost > 0.5f)
+		{
+			//If input, the max absolute speed is instantanely equal to a new maximum
+			currentMaxSpeedWhileBoost = maxSpeedwhileBoost;
+			print("boooost !!!");
+		}
+		else
+		{
+			//If no more boost, smoothly decrease max speed
+			currentMaxSpeedWhileBoost = Mathf.MoveTowards(currentMaxSpeedWhileBoost, 0f, maxBoostSpeed_DeccelerationSpeed * Time.deltaTime);	
+		}
+		currentMaxSpeed	+= currentMaxSpeedWhileBoost;
 		//CurrentSpeed
-		if(I_accel != 0f)	//if input : accelerate
+		if(I_accel != 0f || I_forwardBoost != 0f)	//if input : accelerate
 			currentFwdSpeed += _tempAccel * Time.deltaTime;
 		else				//else : decelerate
 			currentFwdSpeed -= deccelNoInput * Time.deltaTime;
@@ -143,7 +196,7 @@ public class CharacterV3 : MonoBehaviour {
 		dirToMove = Vector3.zero;
 		if(useInertyFeature)
 		{
-			if(I_accel > accel_minSensitivity)
+			if(I_accel > accel_minSensitivity || I_forwardBoost > 0.5f)
             {
                 //inertieVector = Vector3.RotateTowards(inertieVector, transform.forward, Mathf.Deg2Rad * transitionAngleDelta * Time.deltaTime, 1);
 
@@ -202,11 +255,13 @@ public class CharacterV3 : MonoBehaviour {
 	{
 		#region accelerate
 		I_accel = 0f;
-		I_accel = Input.GetAxis(controlerSet.Get_AccelAxisInput());
+//		I_accel = Input.GetAxis("1_RT_Axis");	//Meme entrer la valeur en dur ça ne marche pas en build oO
+		I_accel = Input.GetAxisRaw(controlerSet.Get_AccelAxisInput());
 //		print(Input.GetAxis(controlerSet.Get_AccelAxisInput()));
 		//print("Player " + transform.parent.GetComponentInChildren<ControllerV3>().playerNumero + ", speed : " + I_accel);
 		if(I_accel > accel_minSensitivity)
 		{
+//			print(controlerSet.Get_AccelAxisInput());
 //			print("Accelerate Axis");
 		}
 //		if(Input.GetButton(controlerSet.Get_AccelButtonInput()))
@@ -221,7 +276,7 @@ public class CharacterV3 : MonoBehaviour {
 //			print("SchockWave");
 //		}
 
-		I_lateralPlayerRot = Input.GetAxis(controlerSet.Get_HorizontalRotInput());
+		I_lateralPlayerRot = Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput());
 		if(Mathf.Abs(I_lateralPlayerRot) > horizontalRot_minSensitivity)
 		{
 //			print("Lateral rot" + I_lateralPlayerRot);
@@ -264,7 +319,11 @@ public class CharacterV3 : MonoBehaviour {
 		#endregion
 
 		#region vertical boost
-		I_verticalBoost = Input.GetAxis(controlerSet.Get_VertcalBoostAxisInput());
+		I_verticalBoost = Input.GetAxisRaw(controlerSet.Get_VertcalBoostAxisInput());
+		#endregion
+
+		#region boost
+		I_forwardBoost = Input.GetButton(controlerSet.Get_ForwardBoostInput()) ? 1f : 0f;
 		#endregion
 	}
 
