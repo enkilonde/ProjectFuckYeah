@@ -445,6 +445,9 @@ MonoBehaviour:
   - {fileID: 1560030116}
   - {fileID: 270392020}
   - {fileID: 697828269}
+  scoreToWin: 500
+  partyOver: 0
+  winningPlayer: {fileID: 0}
 --- !u!4 &1304049951
 Transform:
   m_ObjectHideFlags: 0
@@ -518,9 +521,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camState: 0
-  introTravellingOver: 0
+  travellingOver: 0
   travellingPosA: {x: 0, y: 2, z: 10}
   travellingPosB: {x: -0, y: 2, z: -10}
+  playerToFocus: {fileID: 0}
 --- !u!81 &1361953714
 AudioListener:
   m_ObjectHideFlags: 0

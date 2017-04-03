@@ -187,6 +187,7 @@ GameObject:
   - component: {fileID: 4806479699875408}
   - component: {fileID: 114585856911005238}
   - component: {fileID: 114916362478855208}
+  - component: {fileID: 114157095749878668}
   m_Layer: 8
   m_Name: Graphs
   m_TagString: Untagged
@@ -474,7 +475,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1551641013594974}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.22, y: 0.14, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4062844028852936}
@@ -645,7 +646,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1265121069334044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.514107, y: 19.86498, z: -16.545485}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4380115936412442}
@@ -1234,6 +1235,19 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
+--- !u!114 &114157095749878668
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1525846947689796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a505515f261c1429726feaaedc114e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  materialOfTheHunter: {fileID: 2100000, guid: 254cd15807b44e9408ef9420f5f7c50a, type: 2}
+  materialOfTheTarget: {fileID: 2100000, guid: 0dc6bf79e73acb94dbd357c55e141649, type: 2}
 --- !u!114 &114230292364022984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1266,6 +1280,7 @@ MonoBehaviour:
   LatLeftBoost: 4
   LatRightBoost: 5
   lockOn: 7
+  forwardBoost: 0
 --- !u!114 &114487239242104572
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1445,7 +1460,7 @@ MonoBehaviour:
   maxFallingSpeed: 58
   verticalSpeedTransitionSpeed: 200
   maxLateralSpeed: 50
-  lateralBoostAcceleration: 40
+  straffUseInerty: 1
   useInertyFeature: 1
   inertieVector: {x: 0.93247175, y: 0, z: -0.33603486}
   transitionAngleDelta: 2
@@ -1454,6 +1469,17 @@ MonoBehaviour:
   maxSpeedRebondForce: 10
   minSpeedRebondForce: 2
   deccelHitPorcent: 50
+  currentBoostAmountLeft: 0
+  timeToReload: 10
+  timeToUnload: 5
+  maxSpeedwhileBoost: 200
+  maxBoostSpeed_DeccelerationSpeed: 50
+  accelerationSpeedWhileBoost: 2
+  minBoostRecquired: 20
+  lateralBoostAcceleration: 25
+  lateralBoostDecceleration: 25
+  currentScore: 0
+  speedScoreGain: 100
   I_accel: 0
   I_lateralBoostLeft: 0
   I_lateralBoostRight: 0
@@ -1461,6 +1487,8 @@ MonoBehaviour:
   _verticalBoostInput: 0
   lateralBoostDirInput: {x: -0, y: 0, z: -0}
   I_verticalBoost: 0
+  I_forwardBoost: 0
+  timeTowaitForBoostReload: 2
 --- !u!114 &114995566128830746
 MonoBehaviour:
   m_ObjectHideFlags: 1

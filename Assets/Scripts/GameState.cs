@@ -43,16 +43,18 @@ public class GameState : MonoBehaviour {
 				playersManagerScript.GeneratePlayers();
 				//Set the target for everyone
 				CameraV1.targetToLock = GameObject.Find("Flag").transform;
+				//Do the traveling
+				sceneCamScript.camState = SceneCam.CamBehaviorStates.DoIntroTravelling;
 			}
 			break;
 		case AllGameStates.PresentLevel:
-			//Do the traveling
-			sceneCamScript.camState = SceneCam.CamBehaviorStates.DoIntroTravelling;
-			if(sceneCamScript.introTravellingOver)
+			if(sceneCamScript.travellingOver)
 			{
 				curGameState = AllGameStates.CountDown;
 				//Disable cinematic camera
 				sceneCamScript.gameObject.SetActive(false);
+				sceneCamScript.travellingOver = false;
+				sceneCamScript.camState = SceneCam.CamBehaviorStates.Static;
 				//generate UI
 				uiManager.SetCanvasForEachPlayer(playersManagerScript.playerAmount.Length);
 				uiManager.allowedToUpdateUi = true;
@@ -63,8 +65,22 @@ public class GameState : MonoBehaviour {
 			break;
 		case AllGameStates.Play:
 			//Vehicules autorisés à bouger
+			if(playersManagerScript.partyOver)
+			{
+				curGameState = AllGameStates.EndGameAnimation;
+				//Do the traveling
+				sceneCamScript.gameObject.SetActive(true);
+				sceneCamScript.playerToFocus = playersManagerScript.winningPlayer;
+				sceneCamScript.camState = SceneCam.CamBehaviorStates.DoOutroTravelling;
+				//Slow motion
+				Time.timeScale = 0.75f;
+			}
 			break;
 		case AllGameStates.EndGameAnimation:
+			if(sceneCamScript.travellingOver)
+			{
+				print("Over !");
+			}
 			break;
 		case AllGameStates.Score:
 			break;

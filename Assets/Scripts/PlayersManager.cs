@@ -8,9 +8,17 @@ public class PlayersManager : MonoBehaviour {
 	[Header("Attention, ne pas supprimer les gameObjects référencés dans ce tableau")]
 	public Transform[] playerAmount = new Transform[4];
 
+	public int scoreToWin = 50000;
+
 //	private Transform playersStartingPointsContainer;
 	private Transform playersContainer;
 	private UpdateUIStatePlayers uiManager;
+	private CharacterV3[] cv3Datas;
+
+	[HideInInspector]
+	public bool partyOver = false;
+	[HideInInspector]
+	public Transform winningPlayer = null;
 
 	void Start()
 	{
@@ -32,6 +40,9 @@ public class PlayersManager : MonoBehaviour {
 		//Combien de canvas on doit générer
 		uiManager.SetPlayerCanvasArrayLength(playerAmount.Length);
 
+		//Combien de joueurs dois je enregistrer de coté
+		cv3Datas = new CharacterV3[playerAmount.Length];
+
 		for (int i = 0; i < playerAmount.Length; i++) {
 
 			GameObject _lastInstance = (GameObject)Instantiate(playerPrefab, playerAmount[i].position, playerAmount[i].rotation, playersContainer);
@@ -40,7 +51,26 @@ public class PlayersManager : MonoBehaviour {
 			_lastInstance.GetComponentInChildren<TextMesh>().text = (i + 1).ToString();
 			uiManager.SetPlayerCanvasId(i, _lastInstance.GetComponentInChildren<CharacterV3>());
 			CameraSettup(playerAmount.Length, _lastInstance, i);
+
+			cv3Datas[i] = _lastInstance.GetComponentInChildren<CharacterV3>();
 		}
+	}
+
+	void Update()
+	{
+
+		if(GameState.curGameState == GameState.AllGameStates.Play)
+		{
+			for (int i = 0; i < cv3Datas.Length; i++) {
+				if(Mathf.RoundToInt(cv3Datas[i].currentScore) > scoreToWin)
+				{
+					partyOver = true;
+					winningPlayer = cv3Datas[i].transform;
+				}
+			}
+		}
+			
+
 	}
 
 	/// <summary>

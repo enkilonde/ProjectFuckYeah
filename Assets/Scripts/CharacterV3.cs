@@ -28,11 +28,13 @@ public class CharacterV3 : MonoBehaviour {
 	public float minAltAccel = 20f;
 	public float maxAltAccel = 12f;
 	public float deccelNoInput = 5f;
+
 	//Lacet
 	private float currentLacetSpeed = 0f;
 //	private float currentMaxLacetSpeed = 5f;
 	public float maxLacetSpeed = 70f;
 	public float lacetTransitionSpeed = 45f;
+
 	//Altitude
 	[HideInInspector]
 	public float currentAltitude = 0f;
@@ -43,10 +45,11 @@ public class CharacterV3 : MonoBehaviour {
 	public float maxVerticalAscentionSpeed = 25f;
 	public float maxFallingSpeed = 10f;
 	public float verticalSpeedTransitionSpeed = 20f;
+
 	//Lateral boost
 	private float currentLateralSpeed = 0f;
 	public float maxLateralSpeed = 50f;
-	public float lateralBoostAcceleration = 40f;	//TODO marche pas
+	public bool straffUseInerty = true;
 
 	//Inertie
 	public bool useInertyFeature = true;
@@ -80,6 +83,9 @@ public class CharacterV3 : MonoBehaviour {
 	public float maxSpeedwhileBoost = 200f;
 	public float maxBoostSpeed_DeccelerationSpeed = 50f;	//Amount of speed plafond lost in a second
 	public float accelerationSpeedWhileBoost = 2f;
+	public float minBoostRecquired = 20f;	//en %
+	public float lateralBoostAcceleration = 25f;
+	public float lateralBoostDecceleration = 25f;
 
 	//Score
 	private ChasingState chasingStateScript;
@@ -105,7 +111,12 @@ public class CharacterV3 : MonoBehaviour {
 	public float I_forwardBoost = 0f;
 
 	private float _t_boostLoad = 0f;
+	private bool isInBoost = false;
+	private float currentBoostSpeed = 0f;
 
+	private float _lastLatoostDirUsed = 1f;
+
+	Vector3 lateralInertie;
 
 	void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
@@ -119,11 +130,11 @@ public class CharacterV3 : MonoBehaviour {
 		inertieVector = transform.forward;
 		currentScore = 0f;
 	}
-	
-	void Update () {
 
-		if(GameState.curGameState != GameState.AllGameStates.Play)
-			return;
+	private float noBoostTimer = 0f;
+	public float timeTowaitForBoostReload = 2f;
+
+	void Update () {
 
 		//Maj score
 		if(chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target)
@@ -133,16 +144,37 @@ public class CharacterV3 : MonoBehaviour {
 		Vector3 dirToMove = Vector3.zero;
 
 		//Boost
+
+		//Activation du boost
+//		if(!isInBoost)
+//		{
+//			noBoostTimer += Time.deltaTime;
+//			//BoostCooldown and enough boost left
+//			if(noBoostTimer > timeTowaitForBoostReload && currentBoostAmountLeft > 0.2f)
+//			{
+//				//Boost Input
+//				if(I_forwardBoost > 0.5f)
+//				{
+//					isInBoost = true;
+//					currentBoostSpeed = 20f;
+//					currentBoostAmountLeft -= 0.2f;
+//				}
+//				
+//			}
+//		}
+
 		currentBoostAmountLeft = RobToolsClass.GetNormalizedValue(_t_boostLoad, 0f, 1f); //Maj la jauge
 		I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;	//Reste t'il du boost dans la jauge
 		_t_boostLoad += ((I_forwardBoost > 0.5f) ? -1f/timeToUnload : 1f/timeToReload) * Time.deltaTime;	//Are the jauge being used ?
 		_t_boostLoad = Mathf.Clamp(_t_boostLoad, -1f, 1f);
+
+
 		//Update Hit wall transition
 		if(hitSomething)
 			UpdateObstacleHitTranslation();
 
-		//Check Inputs and assign all values in local floats to play with
-		CheckInputs();
+		if(GameState.curGameState == GameState.AllGameStates.Play)
+			CheckInputs();		//Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
 
 		//Rotate upon Input (LACET)
 		//Update rotation speed
@@ -171,7 +203,6 @@ public class CharacterV3 : MonoBehaviour {
 		{
 			//If input, the max absolute speed is instantanely equal to a new maximum
 			currentMaxSpeedWhileBoost = maxSpeedwhileBoost;
-			print("boooost !!!");
 		}
 		else
 		{
@@ -188,7 +219,6 @@ public class CharacterV3 : MonoBehaviour {
 		{
 			float dotIF = (-Vector3.Dot(inertieVector.normalized, transform.forward) + 1f) / 2f;
 			currentFwdSpeed -= (dotIF * airResistance) * Time.deltaTime;
-//			print("Dot " + dotIF);
 		}
 		currentFwdSpeed = Mathf.Clamp(currentFwdSpeed, 0f, currentMaxSpeed); //clamp
 
@@ -196,15 +226,15 @@ public class CharacterV3 : MonoBehaviour {
 		dirToMove = Vector3.zero;
 		if(useInertyFeature)
 		{
+			//Inertie
 			if(I_accel > accel_minSensitivity || I_forwardBoost > 0.5f)
             {
                 //inertieVector = Vector3.RotateTowards(inertieVector, transform.forward, Mathf.Deg2Rad * transitionAngleDelta * Time.deltaTime, 1);
 
                 // enki : faire un lerp entre 'inertieVector' et 'transform.forward', le RotateTowards n'a pas toujours l'effet désiré.
-                inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.deltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
+				inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.deltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
             }
-
-
+				
 			dirToMove = inertieVector * currentFwdSpeed;
 
 		}
@@ -214,12 +244,46 @@ public class CharacterV3 : MonoBehaviour {
 		}
 
 		//LateralBoost
-		lateralBoostDirInput = transform.right * (I_lateralBoostRight - I_lateralBoostLeft);
-//		currentLateralSpeed = Mathf.MoveTowards(currentLateralSpeed, maxLateralSpeed * -_lateralBoostDir.x, lateralBoostAcceleration * Time.deltaTime);	//TODO marche pas, corriger
-		//Vitesse
-		currentLateralSpeed = maxLateralSpeed;
-		//Apply
-		dirToMove += lateralBoostDirInput * currentLateralSpeed;
+		if(straffUseInerty)
+		{
+			//input
+//			lateralBoostDirInput.x = I_lateralBoostRight - I_lateralBoostLeft;
+			if(I_lateralBoostRight - I_lateralBoostLeft > 0.2f)
+			{
+				_lastLatoostDirUsed = 1f;
+				lateralBoostDirInput.x = 1f;
+			}
+			else if(I_lateralBoostRight - I_lateralBoostLeft < -0.2f)
+			{
+				_lastLatoostDirUsed = -1f;
+				lateralBoostDirInput.x = -1f;
+			}
+			else
+			{
+				lateralBoostDirInput.x = 0f;
+			}
+			//Vitesse
+			//CurrentSpeed
+//			currentLateralSpeed = maxLateralSpeed;
+			if(lateralBoostDirInput.x > 0.2f || lateralBoostDirInput.x < -0.2f)	//if input : accelerate
+				currentLateralSpeed += lateralBoostAcceleration * Time.deltaTime;
+			else				//else : decelerate
+				currentLateralSpeed -= lateralBoostDecceleration * Time.deltaTime;
+			currentLateralSpeed = Mathf.Clamp(currentLateralSpeed, 0f, maxLateralSpeed);
+			//apply
+			lateralInertie = (transform.right * _lastLatoostDirUsed);
+			dirToMove += lateralInertie * currentLateralSpeed;
+			Debug.DrawRay(transform.position, lateralInertie * currentLateralSpeed, Color.red);
+		}
+		else
+		{
+			//input
+			lateralBoostDirInput = transform.right * (I_lateralBoostRight - I_lateralBoostLeft);
+			//Vitesse
+			currentLateralSpeed = maxLateralSpeed;
+			//Apply
+			dirToMove += lateralBoostDirInput * currentLateralSpeed;
+		}
 
 		//Vertical boost/gravity
 		//Get Input value

@@ -65,7 +65,7 @@
 			Tags { "LightMode" = "Always" }
 			Cull Front
 			ZWrite Off	//ON = voir tout à travers
-			ZTest Always    
+			ZTest Always   
  
 			// you can choose what kind of blending mode you want for the outline
 			Blend SrcAlpha OneMinusSrcAlpha // Normal

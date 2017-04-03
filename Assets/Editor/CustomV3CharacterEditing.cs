@@ -47,6 +47,7 @@ public class CustomV3CharacterEditing : Editor {
 		EditorGUILayout.BeginVertical("Box");
 		EditorGUILayout.LabelField("Lateral boost", EditorStyles.boldLabel);
 		charaInstance.maxLateralSpeed = EditorGUILayout.Slider("Lateral boost speed", charaInstance.maxLateralSpeed, 0f, 500f);
+		charaInstance.straffUseInerty = EditorGUILayout.Toggle("Affect inerty", charaInstance.straffUseInerty);
 		EditorGUILayout.EndVertical();
 		#endregion
 
@@ -82,6 +83,9 @@ public class CustomV3CharacterEditing : Editor {
 		charaInstance.maxSpeedwhileBoost = EditorGUILayout.Slider("Max speed while boost (dist/sec)", charaInstance.maxSpeedwhileBoost, 1f, 400f);
 		charaInstance.maxBoostSpeed_DeccelerationSpeed = EditorGUILayout.FloatField("Max boost speed decceleration (/sec)", charaInstance.maxBoostSpeed_DeccelerationSpeed);
 		charaInstance.accelerationSpeedWhileBoost = EditorGUILayout.Slider("Acceleration speed while boost (multiplier)", charaInstance.accelerationSpeedWhileBoost, 0f, 20f);
+		charaInstance.minBoostRecquired = EditorGUILayout.Slider("Min Boost Recquired", charaInstance.minBoostRecquired, 0f, 100f);
+		charaInstance.lateralBoostAcceleration = EditorGUILayout.Slider("LateralBoostAcceleration", charaInstance.lateralBoostAcceleration, 0f,100f);
+		charaInstance.lateralBoostDecceleration = EditorGUILayout.Slider("LateralBoostDecceleration", charaInstance.lateralBoostDecceleration, 0f,100f);
 		EditorGUILayout.EndVertical();
 		#endregion
 
