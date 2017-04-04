@@ -17,6 +17,7 @@ public class SceneCam : MonoBehaviour {
 
 	public Vector3 travellingPosA = Vector3.forward * 10f;
 	public Vector3 travellingPosB = Vector3.forward * -4f;
+	public float timeToTravel = 5f;
 
 	[HideInInspector]
 	public Transform playerToFocus;
@@ -32,9 +33,10 @@ public class SceneCam : MonoBehaviour {
 		switch(camState)
 		{
 		case CamBehaviorStates.Static:
+			_t = 0f;
 			break;
 		case CamBehaviorStates.DoIntroTravelling:
-			Travelling(transform.position, travellingPosB);
+			Travelling(travellingPosA, travellingPosB);
 			break;
 		case CamBehaviorStates.DoOutroTravelling:
 			Travelling(playerToFocus.position + travellingPosA + Vector3.up, playerToFocus.position + travellingPosB + Vector3.up);
@@ -44,11 +46,22 @@ public class SceneCam : MonoBehaviour {
 
 	}
 
+	float _t = 0f;
+
 	void Travelling(Vector3 posA, Vector3 posB)
 	{
-		transform.position = Vector3.MoveTowards(transform.position, posB, 5f * Time.deltaTime);
-		if(Vector3.Distance(transform.position, posB) < 0.1f)
+//		transform.position = Vector3.MoveTowards(posA, posB, 5f * Time.deltaTime);
+//		if(Vector3.Distance(transform.position, posB) < 0.1f)
+//			travellingOver = true;
+
+		transform.position = Vector3.Lerp(posA, posB, _t);
+		_t += Time.deltaTime / timeToTravel;
+		if(_t >= 1f)
+		{
+			_t = 0f;
 			travellingOver = true;
+			camState = CamBehaviorStates.Static;
+		}
 	}
 
 

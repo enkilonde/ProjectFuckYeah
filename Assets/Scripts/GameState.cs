@@ -57,7 +57,6 @@ public class GameState : MonoBehaviour {
 				sceneCamScript.camState = SceneCam.CamBehaviorStates.Static;
 				//generate UI
 				uiManager.SetCanvasForEachPlayer(playersManagerScript.playerAmount.Length);
-				uiManager.allowedToUpdateUi = true;
 			}
 			break;
 		case AllGameStates.CountDown:
@@ -72,6 +71,7 @@ public class GameState : MonoBehaviour {
 				sceneCamScript.gameObject.SetActive(true);
 				sceneCamScript.playerToFocus = playersManagerScript.winningPlayer;
 				sceneCamScript.camState = SceneCam.CamBehaviorStates.DoOutroTravelling;
+//				sceneCamScript.transform.position = ;	//position de depart du travelling de fin
 				//Slow motion
 				Time.timeScale = 0.75f;
 			}

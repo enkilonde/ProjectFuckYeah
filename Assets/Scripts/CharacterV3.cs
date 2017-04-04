@@ -305,6 +305,10 @@ public class CharacterV3 : MonoBehaviour {
         //Clamp
         //		dirToMove.y = Mathf.Clamp(currentAltitude + dirToMove.y, minAltitude, maxAltitude);
 
+		//Explosion
+		dirToMove += explVector;
+		//Attenuate
+		explVector = Vector3.MoveTowards(explVector, Vector3.zero, 20f * Time.deltaTime);
 
         //Apply
         myController.Move(dirToMove * Time.deltaTime);
@@ -460,6 +464,21 @@ public class CharacterV3 : MonoBehaviour {
 		//Instantané
 //		inertieVector = _newInertyDirection;
 //		transform.forward = _newInertyDirection;
+	}
+
+	Vector3 explVector = Vector3.zero;
+
+	public void ImpulseInfluence(Vector3 _dirAndForce)
+	{
+		explVector = _dirAndForce;
+//		myController.Move(_dirAndForce * Time.deltaTime);
+//		print("imp");
+	}
+
+	public void RefillBoost()
+	{
+		currentBoostAmountLeft = 1f;
+		_t_boostLoad = 1f;
 	}
 
 }

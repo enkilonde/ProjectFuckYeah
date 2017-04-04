@@ -25,5 +25,10 @@ public class ChasingState : MonoBehaviour {
 		GraChaSta.SetGraphState(currentChaseState);
 	}
 		
-
+	public void BecomeHunter()
+	{
+		currentChaseState = ChaseStates.Hunter;
+		GraChaSta.SetGraphState(currentChaseState);
+		GetComponentInChildren<CameraV1>().CameraType = CameraV1.camModes.Hunter;
+	}
 }

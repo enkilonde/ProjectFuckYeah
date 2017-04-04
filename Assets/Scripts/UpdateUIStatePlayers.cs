@@ -8,13 +8,11 @@ public class UpdateUIStatePlayers : MonoBehaviour {
 
 	public GameObject canvasPrefab;
 
-	[HideInInspector]
-	public bool allowedToUpdateUi = false;
 	private PlayerAndCanvasLink[] playersData = new PlayerAndCanvasLink[4];
 
 	void Update () {
 
-		if(!allowedToUpdateUi)
+		if(GameState.curGameState != GameState.AllGameStates.Play)
 			return;
 
 		//Maj the ui for each player according to it's CharacterV3 script variables

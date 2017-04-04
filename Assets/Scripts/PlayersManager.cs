@@ -11,7 +11,7 @@ public class PlayersManager : MonoBehaviour {
 	public int scoreToWin = 50000;
 
 //	private Transform playersStartingPointsContainer;
-	private Transform playersContainer;
+	public static Transform playersContainer;
 	private UpdateUIStatePlayers uiManager;
 	private CharacterV3[] cv3Datas;
 
