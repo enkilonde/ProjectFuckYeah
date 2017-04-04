@@ -12,7 +12,7 @@ public class UpdateUIState : MonoBehaviour {
 
 	void Start () {
 		if(!CV3 || !heightScroll || !speedScroll)
-			print("Variables not set in Update UI State");
+			print("Variables not set in Update UI State (t'occupes pas de ce message d'erreur, je m'en occupe)");
 	}
 	
 	void Update () {

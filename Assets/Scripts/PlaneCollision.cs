@@ -7,13 +7,13 @@ public class PlaneCollision : MonoBehaviour {
 	[Header("Nb d'embraillages a perdre sur collision avec un element petit")]
 	public int embrayToLoss = 2;
 
-	Collider myCollider;
-	CharacterController myController;
+//	Collider myCollider;
+//	CharacterController myController;
 	CharacterV2 charaScript;
 
 	void OnEnable () {
-		myCollider = GetComponent<Collider>();
-		myController = GetComponent<CharacterController>();
+//		myCollider = GetComponent<Collider>();
+//		myController = GetComponent<CharacterController>();
 		charaScript = GetComponent<CharacterV2>();
 	}
 
