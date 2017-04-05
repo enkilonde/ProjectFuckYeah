@@ -80,6 +80,10 @@ public class GameState : MonoBehaviour {
 			if(sceneCamScript.travellingOver)
 			{
 				print("Over !");
+				//End Slow motion
+				Time.timeScale = 1f;
+				//SetUI score screen
+				uiManager.SetScoreScreen();
 			}
 			break;
 		case AllGameStates.Score:

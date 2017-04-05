@@ -198,6 +198,10 @@ Prefab:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1258084554727850, guid: 7d1cf55b7438f7041a5662303d19fe52, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 7d1cf55b7438f7041a5662303d19fe52, type: 2}
   m_IsPrefabParent: 0
@@ -457,6 +461,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasPrefab: {fileID: 1773558990522058, guid: 9783676e4ed058244b7fca758a733917,
+    type: 2}
+  scorePrefab: {fileID: 1258084554727850, guid: 7d1cf55b7438f7041a5662303d19fe52,
     type: 2}
 --- !u!1 &697828268
 GameObject:
