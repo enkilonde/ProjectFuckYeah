@@ -132,10 +132,17 @@ public class UpdateUIStatePlayers : MonoBehaviour {
 		playersData[id].boostScroll = _canvas.Find("BoostScrollBar").GetComponentInChildren<Scrollbar>();
 	}
 
+	public void DisablePlayersUICanvas()
+	{
+		for (int i = 0; i < playersData.Length; i++) {
+			playersData[i].heightScroll.transform.parent.gameObject.SetActive(false);
+		}
+	}
+
 	public void SetScoreScreen()
 	{
-		transform.Find("ScoreScreen").gameObject.SetActive(true);
-		Transform _scoreScreen = transform.Find("PlayersScores_Container");
+		transform.Find("Canvas/ScoreScreen").gameObject.SetActive(true);
+		Transform _scoreScreen = transform.Find("Canvas/ScoreScreen/PlayersScores_Container");
 
 		for (int i = 0; i < playersData.Length; i++) {
 

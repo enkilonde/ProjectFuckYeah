@@ -67,11 +67,15 @@ public class GameState : MonoBehaviour {
 			if(playersManagerScript.partyOver)
 			{
 				curGameState = AllGameStates.EndGameAnimation;
+				//Disable ui
+				uiManager.DisablePlayersUICanvas();
 				//Do the traveling
 				sceneCamScript.gameObject.SetActive(true);
 				sceneCamScript.playerToFocus = playersManagerScript.winningPlayer;
 				sceneCamScript.camState = SceneCam.CamBehaviorStates.DoOutroTravelling;
 //				sceneCamScript.transform.position = ;	//position de depart du travelling de fin
+				//SetUI score screen
+				uiManager.SetScoreScreen();
 				//Slow motion
 				Time.timeScale = 0.75f;
 			}
@@ -82,8 +86,7 @@ public class GameState : MonoBehaviour {
 				print("Over !");
 				//End Slow motion
 				Time.timeScale = 1f;
-				//SetUI score screen
-				uiManager.SetScoreScreen();
+
 			}
 			break;
 		case AllGameStates.Score:

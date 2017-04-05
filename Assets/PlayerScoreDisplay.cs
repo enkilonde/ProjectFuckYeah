@@ -30,6 +30,7 @@ public class PlayerScoreDisplay : MonoBehaviour {
 
 	private float timer = 0f;
 	private float _t_jauge = 0f;
+	float _val = 0f;
 
 	void Update()
 	{
@@ -45,12 +46,15 @@ public class PlayerScoreDisplay : MonoBehaviour {
 		}
 
 		//Update the jauge
-		jaugeSizeAnimation.Evaluate(_t_jauge);
-		jauge.size = RobToolsClass.GetNormalizedValue(_t_jauge, 0f, 1f) / (PlayersManager.scoreToWinStatic);
+		_val = jaugeSizeAnimation.Evaluate(_t_jauge);
+//		jauge.size = RobToolsClass.GetNormalizedValue(_val, 0f, finalScore) / (PlayersManager.scoreToWinStatic);
+		jauge.size = RobToolsClass.GetNormalizedValue(finalScore * _val, 0f, finalScore);// finalScore * _val;
 		_t_jauge += Time.deltaTime;
+//		_t_jauge = Mathf.Clamp(_t_jauge + Time.deltaTime, 0f, jaugeSizeAnimation.keys[jaugeSizeAnimation.keys.Length-1].time);
 
 		//Update the text
-		scoreText.text = (finalScore * RobToolsClass.GetNormalizedValue(_t_jauge, 0f, 1f)).ToString();
+//		scoreText.text = (finalScore * RobToolsClass.GetNormalizedValue(_t_jauge, 0f, 1f)).ToString();
+		scoreText.text = Mathf.Clamp((finalScore * _val), 0f, PlayersManager.scoreToWinStatic).ToString();
 
 	}
 

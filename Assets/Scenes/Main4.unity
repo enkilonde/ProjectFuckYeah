@@ -188,16 +188,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224128816422710346, guid: 7d1cf55b7438f7041a5662303d19fe52,
-        type: 2}
-      propertyPath: m_AnchorMax.x
-      value: 0.045
-      objectReference: {fileID: 0}
-    - target: {fileID: 224128816422710346, guid: 7d1cf55b7438f7041a5662303d19fe52,
-        type: 2}
-      propertyPath: m_AnchorMax.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1258084554727850, guid: 7d1cf55b7438f7041a5662303d19fe52, type: 2}
       propertyPath: m_IsActive
       value: 0

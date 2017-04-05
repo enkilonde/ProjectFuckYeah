@@ -142,8 +142,8 @@ public class CharacterV3 : MonoBehaviour {
 	void Update () {
 
         //Maj score
-        //if (chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target)
-        //    currentScore += Time.deltaTime * speedScoreGain;
+		if (chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target && GameState.curGameState == GameState.AllGameStates.Play)
+            currentScore += Time.deltaTime * speedScoreGain;
 
         //Reinitialise
         dirToMove = Vector3.zero;
