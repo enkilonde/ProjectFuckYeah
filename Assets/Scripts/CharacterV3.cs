@@ -326,7 +326,7 @@ public class CharacterV3 : MonoBehaviour {
         float _verticalSpeedMultiplier = (_verticalBoostInput > 0f) ? _verticalBoostInput : 1f;
         //Apply
 
-        print(currentVerticalForce);
+        //print(currentVerticalForce);
 
 
 
@@ -336,6 +336,8 @@ public class CharacterV3 : MonoBehaviour {
         float speedfactor = Mathf.InverseLerp(0, minAltMaxSpeed, currentFwdSpeed);
 
         effectiveSpeedFactor = Mathf.Lerp(effectiveSpeedFactor, speedfactor, Time.deltaTime);
+
+        effectiveSpeedFactor = 1; // TEMP, la vitesse n'influe plus sur la hauteur max
 
         float effectifMaxHeight = maxAltitude * speedfactor;
 
@@ -350,6 +352,11 @@ public class CharacterV3 : MonoBehaviour {
         //currentVerticalForce = Mathf.Lerp(currentVerticalForce, 1, Time.deltaTime);
 
         currentVerticalForce = (-maxFallingSpeed + (maxFallingSpeed * 2) * effectiveSpeedFactor * _verticalBoostInput);
+
+        if (currentAltitude <= minAltitude && currentVerticalForce < 0)
+        {
+            currentVerticalForce = 0;
+        }
 
         float _verticalBoost = currentVerticalForce;
         dirToMove.y += _verticalBoost;
