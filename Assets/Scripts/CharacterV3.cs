@@ -20,7 +20,7 @@ public class CharacterV3 : MonoBehaviour {
 	private ControllerV3 controlerSet;
 	private CharacterController myController;
 	//Speed
-//	[HideInInspector]
+	//	[HideInInspector]
 	public float currentFwdSpeed = 0f;
 	private float currentMaxSpeed = 0f;
 	public float minAltMaxSpeed = 140f;
@@ -31,7 +31,7 @@ public class CharacterV3 : MonoBehaviour {
 
 	//Lacet
 	private float currentLacetSpeed = 0f;
-//	private float currentMaxLacetSpeed = 5f;
+	//	private float currentMaxLacetSpeed = 5f;
 	public float maxLacetSpeed = 70f;
 	public float lacetTransitionSpeed = 45f;
 
@@ -107,7 +107,7 @@ public class CharacterV3 : MonoBehaviour {
 	public Vector3 lateralBoostDirInput = Vector3.right;
 	[HideInInspector]
 	public float I_verticalBoost = 0f;
-//	[HideInInspector]
+	//	[HideInInspector]
 	public float I_forwardBoost = 0f;
 
 	private float _t_boostLoad = 0f;
@@ -116,14 +116,9 @@ public class CharacterV3 : MonoBehaviour {
 
 	private float _lastLatoostDirUsed = 1f;
 
-    private float effectiveSpeedFactor = 0;
-    private float effectiveHeightFactor = 0;
-
 	Vector3 lateralInertie;
-    Vector3 dirToMove;
 
-
-    void Start () {
+	void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
 		myController = GetComponent<CharacterController>();
 		chasingStateScript = GetComponent<ChasingState>();
@@ -139,270 +134,220 @@ public class CharacterV3 : MonoBehaviour {
 	private float noBoostTimer = 0f;
 	public float timeTowaitForBoostReload = 2f;
 
-	public bool useScore = false;
-
 	void Update () {
 
-        //Maj score
-		if(useScore)
-			if (chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target && GameState.curGameState == GameState.AllGameStates.Play)
-          	  currentScore += Time.deltaTime * speedScoreGain;
+		//Maj score
+		if(chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target)
+			currentScore += Time.deltaTime * speedScoreGain;
 
-        //Reinitialise
-        dirToMove = Vector3.zero;
+		//Reinitialise
+		Vector3 dirToMove = Vector3.zero;
 
-        computeDirectionHorizontale();
-        computeDirectionVerticale();
+		//Boost
 
-        //Apply
-        myController.Move(dirToMove * Time.deltaTime);
+		//Activation du boost
+		//		if(!isInBoost)
+		//		{
+		//			noBoostTimer += Time.deltaTime;
+		//			//BoostCooldown and enough boost left
+		//			if(noBoostTimer > timeTowaitForBoostReload && currentBoostAmountLeft > 0.2f)
+		//			{
+		//				//Boost Input
+		//				if(I_forwardBoost > 0.5f)
+		//				{
+		//					isInBoost = true;
+		//					currentBoostSpeed = 20f;
+		//					currentBoostAmountLeft -= 0.2f;
+		//				}
+		//				
+		//			}
+		//		}
 
-        //Update Altitude
-        //transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, minAltitude, maxAltitude), transform.position.z);	//C'est dégeu TODO rendre ça plus propre et + smooth (avec des repbonds et tout)
+		currentBoostAmountLeft = RobToolsClass.GetNormalizedValue(_t_boostLoad, 0f, 1f); //Maj la jauge
+		I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;	//Reste t'il du boost dans la jauge
+		_t_boostLoad += ((I_forwardBoost > 0.5f) ? -1f/timeToUnload : 1f/timeToReload) * Time.deltaTime;	//Are the jauge being used ?
+		_t_boostLoad = Mathf.Clamp(_t_boostLoad, -1f, 1f);
+
+
+		//Update Hit wall transition
+		if(hitSomething)
+			UpdateObstacleHitTranslation();
+
+		if(GameState.curGameState == GameState.AllGameStates.Play)
+			CheckInputs();		//Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
+
+		//Rotate upon Input (LACET)
+		//Update rotation speed
+		currentLacetSpeed = Mathf.MoveTowards(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot, lacetTransitionSpeed * Time.deltaTime);
+		//Rotate by speed
+		if(!hitSomething) transform.Rotate(Vector3.up * currentLacetSpeed * Time.deltaTime, Space.World);
+
+		//UpdateSpeedFwd
+		//Accel en fonction de l'altitude
+		float _t_alti = RobToolsClass.GetNormalizedValue(currentAltitude, minAltitude, maxAltitude);
+		float _tempAccel = Mathf.Lerp(minAltAccel, maxAltAccel, _t_alti);
+		if(I_forwardBoost > 0.5f)
+		{
+			//If boost, we accelerate fully
+			_tempAccel *= accelerationSpeedWhileBoost;
+		}
+		else
+		{
+			//If not boost, so we use the accelerate basic axis
+			_tempAccel *= I_accel;		//Multiply by input
+		}
+		//MaxSpeed
+		currentMaxSpeed = Mathf.Lerp(minAltMaxSpeed, maxAltMaxSpeed, _t_alti);
+		//MaxSpeedBoost
+		if(I_forwardBoost > 0.5f)
+		{
+			//If input, the max absolute speed is instantanely equal to a new maximum
+			currentMaxSpeedWhileBoost = maxSpeedwhileBoost;
+		}
+		else
+		{
+			//If no more boost, smoothly decrease max speed
+			currentMaxSpeedWhileBoost = Mathf.MoveTowards(currentMaxSpeedWhileBoost, 0f, maxBoostSpeed_DeccelerationSpeed * Time.deltaTime);	
+		}
+		currentMaxSpeed	+= currentMaxSpeedWhileBoost;
+		//CurrentSpeed
+		if(I_accel != 0f || I_forwardBoost != 0f)	//if input : accelerate
+			currentFwdSpeed += _tempAccel * Time.deltaTime;
+		else				//else : decelerate
+			currentFwdSpeed -= deccelNoInput * Time.deltaTime;
+		if(useInertyFeature)
+		{
+			float dotIF = (-Vector3.Dot(inertieVector.normalized, transform.forward) + 1f) / 2f;
+			currentFwdSpeed -= (dotIF * airResistance) * Time.deltaTime;
+		}
+		currentFwdSpeed = Mathf.Clamp(currentFwdSpeed, 0f, currentMaxSpeed); //clamp
+
+		//Update Inertie
+		dirToMove = Vector3.zero;
+		if(useInertyFeature)
+		{
+			//Inertie
+			if(I_accel > accel_minSensitivity || I_forwardBoost > 0.5f)
+			{
+				//inertieVector = Vector3.RotateTowards(inertieVector, transform.forward, Mathf.Deg2Rad * transitionAngleDelta * Time.deltaTime, 1);
+
+				// enki : faire un lerp entre 'inertieVector' et 'transform.forward', le RotateTowards n'a pas toujours l'effet désiré.
+				inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.deltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
+			}
+
+			dirToMove = inertieVector * currentFwdSpeed;
+
+		}
+		else
+		{
+			dirToMove = transform.forward * currentFwdSpeed;
+		}
+
+		//LateralBoost
+		if(straffUseInerty)
+		{
+			//input
+			//			lateralBoostDirInput.x = I_lateralBoostRight - I_lateralBoostLeft;
+			if(I_lateralBoostRight - I_lateralBoostLeft > 0.2f)
+			{
+				_lastLatoostDirUsed = 1f;
+				lateralBoostDirInput.x = 1f;
+			}
+			else if(I_lateralBoostRight - I_lateralBoostLeft < -0.2f)
+			{
+				_lastLatoostDirUsed = -1f;
+				lateralBoostDirInput.x = -1f;
+			}
+			else
+			{
+				lateralBoostDirInput.x = 0f;
+			}
+			//Vitesse
+			//CurrentSpeed
+			//			currentLateralSpeed = maxLateralSpeed;
+			if(lateralBoostDirInput.x > 0.2f || lateralBoostDirInput.x < -0.2f)	//if input : accelerate
+				currentLateralSpeed += lateralBoostAcceleration * Time.deltaTime;
+			else				//else : decelerate
+				currentLateralSpeed -= lateralBoostDecceleration * Time.deltaTime;
+			currentLateralSpeed = Mathf.Clamp(currentLateralSpeed, 0f, maxLateralSpeed);
+			//apply
+			lateralInertie = (transform.right * _lastLatoostDirUsed);
+			dirToMove += lateralInertie * currentLateralSpeed;
+			Debug.DrawRay(transform.position, lateralInertie * currentLateralSpeed, Color.red);
+		}
+		else
+		{
+			//input
+			lateralBoostDirInput = transform.right * (I_lateralBoostRight - I_lateralBoostLeft);
+			//Vitesse
+			currentLateralSpeed = maxLateralSpeed;
+			//Apply
+			dirToMove += lateralBoostDirInput * currentLateralSpeed;
+		}
+
+		//Vertical boost/gravity
+		//Get Input value
+		//Inputvertical = 1 touche
+		_verticalBoostInput = I_verticalBoost;
+		//Inputvertical = combinaison de deux touches
+		//			_verticalBoostInput = Mathf.Min(I_lateralBoostLeft, I_lateralBoostRight);
+		//			_verticalBoostInput *= (I_lateralBoostLeft > boost_minSensitivity && I_lateralBoostRight > boost_minSensitivity) ? 1f : 0f;
+		//Vertical Speed
+		float _verticalSpeedMultiplier = (_verticalBoostInput > 0f) ? _verticalBoostInput : 1f;
+		if(currentVerticalForce < 0 && _verticalBoostInput > 0f)	//Permet d'annuler instantanément la gravité si l'input vertical est pressé
+		{
+			currentVerticalForce = 0f;
+		}
+		currentVerticalForce = Mathf.MoveTowards(currentVerticalForce, (_verticalBoostInput > 0f) ? maxVerticalAscentionSpeed : (currentAltitude > minAltitude) ? -maxFallingSpeed : 0f, verticalSpeedTransitionSpeed * _verticalSpeedMultiplier * Time.deltaTime);
+		//Apply
+		float _verticalBoost = currentVerticalForce;
+		dirToMove.y += _verticalBoost;
+		//Clamp
+		//		dirToMove.y = Mathf.Clamp(currentAltitude + dirToMove.y, minAltitude, maxAltitude);
+
+		//Explosion
+		dirToMove += explVector;
+		//Attenuate
+		explVector = Vector3.MoveTowards(explVector, Vector3.zero, 20f * Time.deltaTime);
+
+		//Apply
+		myController.Move(dirToMove * Time.deltaTime);
+
+		//Update Altitude
+		transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, minAltitude, maxAltitude), transform.position.z);	//C'est dégeu TODO rendre ça plus propre et + smooth (avec des repbonds et tout)
 		currentAltitude = transform.position.y;
 
 	}
 
-    void computeDirectionHorizontale()
-    {
-        //Boost
-
-        //Activation du boost
-        //		if(!isInBoost)
-        //		{
-        //			noBoostTimer += Time.deltaTime;
-        //			//BoostCooldown and enough boost left
-        //			if(noBoostTimer > timeTowaitForBoostReload && currentBoostAmountLeft > 0.2f)
-        //			{
-        //				//Boost Input
-        //				if(I_forwardBoost > 0.5f)
-        //				{
-        //					isInBoost = true;
-        //					currentBoostSpeed = 20f;
-        //					currentBoostAmountLeft -= 0.2f;
-        //				}
-        //				
-        //			}
-        //		}
-
-        currentBoostAmountLeft = RobToolsClass.GetNormalizedValue(_t_boostLoad, 0f, 1f); //Maj la jauge
-        I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;    //Reste t'il du boost dans la jauge
-        _t_boostLoad += ((I_forwardBoost > 0.5f) ? -1f / timeToUnload : 1f / timeToReload) * Time.deltaTime;    //Are the jauge being used ?
-        _t_boostLoad = Mathf.Clamp(_t_boostLoad, -1f, 1f);
-
-
-        //Update Hit wall transition
-        if (hitSomething)
-            UpdateObstacleHitTranslation();
-
-        if (GameState.curGameState == GameState.AllGameStates.Play || true)
-            CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
-
-        //Rotate upon Input (LACET)
-        //Update rotation speed
-        currentLacetSpeed = Mathf.MoveTowards(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot, lacetTransitionSpeed * Time.deltaTime);
-        //Rotate by speed
-        if (!hitSomething) transform.Rotate(Vector3.up * currentLacetSpeed * Time.deltaTime, Space.World);
-
-        //UpdateSpeedFwd
-        //Accel en fonction de l'altitude
-        float _t_alti = RobToolsClass.GetNormalizedValue(currentAltitude, minAltitude, maxAltitude);
-        //_t_alti = 0;
-        float _tempAccel = Mathf.Lerp(minAltAccel, maxAltAccel, _t_alti);
-        //float _tempAccel =maxAltAccel;
-        if (I_forwardBoost > 0.5f)
-        {
-            //If boost, we accelerate fully
-            _tempAccel *= accelerationSpeedWhileBoost;
-        }
-        else
-        {
-            //If not boost, so we use the accelerate basic axis
-            _tempAccel *= I_accel;      //Multiply by input
-        }
-        //MaxSpeed
-        currentMaxSpeed = Mathf.Lerp(minAltMaxSpeed, maxAltMaxSpeed, _t_alti);
-        //MaxSpeedBoost
-        if (I_forwardBoost > 0.5f)
-        {
-            //If input, the max absolute speed is instantanely equal to a new maximum
-            currentMaxSpeedWhileBoost = maxSpeedwhileBoost;
-        }
-        else
-        {
-            //If no more boost, smoothly decrease max speed
-            currentMaxSpeedWhileBoost = Mathf.MoveTowards(currentMaxSpeedWhileBoost, 0f, maxBoostSpeed_DeccelerationSpeed * Time.deltaTime);
-        }
-        currentMaxSpeed += currentMaxSpeedWhileBoost;
-        //CurrentSpeed
-        if (I_accel != 0f || I_forwardBoost != 0f)  //if input : accelerate
-            currentFwdSpeed += _tempAccel * Time.deltaTime;
-        else                //else : decelerate
-            currentFwdSpeed -= deccelNoInput * Time.deltaTime;
-        if (useInertyFeature)
-        {
-            float dotIF = (-Vector3.Dot(inertieVector.normalized, transform.forward) + 1f) / 2f;
-            currentFwdSpeed -= (dotIF * airResistance) * Time.deltaTime;
-        }
-        currentFwdSpeed = Mathf.Clamp(currentFwdSpeed, 0f, currentMaxSpeed); //clamp
-
-        //Update Inertie
-        dirToMove = Vector3.zero;
-        if (useInertyFeature)
-        {
-            //Inertie
-            if (I_accel > accel_minSensitivity || I_forwardBoost > 0.5f)
-            {
-                //inertieVector = Vector3.RotateTowards(inertieVector, transform.forward, Mathf.Deg2Rad * transitionAngleDelta * Time.deltaTime, 1);
-
-                // enki : faire un lerp entre 'inertieVector' et 'transform.forward', le RotateTowards n'a pas toujours l'effet désiré.
-                inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.deltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
-            }
-
-            dirToMove = inertieVector * currentFwdSpeed;
-
-        }
-        else
-        {
-            dirToMove = transform.forward * currentFwdSpeed;
-        }
-
-        //LateralBoost
-        if (straffUseInerty)
-        {
-            //input
-            //			lateralBoostDirInput.x = I_lateralBoostRight - I_lateralBoostLeft;
-            if (I_lateralBoostRight - I_lateralBoostLeft > 0.2f)
-            {
-                _lastLatoostDirUsed = 1f;
-                lateralBoostDirInput.x = 1f;
-            }
-            else if (I_lateralBoostRight - I_lateralBoostLeft < -0.2f)
-            {
-                _lastLatoostDirUsed = -1f;
-                lateralBoostDirInput.x = -1f;
-            }
-            else
-            {
-                lateralBoostDirInput.x = 0f;
-            }
-            //Vitesse
-            //CurrentSpeed
-            //			currentLateralSpeed = maxLateralSpeed;
-            if (lateralBoostDirInput.x > 0.2f || lateralBoostDirInput.x < -0.2f)    //if input : accelerate
-                currentLateralSpeed += lateralBoostAcceleration * Time.deltaTime;
-            else                //else : decelerate
-                currentLateralSpeed -= lateralBoostDecceleration * Time.deltaTime;
-            currentLateralSpeed = Mathf.Clamp(currentLateralSpeed, 0f, maxLateralSpeed);
-            //apply
-            lateralInertie = (transform.right * _lastLatoostDirUsed);
-            dirToMove += lateralInertie * currentLateralSpeed;
-            Debug.DrawRay(transform.position, lateralInertie * currentLateralSpeed, Color.red);
-        }
-        else
-        {
-            //input
-            lateralBoostDirInput = transform.right * (I_lateralBoostRight - I_lateralBoostLeft);
-            //Vitesse
-            currentLateralSpeed = maxLateralSpeed;
-            //Apply
-            dirToMove += lateralBoostDirInput * currentLateralSpeed;
-        }
-
-        float heightFactor = Mathf.InverseLerp(0, maxAltitude, currentAltitude);
-        effectiveHeightFactor = Mathf.Lerp(effectiveHeightFactor, heightFactor, Time.deltaTime);
-
-
-    }
-
-    void computeDirectionVerticale()
-    {
-
-
-        //Vertical boost/gravity
-        //Get Input value
-        //Inputvertical = 1 touche
-        //Inputvertical = combinaison de deux touches
-        //			_verticalBoostInput = Mathf.Min(I_lateralBoostLeft, I_lateralBoostRight);
-        //			_verticalBoostInput *= (I_lateralBoostLeft > boost_minSensitivity && I_lateralBoostRight > boost_minSensitivity) ? 1f : 0f;
-        //Vertical Speed
-        float _verticalSpeedMultiplier = (_verticalBoostInput > 0f) ? _verticalBoostInput : 1f;
-        //Apply
-
-        //print(currentVerticalForce);
-
-
-
-
-
-        _verticalBoostInput = I_verticalBoost;
-        float speedfactor = Mathf.InverseLerp(0, minAltMaxSpeed, currentFwdSpeed);
-
-        effectiveSpeedFactor = Mathf.Lerp(effectiveSpeedFactor, speedfactor, Time.deltaTime);
-
-        effectiveSpeedFactor = 1; // TEMP, la vitesse n'influe plus sur la hauteur max
-
-        float effectifMaxHeight = maxAltitude * speedfactor;
-
-        if (currentVerticalForce < 0 && _verticalBoostInput > 0f)   //Permet d'annuler instantanément la gravité si l'input vertical est pressé
-        {
-            currentVerticalForce = 0f;
-        }
-
-
-        //currentVerticalForce = Mathf.MoveTowards(currentVerticalForce, (_verticalBoostInput > 0f) ? maxVerticalAscentionSpeed * effectiveSpeedFactor : (currentAltitude > minAltitude) ? -maxFallingSpeed : 0f, verticalSpeedTransitionSpeed * 1 * Time.deltaTime);
-
-        //currentVerticalForce = Mathf.Lerp(currentVerticalForce, 1, Time.deltaTime);
-
-        currentVerticalForce = (-maxFallingSpeed + (maxFallingSpeed * 2) * effectiveSpeedFactor * _verticalBoostInput);
-
-        if (currentAltitude <= minAltitude && currentVerticalForce < 0)
-        {
-            currentVerticalForce = 0;
-        }
-
-        float _verticalBoost = currentVerticalForce;
-        dirToMove.y += _verticalBoost;
-
-        //Clamp
-        //		dirToMove.y = Mathf.Clamp(currentAltitude + dirToMove.y, minAltitude, maxAltitude);
-
-        //Explosion
-        dirToMove += explVector;
-        //Attenuate
-        explVector = Vector3.MoveTowards(explVector, Vector3.zero, 20f * Time.deltaTime);
-
-    }
-
-    void CheckInputs()
+	void CheckInputs()
 	{
 		#region accelerate
 		I_accel = 0f;
-//		I_accel = Input.GetAxis("1_RT_Axis");	//Meme entrer la valeur en dur ça ne marche pas en build oO
+		//		I_accel = Input.GetAxis("1_RT_Axis");	//Meme entrer la valeur en dur ça ne marche pas en build oO
 		I_accel = Input.GetAxisRaw(controlerSet.Get_AccelAxisInput());
-        //print(Input.GetAxis(controlerSet.Get_AccelAxisInput()));
-        //print("Player " + transform.parent.GetComponentInChildren<ControllerV3>().playerNumero + ", speed : " + I_accel);
-        if (I_accel > accel_minSensitivity)
+		//		print(Input.GetAxis(controlerSet.Get_AccelAxisInput()));
+		//print("Player " + transform.parent.GetComponentInChildren<ControllerV3>().playerNumero + ", speed : " + I_accel);
+		if(I_accel > accel_minSensitivity)
 		{
-//			print(controlerSet.Get_AccelAxisInput());
-//			print("Accelerate Axis");
+			//			print(controlerSet.Get_AccelAxisInput());
+			//			print("Accelerate Axis");
 		}
-//		if(Input.GetButton(controlerSet.Get_AccelButtonInput()))
-//		{
-////			print("Accelerate Button");
-//			I_accel = 1f;
-//		}
+		//		if(Input.GetButton(controlerSet.Get_AccelButtonInput()))
+		//		{
+		////			print("Accelerate Button");
+		//			I_accel = 1f;
+		//		}
 		#endregion
 
-//		if(Input.GetButtonDown(controlerSet.Get_SchockWaveInput()))
-//		{
-//			print("SchockWave");
-//		}
+		//		if(Input.GetButtonDown(controlerSet.Get_SchockWaveInput()))
+		//		{
+		//			print("SchockWave");
+		//		}
 
 		I_lateralPlayerRot = Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput());
 		if(Mathf.Abs(I_lateralPlayerRot) > horizontalRot_minSensitivity)
 		{
-//			print("Lateral rot" + I_lateralPlayerRot);
+			//			print("Lateral rot" + I_lateralPlayerRot);
 		}
 		else
 		{
@@ -412,29 +357,29 @@ public class CharacterV3 : MonoBehaviour {
 		#region lateral boost
 		I_lateralBoostLeft = 0f;
 		I_lateralBoostRight = 0f;
-//		I_lateralBoostLeft = Input.GetAxis(controlerSet.Get_LateralBoostLeftInput());
-//		if(Mathf.Abs(I_lateralBoostLeft) > boost_minSensitivity)
-//		{
-////			print("BoostLeft" + I_lateralBoostLeft);
-//		}
-//		else
-//		{
-//			I_lateralBoostLeft = 0f;
-//		}
-//		print(transform.parent.name + " "+  controlerSet.Get_LatLeftBoostInput());
+		//		I_lateralBoostLeft = Input.GetAxis(controlerSet.Get_LateralBoostLeftInput());
+		//		if(Mathf.Abs(I_lateralBoostLeft) > boost_minSensitivity)
+		//		{
+		////			print("BoostLeft" + I_lateralBoostLeft);
+		//		}
+		//		else
+		//		{
+		//			I_lateralBoostLeft = 0f;
+		//		}
+		//		print(transform.parent.name + " "+  controlerSet.Get_LatLeftBoostInput());
 		if(Input.GetButton(controlerSet.Get_LatLeftBoostInput()))
 		{
 			I_lateralBoostLeft = 1f;
 		}
-//		I_lateralBoostRight = Input.GetAxis(controlerSet.Get_LateralBoostRightInput());
-//		if(Mathf.Abs(I_lateralBoostRight) > boost_minSensitivity)
-//		{
-////			print("BoostRight" + I_lateralBoostRight);
-//		}
-//		else
-//		{
-//			I_lateralBoostRight = 0f;
-//		}
+		//		I_lateralBoostRight = Input.GetAxis(controlerSet.Get_LateralBoostRightInput());
+		//		if(Mathf.Abs(I_lateralBoostRight) > boost_minSensitivity)
+		//		{
+		////			print("BoostRight" + I_lateralBoostRight);
+		//		}
+		//		else
+		//		{
+		//			I_lateralBoostRight = 0f;
+		//		}
 		if(Input.GetButton(controlerSet.Get_LatRightBoostInput()))
 		{
 			I_lateralBoostRight = 1f;
@@ -454,7 +399,7 @@ public class CharacterV3 : MonoBehaviour {
 	{
 		Gizmos.color = Color.blue;
 		Gizmos.DrawRay(transform.position, transform.forward * 10);
-//		Debug.DrawRay(transform.position, transform.forward * 10, Color.blue);
+		//		Debug.DrawRay(transform.position, transform.forward * 10, Color.blue);
 		Gizmos.color = Color.green;
 		Debug.DrawRay(transform.position, inertieVector * 10, Color.green);
 		Gizmos.color = Color.blue;
@@ -473,7 +418,7 @@ public class CharacterV3 : MonoBehaviour {
 			float _t = currentTimerToReflect.Remap(0f, transitionTimeToReflectVector, 0f, 1f);
 			inertieVector = Vector3.Lerp(forcedInerty, hit_initialInetry, _t);		//Transition vers la nouvelle inertie
 			transform.forward = Vector3.Lerp(forcedInerty, hit_initialForward, _t);		//Transition du forward
-//			transform.position = Vector3.Lerp(transform.position + lastNormal * maxSpeedRebondForce, hitPosition, _t);	//Rebond selon la normale
+			//			transform.position = Vector3.Lerp(transform.position + lastNormal * maxSpeedRebondForce, hitPosition, _t);	//Rebond selon la normale
 			transform.position = Vector3.Lerp(transform.position + forcedInerty * currentSpeedRebondForce, hitPosition, _t);	//Rebond vers la nouvelle inertie
 			if(currentTimerToReflect <= 0f)
 				hitSomething = false;
@@ -517,8 +462,8 @@ public class CharacterV3 : MonoBehaviour {
 		hit_initialInetry = inertieVector;		//Inertie avant impact
 
 		//Instantané
-//		inertieVector = _newInertyDirection;
-//		transform.forward = _newInertyDirection;
+		//		inertieVector = _newInertyDirection;
+		//		transform.forward = _newInertyDirection;
 	}
 
 	Vector3 explVector = Vector3.zero;
@@ -526,8 +471,8 @@ public class CharacterV3 : MonoBehaviour {
 	public void ImpulseInfluence(Vector3 _dirAndForce)
 	{
 		explVector = _dirAndForce;
-//		myController.Move(_dirAndForce * Time.deltaTime);
-//		print("imp");
+		//		myController.Move(_dirAndForce * Time.deltaTime);
+		//		print("imp");
 	}
 
 	public void RefillBoost()
