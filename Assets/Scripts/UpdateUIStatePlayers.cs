@@ -37,6 +37,9 @@ public class UpdateUIStatePlayers : MonoBehaviour {
 			RectTransform newCanvas = Instantiate(canvasPrefab, transform.GetChild(0)).GetComponent<RectTransform>();
 			newCanvas.name = "J1_Canvas";
 			SetCanvasDataByID(0, newCanvas);
+			newCanvas.offsetMax = new Vector2(0f, 0f);
+			newCanvas.offsetMin = new Vector2(0f, 0f);
+			newCanvas.localScale = Vector3.one;
 			break;
 		case 2:
 			//J1

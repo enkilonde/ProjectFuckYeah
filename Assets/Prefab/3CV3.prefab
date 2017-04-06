@@ -678,7 +678,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1265121069334044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -28.57517, y: -18, z: 81.60002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4380115936412442}
@@ -1414,8 +1414,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedCamPosAlongLine: 5
-  maxSpeedLateralDelay: 7.06
-  minSpeedLateralDelay: 2.3
+  maxSpeedLateralDelay: 3.96
+  minSpeedLateralDelay: 0.52
   lateralSpeedTransition: 5
   mainCam: {fileID: 20119580996262574}
   DOF: {fileID: 114487239242104572}
@@ -1556,6 +1556,7 @@ MonoBehaviour:
   I_verticalBoost: 0
   I_forwardBoost: 0
   timeTowaitForBoostReload: 2
+  useScore: 1
 --- !u!114 &114995566128830746
 MonoBehaviour:
   m_ObjectHideFlags: 1

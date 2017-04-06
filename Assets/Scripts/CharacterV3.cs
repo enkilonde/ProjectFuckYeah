@@ -139,11 +139,14 @@ public class CharacterV3 : MonoBehaviour {
 	private float noBoostTimer = 0f;
 	public float timeTowaitForBoostReload = 2f;
 
+	public bool useScore = false;
+
 	void Update () {
 
         //Maj score
-		if (chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target && GameState.curGameState == GameState.AllGameStates.Play)
-            currentScore += Time.deltaTime * speedScoreGain;
+		if(useScore)
+			if (chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target && GameState.curGameState == GameState.AllGameStates.Play)
+          	  currentScore += Time.deltaTime * speedScoreGain;
 
         //Reinitialise
         dirToMove = Vector3.zero;
