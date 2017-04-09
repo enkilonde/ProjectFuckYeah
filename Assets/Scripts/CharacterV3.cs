@@ -305,30 +305,23 @@ else
     {
 
 
-
-
-        
-
         float speedfactor = Mathf.InverseLerp(maxAltMaxSpeed, minAltMaxSpeed, currentFwdSpeed);
 
-        effectiveSpeedFactor = Mathf.Lerp(effectiveSpeedFactor, speedfactor, Time.deltaTime);
+        //effectiveSpeedFactor = Mathf.Lerp(effectiveSpeedFactor, speedfactor, Time.deltaTime);
 
-        float heightFactor = Mathf.InverseLerp(0, maxAltitude, currentAltitude);
+        float heightFactor = Mathf.InverseLerp(minAltitude, maxAltitude, currentAltitude);
 
         float effectifMaxHeight = maxAltitude * speedfactor;
 
         float oldVerticalForce = currentVerticalForce;
 
-        if(currentAltitude < effectifMaxHeight)
+        if(currentAltitude <= effectifMaxHeight)
             _verticalBoostInput = Mathf.Lerp(_verticalBoostInput, I_verticalBoost, Time.deltaTime * 50);
         else
             _verticalBoostInput = Mathf.Lerp(_verticalBoostInput, 0, Time.deltaTime * 50);
 
 
-
-
-
-        if (I_verticalBoost == 1)
+        if (I_verticalBoost > 0)
             currentVerticalForce = (maxVerticalAscentionSpeed) * (1 - heightFactor) * _verticalBoostInput;
         else
             currentVerticalForce = (maxFallingSpeed) * _verticalBoostInput.Remap(0, 1, -1, 1);
