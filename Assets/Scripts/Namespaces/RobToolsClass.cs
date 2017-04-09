@@ -91,7 +91,14 @@ namespace RobToolsNameSpace
 			return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
 		}
 
+        public static float pow(this float value, float power)
+        {
+            return Mathf.Pow(value, power);
+        }
+
 	}
+
+
 
 
 }

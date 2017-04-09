@@ -54,15 +54,13 @@ public class CustomV3CharacterEditing : Editor {
 		#region inerty
 		EditorGUILayout.BeginVertical("Box");
 		EditorGUILayout.LabelField("Inerty", EditorStyles.boldLabel);
-		charaInstance.useInertyFeature = EditorGUILayout.Toggle("Use inerty feature", charaInstance.useInertyFeature);
-		if(charaInstance.useInertyFeature)
-		{
-			EditorGUILayout.LabelField("Transition de l'inertie vers le forward du joueur", EditorStyles.boldLabel);
-			charaInstance.transitionAngleDelta = EditorGUILayout.Slider("Angle transition angle/sec", charaInstance.transitionAngleDelta, 0f, 300f);
-			EditorGUILayout.LabelField("Puissance du ralentissement lorsque le fwd du joueur est opposé à son inertie", EditorStyles.boldLabel);
-			charaInstance.airResistance = EditorGUILayout.Slider("Air resistance dist/sec", charaInstance.airResistance, 0f, 300f);
-		}
-		EditorGUILayout.EndVertical();
+
+        EditorGUILayout.LabelField("Transition de l'inertie vers le forward du joueur", EditorStyles.boldLabel);
+        charaInstance.transitionAngleDelta = EditorGUILayout.Slider("Angle transition angle/sec", charaInstance.transitionAngleDelta, 0f, 300f);
+        EditorGUILayout.LabelField("Puissance du ralentissement lorsque le fwd du joueur est opposé à son inertie", EditorStyles.boldLabel);
+        charaInstance.airResistance = EditorGUILayout.Slider("Air resistance dist/sec", charaInstance.airResistance, 0f, 300f);
+
+        EditorGUILayout.EndVertical();
 		#endregion
 
 		#region hit
@@ -138,18 +136,15 @@ public class CustomV3CharacterEditing : Editor {
 
 
 		#region inerty
-		if(charaInstance.useInertyFeature)
-		{
-			Handles.color = Color.blue;
-			Handles.DrawLine(Vector3.zero, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed);
-			Handles.DrawLine(Vector3.forward * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f);
-			Handles.DrawLine(new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f + -Vector3.right * 4f);
-			Handles.DrawLine(new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f + Vector3.forward * 4f);
-			DrawString("Inerty transition", new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f, Color.blue);
-		}
-		#endregion
+        Handles.color = Color.blue;
+        Handles.DrawLine(Vector3.zero, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed);
+        Handles.DrawLine(Vector3.forward * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f);
+        Handles.DrawLine(new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f + -Vector3.right * 4f);
+        Handles.DrawLine(new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f + Vector3.forward * 4f);
+        DrawString("Inerty transition", new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f, Color.blue);
+        #endregion
 
-	}
+    }
 
 
 	void DrawString(string text, Vector3 worldPos, Color? colour = null) {

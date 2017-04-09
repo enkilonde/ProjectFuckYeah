@@ -22,9 +22,15 @@ public class InclinaisonManager : MonoBehaviour {
 	
 //		float ternarydoesnotwork = (characterv3.currentVerticalForce > 0f) ? characterv3._verticalBoostInput : -1f;
 		float _pitchNormalized = characterv3.currentVerticalForce.Remap(-characterv3.maxFallingSpeed, characterv3.maxVerticalAscentionSpeed, -1f, 1f); // RobToolsClass.MappedRangeValue(characterv3.currentVerticalForce, -characterv3.maxFallingSpeed, characterv3.maxVerticalAscentionSpeed, -1f, 1f);
-//		print(_pitchNormalized);
+        
+        _pitchNormalized = characterv3.dirToMove.y.Remap(-characterv3.maxFallingSpeed, characterv3.maxVerticalAscentionSpeed, -1 * characterv3.maxFallingSpeed / characterv3.maxVerticalAscentionSpeed, 1);
 
-		float _rollAngleTotal = rollAngle_lateralBoost * (characterv3.I_lateralBoostRight - characterv3.I_lateralBoostLeft);
+
+
+
+
+
+        float _rollAngleTotal = rollAngle_lateralBoost * (characterv3.I_lateralBoostRight - characterv3.I_lateralBoostLeft);
 		_rollAngleTotal += rollAngle_lateralRotation * -characterv3.I_lateralPlayerRot;
 		transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.Euler(-pitchAngle * _pitchNormalized,  0f, _rollAngleTotal), degPerSecond * Time.deltaTime);
 
