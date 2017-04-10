@@ -31,10 +31,12 @@ public class CameraV1 : MonoBehaviour {
 	Vector3 initialPosition;
 	Transform character;
 	ControllerV3 controler;
+	CharacterV3 cv3;
 
 	void Start () {
 		character = transform.parent.transform.FindChild("Character").transform;
 		controler = transform.parent.GetComponentInChildren<ControllerV3>();
+		cv3 = character.GetComponent<CharacterV3>();
 
 		switch(CameraType)
 		{
@@ -101,16 +103,20 @@ public class CameraV1 : MonoBehaviour {
 //			Debug.DrawRay(new Vector3(transform.position.x,transform.position.y,transform.position.z - 2f), new Vector3(lateralCamRot, verticalCamRot, 0f), Color.red);
 			break;
 		case camModes.Hunter:
+			transform.position = character.position;
 			if(Input.GetButton(controler.Get_LockOnInput()))
 			{
+				print(targetToLock.name);
 				transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetToLock.position - transform.position, Vector3.up), camInputSpeed * Time.deltaTime);
 			}
 			else
 			{
 				transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.identity, camInputSpeed * Time.deltaTime);
+//				transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.LookRotation(-cv3.inertieVector.normalized, transform.up), camInputSpeed * Time.deltaTime);
 			}
 			break;
 		case camModes.Target:
+			transform.position = character.position;
 			if(Input.GetButton(controler.Get_LockOnInput()))
 			{
 				transform.rotation = Quaternion.LookRotation(-transform.parent.forward, Vector3.up);

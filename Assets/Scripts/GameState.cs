@@ -20,11 +20,14 @@ public class GameState : MonoBehaviour {
 	private GenerateFlag FlagGenerator;
 	private UpdateUIStatePlayers uiManager;
 
+	public bool useFlag = true;
+
 	void Awake()
 	{
 		playersManagerScript = GetComponent<PlayersManager>();
 		sceneCamScript = GetComponentInChildren<SceneCam>();
-		FlagGenerator = GameObject.Find("FlagPoint").GetComponent<GenerateFlag>();
+		if(useFlag)
+			FlagGenerator = GameObject.Find("FlagPoint").GetComponent<GenerateFlag>();
 		uiManager = GameObject.Find("UI").GetComponent<UpdateUIStatePlayers>();
 	}
 
@@ -38,11 +41,13 @@ public class GameState : MonoBehaviour {
 				//Self actualisation
 				curGameState = AllGameStates.PresentLevel;
 				//Generate Flag
-				FlagGenerator.GenerateTheFlag();
+				if(useFlag)
+					FlagGenerator.GenerateTheFlag();
 				//Generate players
 				playersManagerScript.GeneratePlayers();
 				//Set the target for everyone
-				CameraV1.targetToLock = GameObject.Find("Flag").transform;
+				if(useFlag)
+					CameraV1.targetToLock = GameObject.Find("Flag").transform;
 				//Do the traveling
 				sceneCamScript.camState = SceneCam.CamBehaviorStates.DoIntroTravelling;
 			}
@@ -67,6 +72,8 @@ public class GameState : MonoBehaviour {
 			if(playersManagerScript.partyOver)
 			{
 				curGameState = AllGameStates.EndGameAnimation;
+				//Disable ui
+				uiManager.DisablePlayersUICanvas();
 				//Do the traveling
 				sceneCamScript.gameObject.SetActive(true);
 				sceneCamScript.playerToFocus = playersManagerScript.winningPlayer;
@@ -79,7 +86,12 @@ public class GameState : MonoBehaviour {
 		case AllGameStates.EndGameAnimation:
 			if(sceneCamScript.travellingOver)
 			{
-				print("Over !");
+				curGameState = AllGameStates.Score;
+				//print("Over !");
+				//End Slow motion
+				Time.timeScale = 1f;
+				//SetUI score screen
+				uiManager.SetScoreScreen();
 			}
 			break;
 		case AllGameStates.Score:

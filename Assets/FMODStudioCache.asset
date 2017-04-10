@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114469475211301744}
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   EditorEvents:
   - {fileID: 114559951187069198}
   - {fileID: 114482589103048096}
@@ -25,10 +25,25 @@ MonoBehaviour:
   - {fileID: 114429292457229844}
   - {fileID: 114036801725024442}
   - {fileID: 114774626568566522}
-  MasterBankRef: {fileID: 114634863857678496}
+  MasterBankRef: {fileID: 114935314021805302}
   StringsBankRef: {fileID: 114469475211301744}
-  stringsBankWriteTime: 636267392848234582
+  stringsBankWriteTime: 636269927388296612
   cacheVersion: 2
+--- !u!114 &114035980688235928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: ReactorPower
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114036801725024442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43,7 +58,7 @@ MonoBehaviour:
   Path: event:/Collision Bounce
   guid: e411c969a933af40a62c5cd3aca3fe0a
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -145,7 +160,7 @@ MonoBehaviour:
   Path: event:/Crash
   guid: 5fb40d3b5ee6e94a84711857e8f94ea1
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -187,12 +202,12 @@ MonoBehaviour:
   Path: event:/Howling Banshee
   guid: af0c10182bc67b4d86cb5b99273b5e05
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114633902982394502}
+  - {fileID: 114704877607547228}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114281995908378642
@@ -209,12 +224,12 @@ MonoBehaviour:
   Path: event:/Moving
   guid: b4d7d74e9f6c1b49b05a07b56cda3dba
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114055970836871288}
+  - {fileID: 114452320699706872}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114308313359264330
@@ -338,6 +353,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114423533159579244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Distance to Pursuer
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114429292457229844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,7 +382,7 @@ MonoBehaviour:
   Path: event:/Pursuer In Range
   guid: c4070933cf48d944a7d623396137af4b
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -371,6 +401,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: ReactorPower
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114452320699706872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Speed
   Min: 0
   Max: 1
   Default: 0
@@ -401,7 +446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\StreamingAssets\Master Bank.strings.bank
-  lastModified: 636267392848234582
+  lastModified: 636269927388296612
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -421,7 +466,7 @@ MonoBehaviour:
   Path: event:/Target Destruct
   guid: 25c59faf2b59074684a9dfb397cf932a
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -478,7 +523,7 @@ MonoBehaviour:
   Path: event:/Lateral Boosts
   guid: 09c4da2105f7764caa829e907b4957a3
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -541,6 +586,21 @@ MonoBehaviour:
   - {fileID: 114320202976257980}
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114704877607547228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: IntensiteVirage
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114744848957658384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -555,12 +615,12 @@ MonoBehaviour:
   Path: event:/Reactor
   guid: 2b7b28ba76a0394ab0844f7e056c1a6d
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114466682647449564}
+  - {fileID: 114035980688235928}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114774626568566522
@@ -577,12 +637,12 @@ MonoBehaviour:
   Path: event:/Target proximity
   guid: e50e4f5fe8aed5499cbe115b0aec0ad3
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114540637943010288}
+  - {fileID: 114423533159579244}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114809805363572782
@@ -599,7 +659,7 @@ MonoBehaviour:
   Path: "event:/Fr\xF4lement"
   guid: 628cbd6ec0003e4fac61cfb6b0fdfb8b
   Banks:
-  - {fileID: 114634863857678496}
+  - {fileID: 114935314021805302}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -670,6 +730,24 @@ MonoBehaviour:
   - {fileID: 114080086878105630}
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114935314021805302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\3GDA\Semestriel\SSF_Git\Assets\StreamingAssets\Master Bank.bank
+  lastModified: 636269927388286605
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 3269024
+  Exists: 1
 --- !u!114 &114939006172141236
 MonoBehaviour:
   m_ObjectHideFlags: 0

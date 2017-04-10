@@ -9,6 +9,7 @@ public class PlayersManager : MonoBehaviour {
 	public Transform[] playerAmount = new Transform[4];
 
 	public int scoreToWin = 50000;
+	public static int scoreToWinStatic = 100;
 
 //	private Transform playersStartingPointsContainer;
 	public static Transform playersContainer;
@@ -23,6 +24,7 @@ public class PlayersManager : MonoBehaviour {
 	void Start()
 	{
 		uiManager = GameObject.Find("UI").GetComponent<UpdateUIStatePlayers>();
+		scoreToWinStatic = scoreToWin;
 	}
 
 	/// <summary>

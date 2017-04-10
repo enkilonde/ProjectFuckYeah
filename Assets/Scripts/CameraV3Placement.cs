@@ -104,8 +104,9 @@ public class CameraV3Placement : MonoBehaviour {
 
 	public void SetTargetAlongLine()
 	{
+		float _currentSpeedLateralDelay = Mathf.Lerp(minSpeedLateralDelay, maxSpeedLateralDelay, _t_recul);
 		currentTargetLookAt = Vector3.Lerp(posA_targetLookAt.position, posB_targetLookAt.position, _t_lookAt);
-		mainCam.transform.LookAt(currentTargetLookAt);
+		mainCam.transform.LookAt(currentTargetLookAt + (mainCam.transform.right * Mathf.Lerp(-_currentSpeedLateralDelay, _currentSpeedLateralDelay, _t_lateralDelay)));
 	}
 
 }

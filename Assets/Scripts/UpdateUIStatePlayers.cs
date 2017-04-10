@@ -7,6 +7,7 @@ using RobToolsNameSpace;
 public class UpdateUIStatePlayers : MonoBehaviour {
 
 	public GameObject canvasPrefab;
+	public GameObject scorePrefab;
 
 	private PlayerAndCanvasLink[] playersData = new PlayerAndCanvasLink[4];
 
@@ -36,6 +37,9 @@ public class UpdateUIStatePlayers : MonoBehaviour {
 			RectTransform newCanvas = Instantiate(canvasPrefab, transform.GetChild(0)).GetComponent<RectTransform>();
 			newCanvas.name = "J1_Canvas";
 			SetCanvasDataByID(0, newCanvas);
+			newCanvas.offsetMax = new Vector2(0f, 0f);
+			newCanvas.offsetMin = new Vector2(0f, 0f);
+			newCanvas.localScale = Vector3.one;
 			break;
 		case 2:
 			//J1
@@ -129,6 +133,26 @@ public class UpdateUIStatePlayers : MonoBehaviour {
 		playersData[id].speedScroll = _canvas.Find("SpeedScrollBar").GetComponent<Scrollbar>();
 		playersData[id].score = _canvas.Find("Score").GetComponentInChildren<Text>();
 		playersData[id].boostScroll = _canvas.Find("BoostScrollBar").GetComponentInChildren<Scrollbar>();
+	}
+
+	public void DisablePlayersUICanvas()
+	{
+		for (int i = 0; i < playersData.Length; i++) {
+			playersData[i].heightScroll.transform.parent.gameObject.SetActive(false);
+		}
+	}
+
+	public void SetScoreScreen()
+	{
+		transform.Find("Canvas/ScoreScreen").gameObject.SetActive(true);
+		Transform _scoreScreen = transform.Find("Canvas/ScoreScreen/PlayersScores_Container");
+
+		for (int i = 0; i < playersData.Length; i++) {
+
+			PlayerScoreDisplay PSD = Instantiate(scorePrefab, _scoreScreen).GetComponent<PlayerScoreDisplay>();
+			PSD.SetPlayerData(playersData[i].characterData, i);
+
+		}
 	}
 
 }
