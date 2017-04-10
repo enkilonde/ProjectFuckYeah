@@ -56,7 +56,7 @@ public class CameraV3Placement : MonoBehaviour {
 	void OnEnable()
 	{
 		CV3 = transform.parent.GetComponentInChildren<CharacterV3>();
-		DOF = Camera.main.GetComponent<DepthOfField>();
+        DOF = GetComponentInChildren<DepthOfField>();
 	}
 
 	void LateUpdate () {
