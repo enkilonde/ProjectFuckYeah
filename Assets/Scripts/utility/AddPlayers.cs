@@ -23,14 +23,14 @@ public class AddPlayers : MonoBehaviour
     public void init()
     {
         SceneManager.LoadScene("players", LoadSceneMode.Additive);
-
+        SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
         StartCoroutine(waitLevelLoad());
     }
 
     IEnumerator waitLevelLoad()
     {
 
-        while(!SceneManager.GetSceneByBuildIndex(1).isLoaded)
+        while(!SceneManager.GetSceneByName("players").isLoaded && !SceneManager.GetSceneByName("Pause").isLoaded)
         {
             yield return null;
         }

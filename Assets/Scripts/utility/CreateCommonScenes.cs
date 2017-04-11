@@ -13,7 +13,7 @@ public class CreateCommonScenes : MonoBehaviour
     static public void CreateScene()
     {
         SceneManager.LoadScene("Common", LoadSceneMode.Additive);
-        SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
+        //SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
     }
 
 

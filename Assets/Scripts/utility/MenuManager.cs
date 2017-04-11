@@ -29,6 +29,7 @@ public class MenuManager : MonoBehaviour
     {
         addPlayersScript = SceneManager.GetSceneByName("Common").GetRootGameObjects()[0].GetComponent<AddPlayers>();
         displayNumberOfPlayers = GameObject.Find("Number of Players").GetComponent<Text>();
+        ChangeNumberOfPlayers(0);
     }
 
     public void Play(string levelName)

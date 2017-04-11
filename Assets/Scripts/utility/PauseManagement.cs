@@ -81,6 +81,7 @@ public class PauseManagement : MonoBehaviour
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(menuSceneName));
         SceneManager.UnloadSceneAsync(currentScene);
         SceneManager.UnloadSceneAsync("players");
+        SceneManager.UnloadSceneAsync("Pause");
     }
 
 }
