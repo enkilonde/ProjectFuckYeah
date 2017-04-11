@@ -6,9 +6,19 @@ using UnityEngine.SceneManagement;
 public class PlayerManager : MonoBehaviour
 {
 
+    public static PlayerManager manager;
+
     public GameObject[] Players;
 
     public GameObject[] CurrentSceneGameObjects;
+
+    private void Awake()
+    {
+        if (manager == null)
+            manager = this;
+        else
+            Destroy(this);
+    }
 
     public void init(int NumberOfPlayers)
     {

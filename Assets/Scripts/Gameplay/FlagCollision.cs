@@ -30,13 +30,12 @@ public class FlagCollision : MonoBehaviour {
 		radiusFeedback.localScale = new Vector3(myCollider.radius,myCollider.radius,myCollider.radius) * 2f;
 
 		playersList = new List<Transform>();
-		foreach(Transform tra in PlayersManager.playersContainer.GetComponentsInChildren<Transform>())
-		{
-			if(tra.parent != PlayersManager.playersContainer)
-				continue;
-			playersList.Add(tra);
-		}
-		playersTimers = new float[PlayersManager.playersContainer.childCount];
+        for (int i = 0; i < PlayerManager.manager.Players.Length; i++)
+        {
+            playersList.Add(PlayerManager.manager.Players[i].transform);
+        }
+
+		playersTimers = new float[AddPlayers.manager.NumberOfPlayers];
 		print(playersTimers.Length);
 		CleanTheTimers();
 	}

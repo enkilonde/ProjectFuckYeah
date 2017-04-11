@@ -15,7 +15,7 @@ public class PauseManagement : MonoBehaviour
 
     public bool paused = false;
 
-    private Canvas pauseCanvas;
+    public Canvas pauseCanvas;
 
 	// Use this for initialization
 	void Awake ()
@@ -25,7 +25,7 @@ public class PauseManagement : MonoBehaviour
         else
             Destroy(this);
 
-        pauseCanvas = FindObjectOfType<Canvas>();
+        pauseCanvas = GameObject.Find("PauseCanvas").GetComponent<Canvas>();
         TogglePause(false);
 	}
 	

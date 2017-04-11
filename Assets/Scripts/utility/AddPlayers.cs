@@ -6,14 +6,21 @@ using UnityEngine.SceneManagement;
 
 public class AddPlayers : MonoBehaviour
 {
+    public static AddPlayers manager;
+
     [Range(1, 4)]
     public int NumberOfPlayers = 1;
 
 	// Use this for initialization
 	void Awake ()
     {
+        if (manager == null)
+            manager = this;
+        else
+            Destroy(this);
 
-        if(!SceneManager.GetActiveScene().name.ToLower().Contains("menu"))
+
+        if (!SceneManager.GetActiveScene().name.ToLower().Contains("menu"))
         {
             init();
         }

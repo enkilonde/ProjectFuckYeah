@@ -18,7 +18,7 @@ public class PlaneCollisionV3 : MonoBehaviour {
 
 	void OnCollisionStay(Collision coll)
 	{
-		print(coll.gameObject.tag);
+		//print(coll.gameObject.tag);
 
 		if(coll.gameObject.CompareTag("Obstacle"))
 		{
