@@ -125,6 +125,8 @@ public class CharacterV3 : MonoBehaviour {
 
     public Vector3 dirToMove;
 
+    private Vector3 explosionForce;
+
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
 		myController = GetComponent<CharacterController>();
@@ -151,8 +153,12 @@ public class CharacterV3 : MonoBehaviour {
 
         dirToMove = Vector3.zero;
 
+
+
         computeDirectionHorizontale();
         computeDirectionVerticale();
+
+        dirToMove += explVector; // on ajoute la force d'explosion
 
         //Apply
         myController.Move(dirToMove * Time.deltaTime);
@@ -277,7 +283,23 @@ public class CharacterV3 : MonoBehaviour {
 
 
 
+    public void ReceiveExplosionForce(Vector3 direction)
+    {
+        StartCoroutine(explosionForceAttenuate(direction * 10));
+    }
 
+    IEnumerator explosionForceAttenuate(Vector3 direction)
+    {
+
+        while(direction.magnitude > 1)
+        {
+            explVector = direction;
+            direction *= 0.9f; // TODO - mettre ça dans une variable pour pouvoir gérer l'atténuation
+            yield return null;
+        }
+        explVector = Vector3.zero;
+
+    }
 
     void CheckInputs()
 	{

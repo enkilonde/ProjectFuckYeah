@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     Text scoreText;
     Scrollbar speedDisplay;
     Scrollbar heightDisplay;
+    Scrollbar boostDisplay;
 
 
 	// Use this for initialization
@@ -19,6 +20,7 @@ public class PlayerUI : MonoBehaviour
         scoreText = transform.Find("Score").GetComponent<Text>();
         speedDisplay = transform.Find("speed").GetComponent<Scrollbar>();
         heightDisplay = transform.Find("height").GetComponent<Scrollbar>();
+        boostDisplay = transform.Find("boost").GetComponent<Scrollbar>();
 
 
     }
@@ -31,6 +33,6 @@ public class PlayerUI : MonoBehaviour
 
         speedDisplay.size = Mathf.InverseLerp(0, charaScript.minAltMaxSpeed, charaScript.currentFwdSpeed);
         heightDisplay.size = Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude);
-
+        boostDisplay.size = Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft);
     }
 }

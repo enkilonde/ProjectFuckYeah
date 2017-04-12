@@ -6,10 +6,11 @@ public class FlagBehaviour : MonoBehaviour
 {
     public const float timeToStealFlag = 2.0f;
 
+    public GameObject ImpulsePrefab;
 
-    public CharacterV3 targetPlayer;
+    [HideInInspector] public CharacterV3 targetPlayer;
 
-    public List<PlayerInfo> PlayersInCollider = new List<PlayerInfo>();
+    [HideInInspector] public List<PlayerInfo> PlayersInCollider = new List<PlayerInfo>();
 
     private void LateUpdate()
     {
@@ -74,7 +75,12 @@ public class FlagBehaviour : MonoBehaviour
             PlayersInCollider.Add(new PlayerInfo(targetPlayer.transform));
 
         targetPlayer = play.GetComponent<CharacterV3>();
+        play.GetComponent<CharacterV3>().RefillBoost();
         removePlayerFromList(play);
+
+        transform.position = targetPlayer.transform.position;
+
+        Instantiate(ImpulsePrefab, transform.position, Quaternion.identity);
     }
 
     public void removePlayerFromList(Transform play)

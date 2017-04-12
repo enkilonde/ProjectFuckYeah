@@ -10,6 +10,8 @@ public class PlayerManager : MonoBehaviour
 
     public GameObject[] Players;
 
+    public CharacterV3[] characters = new CharacterV3[4];
+
     public GameObject[] CurrentSceneGameObjects;
 
     private void Awake()
@@ -29,9 +31,15 @@ public class PlayerManager : MonoBehaviour
         {
             GameObject player = Players[i];
 
+            characters[i] = player.GetComponentInChildren<CharacterV3>();
 
             if(i >= NumberOfPlayers)
-            Players[i].SetActive(false);
+            {
+                Players[i].SetActive(false);
+                Players[i].transform.position = new Vector3(0, -100, 0);
+                continue;
+            }
+            
 
             GameObject pos = GetGameObjectByName("pos" + (i+1).ToString(), CurrentSceneGameObjects);
             if (pos != null)
