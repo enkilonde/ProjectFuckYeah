@@ -86,7 +86,7 @@ public class CameraV3Placement : MonoBehaviour {
 		if(!CV3)
 			CV3 = GameObject.Find("Character").GetComponent<CharacterV3>();
 
-		DOF.aperture = Mathf.Lerp(minApperture, maxApperture, _t_apperture);
+		//DOF.aperture = Mathf.Lerp(minApperture, maxApperture, _t_apperture);
 
 	}
 

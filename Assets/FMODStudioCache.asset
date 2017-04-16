@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114469475211301744}
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   EditorEvents:
   - {fileID: 114559951187069198}
   - {fileID: 114482589103048096}
@@ -25,9 +25,9 @@ MonoBehaviour:
   - {fileID: 114429292457229844}
   - {fileID: 114036801725024442}
   - {fileID: 114774626568566522}
-  MasterBankRef: {fileID: 114337709158154794}
+  MasterBankRef: {fileID: 114732796363154828}
   StringsBankRef: {fileID: 114469475211301744}
-  stringsBankWriteTime: 636267392848234582
+  stringsBankWriteTime: 636279562606936611
   cacheVersion: 2
 --- !u!114 &114035980688235928
 MonoBehaviour:
@@ -58,7 +58,7 @@ MonoBehaviour:
   Path: event:/Collision Bounce
   guid: e411c969a933af40a62c5cd3aca3fe0a
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -140,6 +140,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114153558937829032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: ReactorPower
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114170014692914636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +190,7 @@ MonoBehaviour:
   Path: event:/Crash
   guid: 5fb40d3b5ee6e94a84711857e8f94ea1
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -217,12 +232,12 @@ MonoBehaviour:
   Path: event:/Howling Banshee
   guid: af0c10182bc67b4d86cb5b99273b5e05
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114983451604746462}
+  - {fileID: 114343898712847896}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114281995908378642
@@ -239,14 +254,29 @@ MonoBehaviour:
   Path: event:/Moving
   guid: b4d7d74e9f6c1b49b05a07b56cda3dba
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114477065374235118}
+  - {fileID: 114305359025597346}
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114305359025597346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Speed
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114308313359264330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +359,21 @@ MonoBehaviour:
   - Name: 
     Value: 3269024
   Exists: 1
+--- !u!114 &114343898712847896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: IntensiteVirage
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114347177530751820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -416,7 +461,7 @@ MonoBehaviour:
   Path: event:/Pursuer In Range
   guid: c4070933cf48d944a7d623396137af4b
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -480,7 +525,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\StreamingAssets\Master Bank.strings.bank
-  lastModified: 636267392848234582
+  lastModified: 636279562606936611
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -515,7 +560,7 @@ MonoBehaviour:
   Path: event:/Target Destruct
   guid: 25c59faf2b59074684a9dfb397cf932a
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -572,7 +617,7 @@ MonoBehaviour:
   Path: event:/Lateral Boosts
   guid: 09c4da2105f7764caa829e907b4957a3
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -650,6 +695,24 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114732796363154828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: D:\depot_git\FuckYeah\Assets\StreamingAssets\Master Bank.bank
+  lastModified: 636279562606916564
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 3269024
+  Exists: 1
 --- !u!114 &114744848957658384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,14 +727,29 @@ MonoBehaviour:
   Path: event:/Reactor
   guid: 2b7b28ba76a0394ab0844f7e056c1a6d
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114861602967448620}
+  - {fileID: 114153558937829032}
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114757358456001928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Distance to Pursuer
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114774626568566522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,12 +764,12 @@ MonoBehaviour:
   Path: event:/Target proximity
   guid: e50e4f5fe8aed5499cbe115b0aec0ad3
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114066792307903840}
+  - {fileID: 114757358456001928}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114809805363572782
@@ -708,7 +786,7 @@ MonoBehaviour:
   Path: "event:/Fr\xF4lement"
   guid: 628cbd6ec0003e4fac61cfb6b0fdfb8b
   Banks:
-  - {fileID: 114337709158154794}
+  - {fileID: 114732796363154828}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
