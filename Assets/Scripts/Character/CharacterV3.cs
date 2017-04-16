@@ -18,10 +18,11 @@ public class CharacterV3 : MonoBehaviour {
 
 	//Private fields references
 	private ControllerV3 controlerSet;
-	private CharacterController myController;
-	//Speed
-	//	[HideInInspector]
-	public float currentFwdSpeed = 0f;
+    private new Rigidbody rigidbody;
+
+    //Speed
+    //	[HideInInspector]
+    public float currentFwdSpeed = 0f;
 	private float currentMaxSpeed = 0f;
 	public float minAltMaxSpeed = 140f;
 	public float maxAltMaxSpeed = 84f;
@@ -127,10 +128,18 @@ public class CharacterV3 : MonoBehaviour {
 
     private Vector3 explosionForce;
 
+    private Coroutine rotateOnCollisionCoroutine;
+
+    Vector3 explVector = Vector3.zero;
+
+    Vector3 bumbVector = Vector3.zero;
+
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
-		myController = GetComponent<CharacterController>();
-		chasingStateScript = GetComponent<ChasingState>();
+
+        rigidbody = GetComponent<Rigidbody>();
+
+        chasingStateScript = GetComponent<ChasingState>();
 
 		//Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
 		currentFwdSpeed = 0f;
@@ -147,9 +156,17 @@ public class CharacterV3 : MonoBehaviour {
     void Update ()
     {
 
-        //if (chasingStateScript.currentChaseState == ChasingState.ChaseStates.Target)
-        //    currentScore += Time.deltaTime * speedScoreGain;
+        if (GameState.curGameState == GameState.AllGameStates.Play || true)
+            CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
 
+
+
+
+    }
+
+
+    private void FixedUpdate()
+    {
 
         dirToMove = Vector3.zero;
 
@@ -159,9 +176,15 @@ public class CharacterV3 : MonoBehaviour {
         computeDirectionVerticale();
 
         dirToMove += explVector; // on ajoute la force d'explosion
+        dirToMove += bumbVector;
+
+        bumbVector *= 0.9f;
+        if (bumbVector.magnitude < 0.1f) bumbVector = Vector3.zero;
 
         //Apply
-        myController.Move(dirToMove * Time.deltaTime);
+        rigidbody.velocity = dirToMove;
+
+        Debug.DrawLine(transform.position, transform.position + dirToMove);
 
         //Update Altitude
         currentAltitude = transform.position.y;
@@ -178,18 +201,12 @@ public class CharacterV3 : MonoBehaviour {
         _t_boostLoad = Mathf.Clamp(_t_boostLoad, -1f, 1f);
 
 
-        //Update Hit wall transition
-        if (hitSomething)
-            UpdateObstacleHitTranslation();
-
-        if (GameState.curGameState == GameState.AllGameStates.Play || true)
-            CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
 
         //Rotate upon Input (LACET)
         //Update rotation speed
         currentLacetSpeed = Mathf.MoveTowards(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot, lacetTransitionSpeed * Time.deltaTime);
         //Rotate by speed
-        if (!hitSomething) transform.Rotate(Vector3.up * currentLacetSpeed * Time.deltaTime, Space.World);
+        transform.Rotate(Vector3.up * currentLacetSpeed * Time.deltaTime, Space.World);
 
         //UpdateSpeedFwd
         //Accel en fonction de l'altitude
@@ -273,7 +290,7 @@ public class CharacterV3 : MonoBehaviour {
 
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.deltaTime);
         currentVerticalForce = _verticalBoost;
-        dirToMove.y += _verticalBoost;
+        //dirToMove.y += _verticalBoost;
     }
 
 
@@ -389,75 +406,47 @@ public class CharacterV3 : MonoBehaviour {
 	}
 
 
-	/// <summary>
-	/// Updates the changes smoothly after collision.
-	/// </summary>
-	private void UpdateObstacleHitTranslation()
-	{
-		if(currentTimerToReflect > 0f)
-		{
-			currentTimerToReflect-= Time.deltaTime;
-			float _t = currentTimerToReflect.Remap(0f, transitionTimeToReflectVector, 0f, 1f);
-			inertieVector = Vector3.Lerp(forcedInerty, hit_initialInetry, _t);		//Transition vers la nouvelle inertie
-			transform.forward = Vector3.Lerp(forcedInerty, hit_initialForward, _t);		//Transition du forward
-			//			transform.position = Vector3.Lerp(transform.position + lastNormal * maxSpeedRebondForce, hitPosition, _t);	//Rebond selon la normale
-			transform.position = Vector3.Lerp(transform.position + forcedInerty * currentSpeedRebondForce, hitPosition, _t);	//Rebond vers la nouvelle inertie
-			if(currentTimerToReflect <= 0f)
-				hitSomething = false;
-		}
+    IEnumerator rotateFromCollision(Vector3 targetDirection)
+    {
 
-	}
+        float rotSpeed = 10;
+        float addedRot = 0.01f;
 
-	/// <summary>
-	/// Gets the current rebond force.
-	/// </summary>
-	/// <returns>The current rebond force.</returns>
-	float GetCurrentRebondForce()
-	{
-		return Mathf.Lerp(minSpeedRebondForce, maxSpeedRebondForce, RobToolsClass.GetNormalizedValue(currentFwdSpeed, 0f, minAltMaxSpeed));
-	}
+        while (Vector3.Angle(transform.forward, targetDirection) > 1f)
+        {
+            inertieVector = Vector3.Lerp(inertieVector, targetDirection, Time.deltaTime * rotSpeed + addedRot);
 
-	/// <summary>
-	/// When avatar hit obstacle.
-	/// </summary>
-	/// <param name="_newInertyDirection">New inerty direction.</param>
-	/// <param name="normalSurf">Normal surf.</param>
-	/// <param name="hitPos">Hit position.</param>
-	public void ObstacleHit(Vector3 _newInertyDirection, Vector3 normalSurf, Vector3 hitPos)
-	{
-		if(hitSomething)
-			return;
-		hitSomething = true;
-		currentTimerToReflect = transitionTimeToReflectVector;	//Set timer
-		forcedInerty = _newInertyDirection;	//Direction d'inertie cible
+            transform.LookAt(transform.position + Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * rotSpeed + addedRot));
+            yield return null;
+        }
 
-		//Force de rebond dépendante de la vitesse
-		currentSpeedRebondForce = GetCurrentRebondForce();
+    }
 
-		//Ralentir
-		currentFwdSpeed -= RobToolsClass.GetValueFromPercent(deccelHitPorcent, currentFwdSpeed);
+    private void OnCollisionEnter(Collision collision)
+    {
 
-		//Stock pour pouvoir faire un lerp
-		lastNormal = normalSurf;	//Normale de la surface percutée
-		hitPosition = hitPos;	//Point d'impact
-		hit_initialForward = transform.forward;		//Le forward avant impact
-		hit_initialInetry = inertieVector;		//Inertie avant impact
+        //inertieVector = Vector3.zero;
+        //previousDirToMove = Vector3.zero;
 
-		//Instantané
-		//		inertieVector = _newInertyDirection;
-		//		transform.forward = _newInertyDirection;
-	}
+        Vector3 reflect = Vector3.Reflect(inertieVector, collision.contacts[0].normal);
+        Vector3 newVector = inertieVector;
 
-	Vector3 explVector = Vector3.zero;
 
-	public void ImpulseInfluence(Vector3 _dirAndForce)
-	{
-		explVector = _dirAndForce;
-		//		myController.Move(_dirAndForce * Time.deltaTime);
-		//		print("imp");
-	}
 
-	public void RefillBoost()
+        newVector = Vector3.Cross(collision.contacts[0].normal, Vector3.up);
+        if (Vector3.Angle(inertieVector, newVector) > 90) newVector = -newVector;
+
+        newVector = Vector3.RotateTowards(newVector, collision.contacts[0].normal, 5 * Mathf.Deg2Rad, 0.0f);
+
+        bumbVector = reflect * 100;
+
+        //inertieVector = newVector;
+        //transform.LookAt(transform.position + newVector);
+        StartCoroutine(rotateFromCollision(newVector));
+    }
+
+
+    public void RefillBoost()
 	{
 		currentBoostAmountLeft = 1f;
 		_t_boostLoad = 1f;

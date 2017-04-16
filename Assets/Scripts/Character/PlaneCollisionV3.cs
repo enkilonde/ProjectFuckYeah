@@ -16,7 +16,7 @@ public class PlaneCollisionV3 : MonoBehaviour {
 	}
 	
 
-	void OnCollisionStay(Collision coll)
+	void OnCollisionEnter(Collision coll)
 	{
 		//print(coll.gameObject.tag);
 
@@ -29,36 +29,18 @@ public class PlaneCollisionV3 : MonoBehaviour {
 			Debug.DrawRay(coll.contacts[0].point, Vector3.Reflect(CV3.inertieVector, coll.contacts[0].normal) * 10f, Color.red);	//reflect
 
 			Vector3 _reflectionvector = Vector3.Reflect(CV3.inertieVector, coll.contacts[0].normal);
+            float impactAngle = Vector3.Angle(CV3.inertieVector, coll.contacts[0].normal) - 90;
 
-			CV3.ObstacleHit(_reflectionvector, coll.contacts[0].normal, coll.contacts[0].point);
+            if(impactAngle < 90)
+            {
+                //CV3.ObstacleHit(_reflectionvector, coll.contacts[0].normal, coll.contacts[0].point);
 
-		}
-//		else if(coll.gameObject.CompareTag("Impulse"))
-//		{
-//			print("coll");
-//			if(chaseState.currentChaseState == ChasingState.ChaseStates.Target)
-//				return;
-//
-//			Vector3 _impulseVec = transform.position - coll.transform.position;
-//			_impulseVec *= impForce;
-//			CV3.ImpulseInfluence(_impulseVec);
-//		}
+            }
+            //CV3.ObstacleHit(_reflectionvector, coll.contacts[0].normal, coll.contacts[0].point, impactAngle);
 
-	}
+        }
 
-	void OnTriggerStay(Collider coll)
-	{
-//		print(coll.transform.name);
-		if(coll.gameObject.CompareTag("Impulse"))
-		{
-//			print("coll");
-			if(chaseState.currentChaseState == ChasingState.ChaseStates.Target)
-				return;
 
-			Vector3 _impulseVec = transform.position - coll.transform.position;
-			_impulseVec *= impForce;
-			CV3.ImpulseInfluence(_impulseVec);
-		}
 	}
 
 }

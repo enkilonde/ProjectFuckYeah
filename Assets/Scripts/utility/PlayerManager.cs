@@ -43,7 +43,10 @@ public class PlayerManager : MonoBehaviour
 
             GameObject pos = GetGameObjectByName("pos" + (i+1).ToString(), CurrentSceneGameObjects);
             if (pos != null)
+            {
                 player.transform.position = pos.transform.position;
+                player.transform.rotation = pos.transform.rotation;
+            }
 
             SetCamera(player.transform.Find("Character").Find("Camera").GetComponentInChildren<Camera>(), NumberOfPlayers, i);
 
