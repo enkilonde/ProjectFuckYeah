@@ -31,12 +31,10 @@ public class CameraV1 : MonoBehaviour {
 	Vector3 initialPosition;
 	Transform character;
 	ControllerV3 controler;
-	CharacterV3 cv3;
 
 	void Start () {
 		character = transform.parent.transform.FindChild("Character").transform;
 		controler = transform.parent.GetComponentInChildren<ControllerV3>();
-		cv3 = character.GetComponent<CharacterV3>();
 
 		switch(CameraType)
 		{

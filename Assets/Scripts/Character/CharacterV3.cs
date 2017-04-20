@@ -48,7 +48,7 @@ public class CharacterV3 : MonoBehaviour {
 	public float verticalSpeedTransitionSpeed = 20f;
 
 	//Lateral boost
-	private float currentLateralSpeed = 0f;
+
 	public float maxLateralSpeed = 50f;
 	public bool straffUseInerty = true;
 
@@ -61,17 +61,16 @@ public class CharacterV3 : MonoBehaviour {
 	public float airResistance = 25f;
 
 	//Gethit
-	private bool hitSomething = false;
+
 	[Range(0f, 0.5f)]
 	public float transitionTimeToReflectVector = 0.2f;
-	private float currentTimerToReflect = 0f;
-	private Vector3 forcedInerty = Vector3.forward;
+
+
 	private Vector3 hit_initialInetry, hit_initialForward;
 	private Vector3 lastNormal = Vector3.right;
 	private Vector3 hitPosition = Vector3.zero;
 	public float maxSpeedRebondForce = 10f;
 	public float minSpeedRebondForce = 2f;
-	private float currentSpeedRebondForce = 0f;
 	[Range(0f, 100f)]
 	public float deccelHitPorcent = 50f;
 
@@ -89,7 +88,6 @@ public class CharacterV3 : MonoBehaviour {
 	public float lateralBoostDecceleration = 25f;
 
 	//Score
-	private ChasingState chasingStateScript;
 	[HideInInspector]
 	public float currentScore = 0f;
 	public float speedScoreGain = 100f;
@@ -112,15 +110,8 @@ public class CharacterV3 : MonoBehaviour {
 	public float I_forwardBoost = 0f;
 
 	private float _t_boostLoad = 0f;
-	private bool isInBoost = false;
-	private float currentBoostSpeed = 0f;
-
-	private float _lastLatoostDirUsed = 1f;
-
-	Vector3 lateralInertie;
 
     private float noBoostTimer = 0f;
-    public float timeTowaitForBoostReload = 2f;
 
     private float gravityImpactOnAcceleration = 0.5f;
 
@@ -134,12 +125,12 @@ public class CharacterV3 : MonoBehaviour {
 
     Vector3 bumbVector = Vector3.zero;
 
+    RaycastHit downRaycast;
+
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
 
         rigidbody = GetComponent<Rigidbody>();
-
-        chasingStateScript = GetComponent<ChasingState>();
 
 		//Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
 		currentFwdSpeed = 0f;
@@ -171,7 +162,7 @@ public class CharacterV3 : MonoBehaviour {
         dirToMove = Vector3.zero;
 
 
-
+        raycastDown();
         computeDirectionHorizontale();
         computeDirectionVerticale();
 
@@ -290,20 +281,35 @@ public class CharacterV3 : MonoBehaviour {
             currentVerticalForce = 0;
         }
 
-        if(currentAltitude < minAltitude && I_verticalBoost == 0)
+        if(currentAltitude < minAltitude && I_verticalBoost == 0 )
         {
             currentVerticalForce = minAltitude - currentAltitude;
+            AdjustTime = 20;
+        }
+
+        if (downRaycast.transform != null && Vector3.Distance(downRaycast.point, transform.position) < 5)
+        {
+            currentVerticalForce = 5 - Vector3.Distance(downRaycast.point, transform.position);
             AdjustTime = 20;
         }
 
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.deltaTime * AdjustTime);
         currentVerticalForce = _verticalBoost;
         dirToMove.y += _verticalBoost;
-
     }
 
 
+    void raycastDown()
+    {
+        Ray r = new Ray(transform.position, Vector3.down);
+        if( Physics.Raycast(r, out downRaycast, 1000))
+        {
+            //Debug.Log(Vector3.Distance(downRaycast.point, transform.position), downRaycast.transform.gameObject);
+        }
+        Debug.DrawRay(transform.position, Vector3.down, Color.black);
 
+
+    }
 
 
 

@@ -28,7 +28,7 @@ public class PlaneCollisionV3 : MonoBehaviour {
 			Debug.DrawRay(coll.contacts[0].point, coll.contacts[0].normal * 10f, Color.green);	//normale
 			Debug.DrawRay(coll.contacts[0].point, Vector3.Reflect(CV3.inertieVector, coll.contacts[0].normal) * 10f, Color.red);	//reflect
 
-			Vector3 _reflectionvector = Vector3.Reflect(CV3.inertieVector, coll.contacts[0].normal);
+
             float impactAngle = Vector3.Angle(CV3.inertieVector, coll.contacts[0].normal) - 90;
 
             if(impactAngle < 90)
