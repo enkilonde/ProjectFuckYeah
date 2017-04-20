@@ -8,21 +8,19 @@ public class PlayerUI : MonoBehaviour
     CharacterV3 charaScript;
 
     Text scoreText;
-    Scrollbar speedDisplay;
-    Scrollbar heightDisplay;
-    Scrollbar boostDisplay;
+    RectTransform speedDisplay;
+    RectTransform heightDisplay;
+    RectTransform boostDisplay;
 
 
-	// Use this for initialization
-	void Awake ()
+    // Use this for initialization
+    void Awake ()
     {
         charaScript = transform.parent.parent.GetComponentInChildren<CharacterV3>();
         scoreText = transform.Find("Score").GetComponent<Text>();
-        speedDisplay = transform.Find("speed").GetComponent<Scrollbar>();
-        heightDisplay = transform.Find("height").GetComponent<Scrollbar>();
-        boostDisplay = transform.Find("boost").GetComponent<Scrollbar>();
-
-
+        speedDisplay = transform.Find("Speed").Find("slider").GetComponent<RectTransform>();
+        heightDisplay = transform.Find("Height").Find("slider").GetComponent<RectTransform>();
+        boostDisplay = transform.Find("Boost").Find("slider").GetComponent<RectTransform>();
     }
 
     // Update is called once per frame
@@ -31,8 +29,13 @@ public class PlayerUI : MonoBehaviour
 
         scoreText.text = "Score : " + (int)charaScript.currentScore;
 
-        speedDisplay.size = Mathf.InverseLerp(0, charaScript.minAltMaxSpeed, charaScript.currentFwdSpeed);
-        heightDisplay.size = Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude);
-        boostDisplay.size = Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft);
+        //speedDisplay.size = Mathf.InverseLerp(0, charaScript.minAltMaxSpeed, charaScript.currentFwdSpeed);
+        //heightDisplay.size = Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude);
+        //boostDisplay.size = Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft);
+
+        speedDisplay.sizeDelta = new Vector2(Mathf.InverseLerp(0, charaScript.minAltMaxSpeed, charaScript.currentFwdSpeed) * 100, speedDisplay.sizeDelta.y);
+        heightDisplay.sizeDelta = new Vector2(Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude) * 100, speedDisplay.sizeDelta.y);
+        boostDisplay.sizeDelta = new Vector2(Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft) * 100, speedDisplay.sizeDelta.y);
+
     }
 }

@@ -263,6 +263,8 @@ public class CharacterV3 : MonoBehaviour {
 
     void computeDirectionVerticale()
     {
+        float AdjustTime = 1;
+
         float speedfactor = Mathf.InverseLerp(maxAltMaxSpeed, minAltMaxSpeed, currentFwdSpeed);
 
         float heightFactor = Mathf.InverseLerp(minAltitude, maxAltitude, currentAltitude);
@@ -288,9 +290,16 @@ public class CharacterV3 : MonoBehaviour {
             currentVerticalForce = 0;
         }
 
-        float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.deltaTime);
+        if(currentAltitude < minAltitude && I_verticalBoost == 0)
+        {
+            currentVerticalForce = minAltitude - currentAltitude;
+            AdjustTime = 20;
+        }
+
+        float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.deltaTime * AdjustTime);
         currentVerticalForce = _verticalBoost;
-        //dirToMove.y += _verticalBoost;
+        dirToMove.y += _verticalBoost;
+
     }
 
 
