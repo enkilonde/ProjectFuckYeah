@@ -38,16 +38,16 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: 1_StickG_X_Axis
-    descriptiveName: for keyboard
+    m_Name: 
+    descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: q
-    positiveButton: d
+    negativeButton: 
+    positiveButton: 
     altNegativeButton: 
     altPositiveButton: 
-    gravity: 3
-    dead: 0.1
-    sensitivity: 3
+    gravity: 0
+    dead: 0
+    sensitivity: 0
     snap: 0
     invert: 0
     type: 0

@@ -293,6 +293,11 @@ Prefab:
       propertyPath: m_Name
       value: 3CV3_J1
       objectReference: {fileID: 0}
+    - target: {fileID: 114424018301075676, guid: f61c4578616dd9f4fa69fcb3a6e17b47,
+        type: 2}
+      propertyPath: playerNumero
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f61c4578616dd9f4fa69fcb3a6e17b47, type: 2}
   m_IsPrefabParent: 0

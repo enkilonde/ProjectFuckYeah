@@ -121,6 +121,8 @@ public class CharacterV3 : MonoBehaviour {
 
     FlagBehaviour flagBehavoirScript;
 
+    public bool inputsSet = false;
+
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
         flagBehavoirScript = FindObjectOfType<FlagBehaviour>();
@@ -141,7 +143,7 @@ public class CharacterV3 : MonoBehaviour {
     void Update ()
     {
 
-        if (GameState.curGameState == GameState.AllGameStates.Play || true)
+        if (GameState.curGameState == GameState.AllGameStates.Play || true && inputsSet)
             CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
 
 
@@ -382,9 +384,10 @@ public class CharacterV3 : MonoBehaviour {
 		{
 			I_lateralBoostRight = 1f;
 		}
-		#endregion
+        #endregion
 
-		#region vertical boost
+        #region vertical boost
+        //Debug.Log(controlerSet.Get_HorizontalRotInput() + " : " + Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput()), controlerSet.gameObject);
 		I_verticalBoost = Input.GetAxisRaw(controlerSet.Get_VertcalBoostAxisInput());
 		#endregion
 

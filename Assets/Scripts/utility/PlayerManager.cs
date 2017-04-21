@@ -11,8 +11,12 @@ public class PlayerManager : MonoBehaviour
     public GameObject[] Players;
 
     public CharacterV3[] characters = new CharacterV3[4];
+    public ControllerV3[] controllers = new ControllerV3[4];
 
     public GameObject[] CurrentSceneGameObjects;
+
+    public bool[] playersAttribs = new bool[4];
+    public bool[] controllersUsed = new bool[4];
 
     private void Awake()
     {
@@ -20,6 +24,19 @@ public class PlayerManager : MonoBehaviour
             manager = this;
         else
             Destroy(this);
+
+        controllersUsed = new bool[4];
+        playersAttribs = new bool[4];
+        for (int i = 0; i < 4; i++)
+        {
+            controllersUsed[i] = false;
+            playersAttribs[i] = false;
+        }
+    }
+
+    private void Update()
+    {
+        AttribInputs();
     }
 
     public void init(int NumberOfPlayers)
@@ -32,6 +49,7 @@ public class PlayerManager : MonoBehaviour
             GameObject player = Players[i];
 
             characters[i] = player.GetComponentInChildren<CharacterV3>();
+            controllers[i] = player.GetComponentInChildren<ControllerV3>();
 
             if(i >= NumberOfPlayers)
             {
@@ -143,5 +161,31 @@ public class PlayerManager : MonoBehaviour
 
         return null;
     }
+
+    public void AttribInputs()
+    {
+        if (playersAttribs[3]) return;
+        for (int i = 1; i <= 4; i++)
+        {
+            //Debug.Log("Controller : " + i + " : " +  Input.GetAxisRaw(i + "_XBOX_A"));
+            if (controllersUsed[i - 1]) continue;
+
+            if(Input.GetAxisRaw(i + "_XBOX_A") != 0)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    if (playersAttribs[j]) continue;
+                    Debug.Log("Set player " + j + " on controller " + i);
+                    controllers[j].playerNumero = i;
+                    characters[j].inputsSet = true;
+                    controllersUsed[i-1] = true;
+                    playersAttribs[j] = true;
+                    break;
+                }
+            }
+
+        }
+    }
+
 
 }
