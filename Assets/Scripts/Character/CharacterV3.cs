@@ -76,16 +76,9 @@ public class CharacterV3 : MonoBehaviour {
 
 	//Boost
 	[HideInInspector]
-	public float currentBoostAmountLeft = 0f;
-	public float timeToReload = 10f;
-	public float timeToUnload = 5f;
-	private float currentMaxSpeedWhileBoost = 0f;
-	public float maxSpeedwhileBoost = 200f;
-	public float maxBoostSpeed_DeccelerationSpeed = 50f;	//Amount of speed plafond lost in a second
-	public float accelerationSpeedWhileBoost = 2f;
-	public float minBoostRecquired = 20f;	//en %
-	public float lateralBoostAcceleration = 25f;
-	public float lateralBoostDecceleration = 25f;
+    public float I_forwardBoost = 0f;
+    public float currentBoostAmountLeft = 0f;
+    private float boostSpeedMultiplier = 5;
 
 	//Score
 	[HideInInspector]
@@ -107,11 +100,10 @@ public class CharacterV3 : MonoBehaviour {
 	[HideInInspector]
 	public float I_verticalBoost = 0f;
 	//	[HideInInspector]
-	public float I_forwardBoost = 0f;
 
-	private float _t_boostLoad = 0f;
 
-    private float noBoostTimer = 0f;
+
+    //private float noBoostTimer = 0f;
 
     private float gravityImpactOnAcceleration = 0.5f;
 
@@ -127,9 +119,11 @@ public class CharacterV3 : MonoBehaviour {
 
     RaycastHit downRaycast;
 
+    FlagBehaviour flagBehavoirScript;
+
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
-
+        flagBehavoirScript = FindObjectOfType<FlagBehaviour>();
         rigidbody = GetComponent<Rigidbody>();
 
 		//Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
@@ -185,54 +179,44 @@ public class CharacterV3 : MonoBehaviour {
 
     void computeDirectionHorizontale()
     {
-
-        currentBoostAmountLeft = RobToolsClass.GetNormalizedValue(_t_boostLoad, 0f, 1f); //Maj la jauge
         I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;    //Reste t'il du boost dans la jauge
-        _t_boostLoad += ((I_forwardBoost > 0.5f) ? -1f / timeToUnload : 1f / timeToReload) * Time.deltaTime;    //Are the jauge being used ?
-        _t_boostLoad = Mathf.Clamp(_t_boostLoad, -1f, 1f);
-
-
+        currentBoostAmountLeft = Mathf.Clamp(currentBoostAmountLeft += Time.fixedDeltaTime / 5, 0, 1);
 
         //Rotate upon Input (LACET)
         //Update rotation speed
-        currentLacetSpeed = Mathf.MoveTowards(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot, lacetTransitionSpeed * Time.deltaTime);
+        currentLacetSpeed = Mathf.MoveTowards(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot, lacetTransitionSpeed * Time.fixedDeltaTime);
         //Rotate by speed
-        transform.Rotate(Vector3.up * currentLacetSpeed * Time.deltaTime, Space.World);
+        transform.Rotate(Vector3.up * currentLacetSpeed * Time.fixedDeltaTime, Space.World);
 
-        //UpdateSpeedFwd
         //Accel en fonction de l'altitude
-
         float _t_alti = RobToolsClass.GetNormalizedValue(currentAltitude, minAltitude, maxAltitude);
         float _tempAccel = Mathf.Lerp(minAltAccel, maxAltAccel, _t_alti);
 
-        if (I_forwardBoost > 0.5f)
-            _tempAccel *= accelerationSpeedWhileBoost;//If boost, we accelerate fully
-        else
-            _tempAccel *= I_accel;//If not boost, so we use the accelerate basic axis //Multiply by input
+        _tempAccel *= I_accel;//If not boost, so we use the accelerate basic axis //Multiply by input
 
 
         //MaxSpeed
-        currentMaxSpeed = Mathf.Lerp(minAltMaxSpeed, maxAltMaxSpeed, _t_alti);
+        float maxSpeed = Mathf.Lerp(minAltMaxSpeed, maxAltMaxSpeed, _t_alti);
 
 
-        //MaxSpeedBoost
-        if (I_forwardBoost > 0.5f)
-            currentMaxSpeedWhileBoost = maxSpeedwhileBoost;//If input, the max absolute speed is instantanely equal to a new maximum
-        else
-            currentMaxSpeedWhileBoost = Mathf.MoveTowards(currentMaxSpeedWhileBoost, 0f, maxBoostSpeed_DeccelerationSpeed * Time.deltaTime);//If no more boost, smoothly decrease max speed
 
+        //Do we use the boost?
+        if(I_forwardBoost!= 0)
+        {
+            _tempAccel *= boostSpeedMultiplier;
+            currentBoostAmountLeft -=  Time.fixedDeltaTime;
+        }
 
-        currentMaxSpeed += currentMaxSpeedWhileBoost;
-
+        currentMaxSpeed = Mathf.Lerp(currentMaxSpeed, (I_forwardBoost == 0)?maxSpeed : maxSpeed * 2, Time.fixedDeltaTime);
 
         //CurrentSpeed
-        if (I_accel != 0f || I_forwardBoost != 0f)  //if input : accelerate
-            currentFwdSpeed += (_tempAccel * (1 - gravityImpactOnAcceleration * Mathf.Sign(currentVerticalForce))) * Time.deltaTime;
+        if (I_accel > accel_minSensitivity || I_forwardBoost != 0f)  //if input : accelerate
+            currentFwdSpeed += (_tempAccel * (1 - gravityImpactOnAcceleration * Mathf.Sign(currentVerticalForce))) * Time.fixedDeltaTime;
         else                //else : decelerate
-            currentFwdSpeed -= deccelNoInput * Time.deltaTime;
+            currentFwdSpeed -= deccelNoInput * Time.fixedDeltaTime;
 
         float dotIF = (-Vector3.Dot(inertieVector.normalized, transform.forward) + 1f) / 2f;
-        currentFwdSpeed -= (dotIF * airResistance) * Time.deltaTime;
+        currentFwdSpeed -= (dotIF * airResistance) * Time.fixedDeltaTime;
 
 
         currentFwdSpeed = Mathf.Clamp(currentFwdSpeed, 0f, currentMaxSpeed); //clamp
@@ -243,11 +227,11 @@ public class CharacterV3 : MonoBehaviour {
         //Inertie
         if (I_accel > accel_minSensitivity || I_forwardBoost > 0.5f)
         {
-            inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.deltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
+            inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.fixedDeltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
         }
 
-        dirToMove = inertieVector * currentFwdSpeed;
 
+        dirToMove = inertieVector * currentFwdSpeed;
     }
 
 
@@ -265,9 +249,9 @@ public class CharacterV3 : MonoBehaviour {
         float oldVerticalForce = currentVerticalForce;
 
         if (currentAltitude <= effectifMaxHeight)
-            _verticalBoostInput = Mathf.Lerp(_verticalBoostInput, I_verticalBoost, Time.deltaTime * 50);
+            _verticalBoostInput = Mathf.Lerp(_verticalBoostInput, I_verticalBoost, Time.fixedDeltaTime * 50);
         else
-            _verticalBoostInput = Mathf.Lerp(_verticalBoostInput, 0, Time.deltaTime * 50);
+            _verticalBoostInput = Mathf.Lerp(_verticalBoostInput, 0, Time.fixedDeltaTime * 50);
 
 
         if (I_verticalBoost > 0)
@@ -293,7 +277,7 @@ public class CharacterV3 : MonoBehaviour {
             AdjustTime = 20;
         }
 
-        float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.deltaTime * AdjustTime);
+        float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.fixedDeltaTime * AdjustTime);
         currentVerticalForce = _verticalBoost;
         dirToMove.y += _verticalBoost;
     }
@@ -440,13 +424,15 @@ public class CharacterV3 : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
 
-        //inertieVector = Vector3.zero;
-        //previousDirToMove = Vector3.zero;
 
         Vector3 reflect = Vector3.Reflect(inertieVector, collision.contacts[0].normal);
         Vector3 newVector = inertieVector;
 
-
+        if(Vector3.Angle(inertieVector, reflect) < 30)
+        {
+            //Crash
+            flagBehavoirScript.Drop();
+        }
 
         newVector = Vector3.Cross(collision.contacts[0].normal, Vector3.up);
         if (Vector3.Angle(inertieVector, newVector) > 90) newVector = -newVector;
@@ -455,16 +441,17 @@ public class CharacterV3 : MonoBehaviour {
 
         bumbVector = reflect * 100;
 
-        //inertieVector = newVector;
-        //transform.LookAt(transform.position + newVector);
-        StartCoroutine(rotateFromCollision(newVector));
+        if (rotateOnCollisionCoroutine != null)
+            StopCoroutine(rotateOnCollisionCoroutine);
+
+        rotateOnCollisionCoroutine = StartCoroutine(rotateFromCollision(newVector));
     }
 
 
     public void RefillBoost()
 	{
 		currentBoostAmountLeft = 1f;
-		_t_boostLoad = 1f;
+		//_t_boostLoad = 1f;
 	}
 
 }

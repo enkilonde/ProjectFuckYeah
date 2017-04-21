@@ -107,6 +107,10 @@ public class FlagBehaviour : MonoBehaviour
         return false;
     }
 
+    public void Drop()
+    {
+        targetPlayer = null;
+    }
 }
 
 [System.Serializable]

@@ -95,7 +95,7 @@ NavMeshSettings:
 GameObject:
   m_PrefabParentObject: {fileID: 1413997976804262, guid: f61c4578616dd9f4fa69fcb3a6e17b47,
     type: 2}
-  m_PrefabInternal: {fileID: 1599600146}
+  m_PrefabInternal: {fileID: 1322368687}
 --- !u!1 &834850776
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +250,7 @@ GameObject:
   m_PrefabParentObject: {fileID: 1413997976804262, guid: f61c4578616dd9f4fa69fcb3a6e17b47,
     type: 2}
   m_PrefabInternal: {fileID: 1312706316}
---- !u!1001 &1599600146
+--- !u!1001 &1322368687
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
