@@ -106,9 +106,11 @@ public class PlayerManager : MonoBehaviour
                         break;
                 }
                 break;
-
-
         }
+
+        Camera camUI = cam.transform.parent.Find("CameraUI").GetComponent<Camera>();
+        camUI.rect = cam.rect;
+
     }
 
     GameObject GetGameObjectByName(string name, GameObject[] objects)
