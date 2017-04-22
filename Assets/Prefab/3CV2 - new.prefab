@@ -1868,9 +1868,11 @@ MonoBehaviour:
   deccelHitPorcent: 50
   I_forwardBoost: 0
   currentBoostAmountLeft: 0
-  boostSpeedMultiplier: 2
+  boostGainedPerSeconds: 0.1
   currentScore: 0
   speedScoreGain: 100
+  inputsSet: 0
+  useKeyboard: 0
   I_accel: 0
   I_lateralBoostLeft: 0
   I_lateralBoostRight: 0
@@ -1879,6 +1881,7 @@ MonoBehaviour:
   lateralBoostDirInput: {x: -0, y: 0, z: -0}
   I_verticalBoost: 0
   dirToMove: {x: 0, y: 0, z: 0}
+  previousPos: []
 --- !u!114 &114424018301075676
 MonoBehaviour:
   m_ObjectHideFlags: 1

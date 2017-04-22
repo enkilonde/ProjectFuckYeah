@@ -79,6 +79,7 @@ public class CharacterV3 : MonoBehaviour {
     public float I_forwardBoost = 0f;
     public float currentBoostAmountLeft = 0f;
     private float boostSpeedMultiplier = 5;
+    public float boostGainedPerSeconds = 0.1f;
 
 	//Score
 	[HideInInspector]
@@ -127,14 +128,17 @@ public class CharacterV3 : MonoBehaviour {
 
     FlagBehaviour flagBehavoirScript; //  /!\ ne marche que si il n'y a que 1 seul flag
 
-    TrailRenderer reactorTrail;
+
+    public List<Vector3> previousPos = new List<Vector3>(30);
+    float registerPosLastDistance = 0;
+    Vector3 previousP;
+
 
 
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
         flagBehavoirScript = FindObjectOfType<FlagBehaviour>();
         rigidbody = GetComponent<Rigidbody>();
-        reactorTrail = GetComponentInChildren<TrailManager>().transform.Find("Reactor_Trail").GetComponent<TrailRenderer>();
 
         //Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
         currentFwdSpeed = 0f;
@@ -146,28 +150,28 @@ public class CharacterV3 : MonoBehaviour {
 	}
 
 
-
-
     void Update ()
-    {
-        
+    { 
 
         if (inputsSet)
             CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
         else if (useKeyboard)
             CheckInputsKeyboard(); // check inputs for keyboard
-
-
-
-
     }
 
 
     private void FixedUpdate()
     {
 
-        dirToMove = Vector3.zero;
+        //Debug.Log("displacement = " + (transform.position - previousP).magnitude + " velocity : " + dirToMove.magnitude);
 
+        if ( (registerPosLastDistance += (transform.position - previousP).magnitude ) >= 10)
+        {
+            RegisterPos();
+            registerPosLastDistance = 0;
+        }
+
+        dirToMove = Vector3.zero;
 
         raycastDown();
         computeDirectionHorizontale();
@@ -182,18 +186,17 @@ public class CharacterV3 : MonoBehaviour {
         //Apply
         rigidbody.velocity = dirToMove;
 
-        Debug.DrawLine(transform.position, transform.position + dirToMove);
 
         //Update Altitude
         currentAltitude = transform.position.y;
 
+        previousP = transform.position;
     }
-
 
     void computeDirectionHorizontale()
     {
         I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;    //Reste t'il du boost dans la jauge
-        currentBoostAmountLeft = Mathf.Clamp(currentBoostAmountLeft += Time.fixedDeltaTime / 5, 0, 1);
+        currentBoostAmountLeft = Mathf.Clamp(currentBoostAmountLeft +=  boostGainedPerSeconds * ((IsInTrail())?10:1) * Time.fixedDeltaTime, 0, 1);
 
         //Rotate upon Input (LACET)
         //Update rotation speed
@@ -228,6 +231,8 @@ public class CharacterV3 : MonoBehaviour {
         else                //else : decelerate
             currentFwdSpeed -= deccelNoInput * Time.fixedDeltaTime;
 
+
+
         float dotIF = (-Vector3.Dot(inertieVector.normalized, transform.forward) + 1f) / 2f;
         currentFwdSpeed -= (dotIF * airResistance) * Time.fixedDeltaTime;
 
@@ -246,8 +251,6 @@ public class CharacterV3 : MonoBehaviour {
 
         dirToMove = inertieVector * currentFwdSpeed;
     }
-
-
 
     void computeDirectionVerticale()
     {
@@ -295,7 +298,6 @@ public class CharacterV3 : MonoBehaviour {
         dirToMove.y += _verticalBoost;
     }
 
-
     void raycastDown()
     {
         Ray r = new Ray(transform.position, Vector3.down);
@@ -307,10 +309,6 @@ public class CharacterV3 : MonoBehaviour {
 
 
     }
-
-
-
-
 
     public void ReceiveExplosionForce(Vector3 direction)
     {
@@ -441,7 +439,6 @@ public class CharacterV3 : MonoBehaviour {
 		Debug.DrawRay(hitPosition, lastNormal);
 	}
 
-
     IEnumerator rotateFromCollision(Vector3 targetDirection)
     {
 
@@ -465,7 +462,8 @@ public class CharacterV3 : MonoBehaviour {
         Vector3 reflect = Vector3.Reflect(inertieVector, collision.contacts[0].normal);
         Vector3 newVector = inertieVector;
 
-        if(Vector3.Angle(inertieVector, reflect) < 30)
+
+        if(Vector3.Angle(-inertieVector, reflect) < 30 && flagBehavoirScript.targetPlayer == this)
         {
             //Crash
             flagBehavoirScript.Drop();
@@ -484,7 +482,6 @@ public class CharacterV3 : MonoBehaviour {
         rotateOnCollisionCoroutine = StartCoroutine(rotateFromCollision(newVector));
     }
 
-
     public void RefillBoost()
 	{
 		currentBoostAmountLeft = 1f;
@@ -492,11 +489,30 @@ public class CharacterV3 : MonoBehaviour {
 
     public bool IsInTrail()
     {
-        if (flagBehavoirScript.targetPlayer == this || flagBehavoirScript.targetPlayer == null) return;
+        if (flagBehavoirScript.targetPlayer == this || flagBehavoirScript.targetPlayer == null) return false;
+
+        for (int i = 0; i < flagBehavoirScript.targetPlayer.previousPos.Count; i++)
+        {
+            if (Vector3.Distance(transform.position, flagBehavoirScript.targetPlayer.previousPos[i]) < 10) return true;
+        }
 
 
         return false;
     }
 
+    public void RegisterPos()
+    {
+        if (previousPos.Count >= previousPos.Capacity) previousPos.RemoveAt(0);
 
+        previousPos.Add(transform.position);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        for (int i = 0; i < previousPos.Count; i++)
+        {
+            Gizmos.color = new Color(0, 1, 0, 0.2f);
+            Gizmos.DrawSphere(previousPos[i], 10);
+        }
+    }
 }

@@ -40,7 +40,7 @@ public class TrailManager : MonoBehaviour {
         Color col = (cv3.I_forwardBoost != 0) ? Color.red : Color.blue;
         col = Color.Lerp(oldColor, col, Time.deltaTime * 5);
         trailReactor.startColor = col;
-        col.a = 0;
+        //col.a = 0.5f;
         trailReactor.endColor = col;
 
     }

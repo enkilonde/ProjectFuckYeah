@@ -109,6 +109,7 @@ public class FlagBehaviour : MonoBehaviour
 
     public void Drop()
     {
+        print("DROP");
         targetPlayer = null;
     }
 }

@@ -133,7 +133,14 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  controllers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   CurrentSceneGameObjects: []
+  playersAttribs: 
+  controllersUsed: 
 --- !u!4 &834850778
 Transform:
   m_ObjectHideFlags: 0
@@ -292,11 +299,6 @@ Prefab:
     - target: {fileID: 1413997976804262, guid: f61c4578616dd9f4fa69fcb3a6e17b47, type: 2}
       propertyPath: m_Name
       value: 3CV3_J1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114424018301075676, guid: f61c4578616dd9f4fa69fcb3a6e17b47,
-        type: 2}
-      propertyPath: playerNumero
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f61c4578616dd9f4fa69fcb3a6e17b47, type: 2}

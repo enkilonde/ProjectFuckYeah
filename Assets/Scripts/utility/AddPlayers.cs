@@ -8,8 +8,9 @@ public class AddPlayers : MonoBehaviour
 {
     public static AddPlayers manager;
 
-    [Range(1, 4)]
-    public int NumberOfPlayers = 1;
+    public static int NumberOfPlayers = 1;
+
+
 
 	// Use this for initialization
 	void Awake ()

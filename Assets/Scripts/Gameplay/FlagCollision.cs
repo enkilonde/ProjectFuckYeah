@@ -35,7 +35,7 @@ public class FlagCollision : MonoBehaviour {
             playersList.Add(PlayerManager.manager.Players[i].transform);
         }
 
-		playersTimers = new float[AddPlayers.manager.NumberOfPlayers];
+		playersTimers = new float[AddPlayers.NumberOfPlayers];
 		print(playersTimers.Length);
 		CleanTheTimers();
 	}

@@ -51,8 +51,8 @@ public class MenuManager : MonoBehaviour
 
     public void ChangeNumberOfPlayers(int value)
     {
-        addPlayersScript.NumberOfPlayers = Mathf.Clamp(addPlayersScript.NumberOfPlayers + value, 1, 4);
-        displayNumberOfPlayers.text = "Number of players : " + addPlayersScript.NumberOfPlayers;
+        AddPlayers.NumberOfPlayers = Mathf.Clamp(AddPlayers.NumberOfPlayers + value, 1, 4);
+        displayNumberOfPlayers.text = "Number of players : " + AddPlayers.NumberOfPlayers;
 
     }
 

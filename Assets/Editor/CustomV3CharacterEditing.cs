@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using RobToolsNameSpace;
-
+/*
 [CustomEditor(typeof(CharacterV3))]
 public class CustomV3CharacterEditing : Editor {
 
@@ -169,3 +169,4 @@ public class CustomV3CharacterEditing : Editor {
 		UnityEditor.Handles.EndGUI();
 	}
 }
+*/
