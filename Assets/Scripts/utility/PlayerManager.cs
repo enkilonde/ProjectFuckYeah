@@ -18,6 +18,8 @@ public class PlayerManager : MonoBehaviour
     public bool[] playersAttribs = new bool[4];
     public bool[] controllersUsed = new bool[4];
 
+    int playerNumber = 0;
+
     private void Awake()
     {
         if (manager == null)
@@ -41,6 +43,7 @@ public class PlayerManager : MonoBehaviour
 
     public void init(int NumberOfPlayers)
     {
+        playerNumber = NumberOfPlayers;
         CurrentSceneGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
 
 
@@ -50,6 +53,8 @@ public class PlayerManager : MonoBehaviour
 
             characters[i] = player.GetComponentInChildren<CharacterV3>();
             controllers[i] = player.GetComponentInChildren<ControllerV3>();
+
+            characters[0].useKeyboard = true;
 
             if(i >= NumberOfPlayers)
             {
@@ -175,11 +180,23 @@ public class PlayerManager : MonoBehaviour
                 for (int j = 0; j < 4; j++)
                 {
                     if (playersAttribs[j]) continue;
+
                     Debug.Log("Set player " + j + " on controller " + i);
                     controllers[j].playerNumero = i;
                     characters[j].inputsSet = true;
+                    if(j < playerNumber-1)
+                    {
+                        print("Change keyboard");
+                        characters[j].useKeyboard = false;
+                        if (j < 3) characters[j + 1].useKeyboard = true;
+                    }
+                    
+
                     controllersUsed[i-1] = true;
                     playersAttribs[j] = true;
+
+
+
                     break;
                 }
             }

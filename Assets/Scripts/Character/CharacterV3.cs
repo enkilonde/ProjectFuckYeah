@@ -84,8 +84,12 @@ public class CharacterV3 : MonoBehaviour {
 	[HideInInspector]
 	public float currentScore = 0f;
 	public float speedScoreGain = 100f;
-	//Inputs translated as floats
-	[HideInInspector]
+
+
+    public bool inputsSet = false;
+    public bool useKeyboard = false;
+    //Inputs translated as floats
+    [HideInInspector]
 	public float I_accel = 0f;
 	[HideInInspector]
 	public float I_lateralBoostLeft = 0f;
@@ -99,6 +103,8 @@ public class CharacterV3 : MonoBehaviour {
 	public Vector3 lateralBoostDirInput = Vector3.right;
 	[HideInInspector]
 	public float I_verticalBoost = 0f;
+
+
 	//	[HideInInspector]
 
 
@@ -119,17 +125,19 @@ public class CharacterV3 : MonoBehaviour {
 
     RaycastHit downRaycast;
 
-    FlagBehaviour flagBehavoirScript;
+    FlagBehaviour flagBehavoirScript; //  /!\ ne marche que si il n'y a que 1 seul flag
 
-    public bool inputsSet = false;
+    TrailRenderer reactorTrail;
+
 
     void Start () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
         flagBehavoirScript = FindObjectOfType<FlagBehaviour>();
         rigidbody = GetComponent<Rigidbody>();
+        reactorTrail = GetComponentInChildren<TrailManager>().transform.Find("Reactor_Trail").GetComponent<TrailRenderer>();
 
-		//Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
-		currentFwdSpeed = 0f;
+        //Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
+        currentFwdSpeed = 0f;
 		currentAltitude = 0f;
 		currentVerticalForce = 0f;
 		inertieVector = transform.forward;
@@ -142,9 +150,12 @@ public class CharacterV3 : MonoBehaviour {
 
     void Update ()
     {
+        
 
-        if (GameState.curGameState == GameState.AllGameStates.Play || true && inputsSet)
+        if (inputsSet)
             CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
+        else if (useKeyboard)
+            CheckInputsKeyboard(); // check inputs for keyboard
 
 
 
@@ -321,6 +332,7 @@ public class CharacterV3 : MonoBehaviour {
 
     void CheckInputs()
 	{
+
 		#region accelerate
 		I_accel = 0f;
 		//		I_accel = Input.GetAxis("1_RT_Axis");	//Meme entrer la valeur en dur ça ne marche pas en build oO
@@ -332,30 +344,21 @@ public class CharacterV3 : MonoBehaviour {
 			//			print(controlerSet.Get_AccelAxisInput());
 			//			print("Accelerate Axis");
 		}
-		//		if(Input.GetButton(controlerSet.Get_AccelButtonInput()))
-		//		{
-		////			print("Accelerate Button");
-		//			I_accel = 1f;
-		//		}
-		#endregion
+        //		if(Input.GetButton(controlerSet.Get_AccelButtonInput()))
+        //		{
+        ////			print("Accelerate Button");
+        //			I_accel = 1f;
+        //		}
+        #endregion
 
-		//		if(Input.GetButtonDown(controlerSet.Get_SchockWaveInput()))
-		//		{
-		//			print("SchockWave");
-		//		}
+        #region rotation
+        I_lateralPlayerRot = Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput());
+        if (Mathf.Abs(I_lateralPlayerRot) < horizontalRot_minSensitivity)
+            I_lateralPlayerRot = 0f; 
+        #endregion
 
-		I_lateralPlayerRot = Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput());
-		if(Mathf.Abs(I_lateralPlayerRot) > horizontalRot_minSensitivity)
-		{
-			//			print("Lateral rot" + I_lateralPlayerRot);
-		}
-		else
-		{
-			I_lateralPlayerRot = 0f;
-		}
-
-		#region lateral boost
-		I_lateralBoostLeft = 0f;
+        #region lateral boost
+        I_lateralBoostLeft = 0f;
 		I_lateralBoostRight = 0f;
 		//		I_lateralBoostLeft = Input.GetAxis(controlerSet.Get_LateralBoostLeftInput());
 		//		if(Mathf.Abs(I_lateralBoostLeft) > boost_minSensitivity)
@@ -387,7 +390,6 @@ public class CharacterV3 : MonoBehaviour {
         #endregion
 
         #region vertical boost
-        //Debug.Log(controlerSet.Get_HorizontalRotInput() + " : " + Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput()), controlerSet.gameObject);
 		I_verticalBoost = Input.GetAxisRaw(controlerSet.Get_VertcalBoostAxisInput());
 		#endregion
 
@@ -396,7 +398,39 @@ public class CharacterV3 : MonoBehaviour {
 		#endregion
 	}
 
-	void OnDrawGizmos()
+    void CheckInputsKeyboard()
+    {
+        #region accelerate
+        I_accel = 0f;
+        //print(GetKeyboardInputName(controlerSet.Get_AccelAxisInput()));
+        I_accel = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_AccelAxisInput()));
+        #endregion
+
+        #region rotation
+        I_lateralPlayerRot = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_HorizontalRotInput()));
+        if (Mathf.Abs(I_lateralPlayerRot) < horizontalRot_minSensitivity)
+            I_lateralPlayerRot = 0f;
+        #endregion
+
+
+
+        #region vertical boost
+        I_verticalBoost = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_VertcalBoostAxisInput()));
+        #endregion
+
+        #region boost
+        I_forwardBoost = Input.GetButton(GetKeyboardInputName(controlerSet.Get_ForwardBoostInput())) ? 1f : 0f;
+        #endregion
+    }
+
+    string GetKeyboardInputName(string inputName)
+    {
+        inputName = inputName.Remove(0, 1);
+        inputName = inputName.Insert(0, "K");
+        return inputName;
+    }
+
+    void OnDrawGizmos()
 	{
 		Gizmos.color = Color.blue;
 		Gizmos.DrawRay(transform.position, transform.forward * 10);
@@ -454,7 +488,15 @@ public class CharacterV3 : MonoBehaviour {
     public void RefillBoost()
 	{
 		currentBoostAmountLeft = 1f;
-		//_t_boostLoad = 1f;
 	}
+
+    public bool IsInTrail()
+    {
+        if (flagBehavoirScript.targetPlayer == this || flagBehavoirScript.targetPlayer == null) return;
+
+
+        return false;
+    }
+
 
 }
