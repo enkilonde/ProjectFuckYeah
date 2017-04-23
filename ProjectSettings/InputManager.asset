@@ -102,8 +102,8 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: K_XBOX_A
-    descriptiveName: 
+    m_Name: -5_XBOX_A
+    descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: left shift
@@ -134,11 +134,11 @@ InputManager:
     axis: 1
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Mouse ScrollWheel
-    descriptiveName: 
+    m_Name: -5_StickD
+    descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: tab
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -146,15 +146,15 @@ InputManager:
     sensitivity: 0.1
     snap: 0
     invert: 0
-    type: 1
-    axis: 2
+    type: 0
+    axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Horizontal
+    m_Name: -5_StickD_X_Axis
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
+    negativeButton: '&'
+    positiveButton: '"'
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -166,11 +166,11 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Vertical
+    m_Name: -5_StickD_Y_Axis
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
+    negativeButton: ''''
+    positiveButton: (
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -182,7 +182,7 @@ InputManager:
     axis: 1
     joyNum: 0
   - serializedVersion: 3
-    m_Name: K_RT_Axis
+    m_Name: -5_RT_Axis
     descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: s
@@ -198,7 +198,7 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: K_StickG_X_Axis
+    m_Name: -5_StickG_X_Axis
     descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: q
@@ -214,7 +214,7 @@ InputManager:
     axis: 1
     joyNum: 0
   - serializedVersion: 3
-    m_Name: K_LT_Axis
+    m_Name: -5_LT_Axis
     descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: 
@@ -230,7 +230,7 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: K_LB
+    m_Name: -5_LB
     descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: 
@@ -246,7 +246,7 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: K_RB
+    m_Name: -5_RB
     descriptiveName: for keyboard
     descriptiveNegativeName: 
     negativeButton: 

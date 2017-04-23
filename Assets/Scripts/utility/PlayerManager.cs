@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerManager : MonoBehaviour
 {
+    public const int keyboardIndex = -5;
 
     public static PlayerManager manager;
 
@@ -55,6 +56,7 @@ public class PlayerManager : MonoBehaviour
             controllers[i] = player.GetComponentInChildren<ControllerV3>();
 
             characters[0].useKeyboard = true;
+            controllers[0].playerNumero = keyboardIndex;
 
             if(i >= NumberOfPlayers)
             {
@@ -186,9 +188,9 @@ public class PlayerManager : MonoBehaviour
                     characters[j].inputsSet = true;
                     if(j < playerNumber-1)
                     {
-                        print("Change keyboard");
                         characters[j].useKeyboard = false;
-                        if (j < 3) characters[j + 1].useKeyboard = true;
+                        characters[j + 1].useKeyboard = true;
+                        controllers[j + 1].playerNumero = keyboardIndex;
                     }
                     
 

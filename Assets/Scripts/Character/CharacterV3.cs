@@ -156,7 +156,7 @@ public class CharacterV3 : MonoBehaviour {
         if (inputsSet)
             CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
         else if (useKeyboard)
-            CheckInputsKeyboard(); // check inputs for keyboard
+            CheckInputs(); // check inputs for keyboard
     }
 
 

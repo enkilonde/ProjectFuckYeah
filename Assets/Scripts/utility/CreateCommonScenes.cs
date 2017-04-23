@@ -15,7 +15,6 @@ public class CreateCommonScenes : MonoBehaviour
         SceneManager.LoadScene("Common", LoadSceneMode.Additive);
         //SceneManager.LoadScene("Pause", LoadSceneMode.Additive);
         AddPlayers.NumberOfPlayers = PlayerPrefs.GetInt("NumberOfPlayers");
-        Debug.Log(PlayerPrefs.GetInt("NumberOfPlayers"));
     }
 
 
