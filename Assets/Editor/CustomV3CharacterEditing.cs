@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using RobToolsNameSpace;
-
+/*
 [CustomEditor(typeof(CharacterV3))]
 public class CustomV3CharacterEditing : Editor {
 
@@ -54,15 +54,13 @@ public class CustomV3CharacterEditing : Editor {
 		#region inerty
 		EditorGUILayout.BeginVertical("Box");
 		EditorGUILayout.LabelField("Inerty", EditorStyles.boldLabel);
-		charaInstance.useInertyFeature = EditorGUILayout.Toggle("Use inerty feature", charaInstance.useInertyFeature);
-		if(charaInstance.useInertyFeature)
-		{
-			EditorGUILayout.LabelField("Transition de l'inertie vers le forward du joueur", EditorStyles.boldLabel);
-			charaInstance.transitionAngleDelta = EditorGUILayout.Slider("Angle transition angle/sec", charaInstance.transitionAngleDelta, 0f, 300f);
-			EditorGUILayout.LabelField("Puissance du ralentissement lorsque le fwd du joueur est opposé à son inertie", EditorStyles.boldLabel);
-			charaInstance.airResistance = EditorGUILayout.Slider("Air resistance dist/sec", charaInstance.airResistance, 0f, 300f);
-		}
-		EditorGUILayout.EndVertical();
+
+        EditorGUILayout.LabelField("Transition de l'inertie vers le forward du joueur", EditorStyles.boldLabel);
+        charaInstance.transitionAngleDelta = EditorGUILayout.Slider("Angle transition angle/sec", charaInstance.transitionAngleDelta, 0f, 300f);
+        EditorGUILayout.LabelField("Puissance du ralentissement lorsque le fwd du joueur est opposé à son inertie", EditorStyles.boldLabel);
+        charaInstance.airResistance = EditorGUILayout.Slider("Air resistance dist/sec", charaInstance.airResistance, 0f, 300f);
+
+        EditorGUILayout.EndVertical();
 		#endregion
 
 		#region hit
@@ -73,24 +71,24 @@ public class CustomV3CharacterEditing : Editor {
 		charaInstance.maxSpeedRebondForce = EditorGUILayout.Slider("Force de rebond à vitesse max (dist)", charaInstance.maxSpeedRebondForce, 0f, 50f);
 		charaInstance.deccelHitPorcent = EditorGUILayout.Slider("Decceleration sur impact (%)", charaInstance.deccelHitPorcent, 0f, 100f);
 		EditorGUILayout.EndVertical();
-		#endregion
+        #endregion
 
-		#region boost
-		EditorGUILayout.BeginVertical("Box");
-		EditorGUILayout.LabelField("Boost", EditorStyles.boldLabel);
-		charaInstance.timeToReload = EditorGUILayout.Slider("Time to fully reload (/sec)", charaInstance.timeToReload, 1f, 20f);
-		charaInstance.timeToUnload = EditorGUILayout.Slider("Time to fully unload (/sec)", charaInstance.timeToUnload, 1f, 20f);
-		charaInstance.maxSpeedwhileBoost = EditorGUILayout.Slider("Max speed while boost (dist/sec)", charaInstance.maxSpeedwhileBoost, 1f, 400f);
-		charaInstance.maxBoostSpeed_DeccelerationSpeed = EditorGUILayout.FloatField("Max boost speed decceleration (/sec)", charaInstance.maxBoostSpeed_DeccelerationSpeed);
-		charaInstance.accelerationSpeedWhileBoost = EditorGUILayout.Slider("Acceleration speed while boost (multiplier)", charaInstance.accelerationSpeedWhileBoost, 0f, 20f);
-		charaInstance.minBoostRecquired = EditorGUILayout.Slider("Min Boost Recquired", charaInstance.minBoostRecquired, 0f, 100f);
-		charaInstance.lateralBoostAcceleration = EditorGUILayout.Slider("LateralBoostAcceleration", charaInstance.lateralBoostAcceleration, 0f,100f);
-		charaInstance.lateralBoostDecceleration = EditorGUILayout.Slider("LateralBoostDecceleration", charaInstance.lateralBoostDecceleration, 0f,100f);
-		EditorGUILayout.EndVertical();
-		#endregion
+        #region boost
+        EditorGUILayout.BeginVertical("Box");
+        EditorGUILayout.LabelField("Boost", EditorStyles.boldLabel);
+        //charaInstance.timeToReload = EditorGUILayout.Slider("Time to fully reload (/sec)", charaInstance.timeToReload, 1f, 20f);
+        //charaInstance.timeToUnload = EditorGUILayout.Slider("Time to fully unload (/sec)", charaInstance.timeToUnload, 1f, 20f);
+        //charaInstance.maxSpeedwhileBoost = EditorGUILayout.Slider("Max speed while boost (dist/sec)", charaInstance.maxSpeedwhileBoost, 1f, 400f);
+        //charaInstance.maxBoostSpeed_DeccelerationSpeed = EditorGUILayout.FloatField("Max boost speed decceleration (/sec)", charaInstance.maxBoostSpeed_DeccelerationSpeed);
+        //charaInstance.accelerationSpeedWhileBoost = EditorGUILayout.Slider("Acceleration speed while boost (multiplier)", charaInstance.accelerationSpeedWhileBoost, 0f, 20f);
+        //charaInstance.minBoostRecquired = EditorGUILayout.Slider("Min Boost Recquired", charaInstance.minBoostRecquired, 0f, 100f);
+        //charaInstance.lateralBoostAcceleration = EditorGUILayout.Slider("LateralBoostAcceleration", charaInstance.lateralBoostAcceleration, 0f, 100f);
+        //charaInstance.lateralBoostDecceleration = EditorGUILayout.Slider("LateralBoostDecceleration", charaInstance.lateralBoostDecceleration, 0f, 100f);
+        EditorGUILayout.EndVertical();
+        #endregion
 
-		#region score
-		EditorGUILayout.BeginVertical("Box");
+        #region score
+        EditorGUILayout.BeginVertical("Box");
 		EditorGUILayout.LabelField("Score", EditorStyles.boldLabel);
 		charaInstance.speedScoreGain = EditorGUILayout.FloatField("Score speed gain while target (/sec)", charaInstance.speedScoreGain);
 		EditorGUILayout.EndVertical();
@@ -138,18 +136,15 @@ public class CustomV3CharacterEditing : Editor {
 
 
 		#region inerty
-		if(charaInstance.useInertyFeature)
-		{
-			Handles.color = Color.blue;
-			Handles.DrawLine(Vector3.zero, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed);
-			Handles.DrawLine(Vector3.forward * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f);
-			Handles.DrawLine(new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f + -Vector3.right * 4f);
-			Handles.DrawLine(new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f + Vector3.forward * 4f);
-			DrawString("Inerty transition", new Vector3(0.5f,0f,0.5f) * charaInstance.minAltMaxSpeed * 0.75f, Color.blue);
-		}
-		#endregion
+        Handles.color = Color.blue;
+        Handles.DrawLine(Vector3.zero, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed);
+        Handles.DrawLine(Vector3.forward * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f);
+        Handles.DrawLine(new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f + -Vector3.right * 4f);
+        Handles.DrawLine(new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f, new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f + Vector3.forward * 4f);
+        DrawString("Inerty transition", new Vector3(0.5f, 0f, 0.5f) * charaInstance.minAltMaxSpeed * 0.75f, Color.blue);
+        #endregion
 
-	}
+    }
 
 
 	void DrawString(string text, Vector3 worldPos, Color? colour = null) {
@@ -174,3 +169,4 @@ public class CustomV3CharacterEditing : Editor {
 		UnityEditor.Handles.EndGUI();
 	}
 }
+*/

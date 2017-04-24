@@ -14,14 +14,20 @@ public class TrailManager : MonoBehaviour {
 
 	private TrailRenderer trailA;
 	private TrailRenderer trailB;
-	private float side;
+    private TrailRenderer trailReactor;
+
+    CharacterV3 cv3;
+
+    private float side;
 
 	void Start () {
 		trailA = transform.Find("L_Trail").GetComponent<TrailRenderer>();
 		trailB = transform.Find("R_Trail").GetComponent<TrailRenderer>();
-	}
-	
-	void Update () {
+        trailReactor = transform.Find("Reactor_Trail").GetComponent<TrailRenderer>();
+        cv3 = GetComponentInParent<CharacterV3>();
+    }
+
+    void Update () {
 		
 		side = Input.GetAxis("Horizontal") * sideRepartition;
 
@@ -30,6 +36,12 @@ public class TrailManager : MonoBehaviour {
 
 		trailA.widthMultiplier = Mathf.Lerp(minWidth, maxWidth, side);
 		trailB.widthMultiplier = Mathf.Lerp(minWidth, maxWidth, 1 - side);
+        Color oldColor = trailReactor.startColor;
+        Color col = (cv3.I_forwardBoost != 0) ? Color.red : Color.blue;
+        col = Color.Lerp(oldColor, col, Time.deltaTime * 5);
+        trailReactor.startColor = col;
+        //col.a = 0.5f;
+        trailReactor.endColor = col;
 
-	}
+    }
 }
