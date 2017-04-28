@@ -280,17 +280,17 @@ public class CharacterV3 : MonoBehaviour {
         {
             currentVerticalForce = 0;
         }
-
+        float suspension = 20; // make a var
         if(currentAltitude < minAltitude && I_verticalBoost == 0 )
         {
             currentVerticalForce = minAltitude - currentAltitude;
-            AdjustTime = 20;
+            AdjustTime = suspension;
         }
 
         if (downRaycast.transform != null && Vector3.Distance(downRaycast.point, transform.position) < 5)
         {
             currentVerticalForce = 5 - Vector3.Distance(downRaycast.point, transform.position);
-            AdjustTime = 20;
+            AdjustTime = suspension;
         }
 
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.fixedDeltaTime * AdjustTime);
@@ -444,12 +444,16 @@ public class CharacterV3 : MonoBehaviour {
 
         float rotSpeed = 10;
         float addedRot = 0.01f;
+        float ntime = 0;
 
-        while (Vector3.Angle(transform.forward, targetDirection) > 1f)
+        while (Vector3.Angle(transform.forward, targetDirection) > 2f && ntime < 0.5f)
         {
             inertieVector = Vector3.Lerp(inertieVector, targetDirection, Time.deltaTime * rotSpeed + addedRot);
 
             transform.LookAt(transform.position + Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * rotSpeed + addedRot));
+
+            ntime += Time.deltaTime;
+            print(ntime);
             yield return null;
         }
 
@@ -457,7 +461,11 @@ public class CharacterV3 : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-
+        
+        if(Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.9f) // Si la face qu'on a touché pointe vers le haut
+        {
+            return;
+        }
 
         Vector3 reflect = Vector3.Reflect(inertieVector, collision.contacts[0].normal);
         Vector3 newVector = inertieVector;

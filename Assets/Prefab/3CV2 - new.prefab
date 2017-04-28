@@ -487,11 +487,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4135514273778130}
-  - component: {fileID: 65072358319975016}
   - component: {fileID: 114421501933066244}
   - component: {fileID: 114371890986688838}
   - component: {fileID: 54373211431593266}
   - component: {fileID: 114494381827981876}
+  - component: {fileID: 136908956138487106}
   m_Layer: 8
   m_Name: Character
   m_TagString: PlayerCharacter
@@ -723,7 +723,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1413997976804262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 230.00842, y: 149.0191, z: 24.400146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4751429562015508}
@@ -1261,18 +1261,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!65 &65072358319975016
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1859935985719502}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 3.18, y: 1, z: 4.38}
-  m_Center: {x: 0, y: 0, z: -0.1391586}
 --- !u!81 &81180642430050474
 AudioListener:
   m_ObjectHideFlags: 1
@@ -2250,6 +2238,19 @@ Behaviour:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1300989496875300}
   m_Enabled: 1
+--- !u!136 &136908956138487106
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1859935985719502}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 1
+  m_Height: 0
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!198 &198966070249525252
 ParticleSystem:
   m_ObjectHideFlags: 1
