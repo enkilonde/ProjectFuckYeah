@@ -4,13 +4,23 @@ using UnityEngine;
 
 public class FlagBehaviour : MonoBehaviour
 {
-    public const float timeToStealFlag = 2.0f;
+    public const float timeToStealFlag = 0.01f;
+    public const float flagSizeIncrease = 3f;
 
     public GameObject ImpulsePrefab;
 
     [HideInInspector] public CharacterV3 targetPlayer;
 
     [HideInInspector] public List<PlayerInfo> PlayersInCollider = new List<PlayerInfo>();
+
+    Vector3 initialSize = Vector3.one;
+
+    float timeSinceLastSteal = 0f;
+
+    private void Awake()
+    {
+        initialSize = transform.localScale;
+    }
 
     private void LateUpdate()
     {
@@ -23,14 +33,18 @@ public class FlagBehaviour : MonoBehaviour
             }
 
             PlayersInCollider[i].TimeInCollider += Time.deltaTime;
-            if(PlayersInCollider[i].TimeInCollider >= timeToStealFlag)
+            if(PlayersInCollider[i].TimeInCollider >= timeToStealFlag && timeSinceLastSteal > 0.5f)
             {
                 setPlayerOwner(PlayersInCollider[i].playerTransform);
             }
         }
 
-
+        transform.localScale = initialSize;
         if (targetPlayer == null) return;
+
+        timeSinceLastSteal += Time.deltaTime;
+
+        transform.localScale = initialSize * flagSizeIncrease;
 
         transform.position = targetPlayer.transform.position;
         targetPlayer.currentScore += targetPlayer.speedScoreGain * Time.deltaTime;    
@@ -81,6 +95,7 @@ public class FlagBehaviour : MonoBehaviour
         transform.position = targetPlayer.transform.position;
 
         Instantiate(ImpulsePrefab, transform.position, Quaternion.identity);
+        timeSinceLastSteal = 0f;
     }
 
     public void removePlayerFromList(Transform play)

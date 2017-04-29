@@ -78,10 +78,10 @@ public class CameraV1 : MonoBehaviour {
 
     void GetCameraType()
     {
-        if(flagBeaviourScript.targetPlayer != null && flagBeaviourScript.targetPlayer.transform != transform.parent && Input.GetAxis(controler.Get_LockOnInput()) != 0)
+        if((flagBeaviourScript.targetPlayer == null || flagBeaviourScript.targetPlayer.transform != transform.parent) && Input.GetAxis(controler.Get_LockOnInput()) != 0)
         {
             CameraType = camModes.Hunter;
-            targetToLock = flagBeaviourScript.targetPlayer.transform;
+            targetToLock = flagBeaviourScript.transform;
         }
         else
         {
@@ -133,7 +133,6 @@ public class CameraV1 : MonoBehaviour {
                 transform.position = character.position;
                 if (Input.GetButton(controler.Get_LockOnInput()))
                 {
-                    Debug.Log(targetToLock.name, gameObject);
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetToLock.position - transform.position, Vector3.up), camInputSpeed * Time.deltaTime);
                 }
                 else

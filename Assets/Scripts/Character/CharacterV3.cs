@@ -77,6 +77,9 @@ public class CharacterV3 : MonoBehaviour {
 	//Boost
 	[HideInInspector]
     public float I_forwardBoost = 0f;
+    public float I_forwardBoostEffective = 0f;
+
+    public float previous_I_forwardBoost = 0;
     public float currentBoostAmountLeft = 0f;
     private float boostSpeedMultiplier = 5;
     public float boostGainedPerSeconds = 0.1f;
@@ -195,7 +198,8 @@ public class CharacterV3 : MonoBehaviour {
 
     void computeDirectionHorizontale()
     {
-        I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;    //Reste t'il du boost dans la jauge
+        I_forwardBoost *= (previous_I_forwardBoost == 1 || currentBoostAmountLeft > 0.25f) ? 1f : 0f;    //Reste t'il du boost dans la jauge
+        previous_I_forwardBoost = I_forwardBoost;
         currentBoostAmountLeft = Mathf.Clamp(currentBoostAmountLeft +=  boostGainedPerSeconds * ((IsInTrail())?10:1) * Time.fixedDeltaTime, 0, 1);
 
         //Rotate upon Input (LACET)
@@ -287,7 +291,7 @@ public class CharacterV3 : MonoBehaviour {
             AdjustTime = suspension;
         }
 
-        if (downRaycast.transform != null && Vector3.Distance(downRaycast.point, transform.position) < 5)
+        if (downRaycast.transform != null && Vector3.Distance(downRaycast.point, transform.position) < 5 && I_verticalBoost == 0)
         {
             currentVerticalForce = 5 - Vector3.Distance(downRaycast.point, transform.position);
             AdjustTime = suspension;
@@ -396,31 +400,6 @@ public class CharacterV3 : MonoBehaviour {
 		#endregion
 	}
 
-    void CheckInputsKeyboard()
-    {
-        #region accelerate
-        I_accel = 0f;
-        //print(GetKeyboardInputName(controlerSet.Get_AccelAxisInput()));
-        I_accel = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_AccelAxisInput()));
-        #endregion
-
-        #region rotation
-        I_lateralPlayerRot = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_HorizontalRotInput()));
-        if (Mathf.Abs(I_lateralPlayerRot) < horizontalRot_minSensitivity)
-            I_lateralPlayerRot = 0f;
-        #endregion
-
-
-
-        #region vertical boost
-        I_verticalBoost = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_VertcalBoostAxisInput()));
-        #endregion
-
-        #region boost
-        I_forwardBoost = Input.GetButton(GetKeyboardInputName(controlerSet.Get_ForwardBoostInput())) ? 1f : 0f;
-        #endregion
-    }
-
     string GetKeyboardInputName(string inputName)
     {
         inputName = inputName.Remove(0, 1);
@@ -453,7 +432,6 @@ public class CharacterV3 : MonoBehaviour {
             transform.LookAt(transform.position + Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * rotSpeed + addedRot));
 
             ntime += Time.deltaTime;
-            print(ntime);
             yield return null;
         }
 
@@ -501,7 +479,7 @@ public class CharacterV3 : MonoBehaviour {
 
         for (int i = 0; i < flagBehavoirScript.targetPlayer.previousPos.Count; i++)
         {
-            if (Vector3.Distance(transform.position, flagBehavoirScript.targetPlayer.previousPos[i]) < 10) return true;
+            if (Vector3.Distance(transform.position, flagBehavoirScript.targetPlayer.previousPos[i]) < Vector3.Distance(flagBehavoirScript.targetPlayer.previousPos[i], flagBehavoirScript.targetPlayer.transform.position)) return true;
         }
 
 
@@ -510,17 +488,28 @@ public class CharacterV3 : MonoBehaviour {
 
     public void RegisterPos()
     {
-        if (previousPos.Count >= previousPos.Capacity) previousPos.RemoveAt(0);
+        if (previousPos.Count >= previousPos.Capacity) previousPos.RemoveAt(previousPos.Count-1);
 
-        previousPos.Add(transform.position);
+        previousPos.Insert(0, transform.position);
     }
 
     private void OnDrawGizmosSelected()
     {
+        if (flagBehavoirScript.targetPlayer != this && flagBehavoirScript.targetPlayer != null) return;
         for (int i = 0; i < previousPos.Count; i++)
         {
             Gizmos.color = new Color(0, 1, 0, 0.2f);
-            Gizmos.DrawSphere(previousPos[i], 10);
+            Gizmos.DrawSphere(previousPos[i], Vector3.Distance(flagBehavoirScript.targetPlayer.previousPos[i], flagBehavoirScript.targetPlayer.transform.position) / 4);
         }
+    }
+
+    public float getSpeedRatio()
+    {
+        return Mathf.InverseLerp(0, minAltMaxSpeed, currentFwdSpeed);
+    }
+
+    public float getSpeedRatioWithBoost()
+    {
+        return Mathf.InverseLerp(0, minAltMaxSpeed * boostSpeedMultiplier, currentFwdSpeed);
     }
 }
