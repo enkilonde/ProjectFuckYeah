@@ -206,5 +206,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public int getManagerID(CharacterV3 character)
+    {
+        for (int i = 0; i < characters.Length; i++)
+        {
+            if (character == characters[i]) return i;
+        }
+        return -1;
+    }
 
 }
