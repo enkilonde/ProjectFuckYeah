@@ -212,6 +212,7 @@ public class PlayerManager : MonoBehaviour
         {
             if (character == characters[i]) return i;
         }
+        //Debug.Log("pas dans la liste", character);
         return -1;
     }
 

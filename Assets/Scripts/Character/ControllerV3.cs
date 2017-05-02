@@ -47,9 +47,10 @@ public class ControllerV3 : MonoBehaviour {
 	public AllButtons LatRightBoost = AllButtons.RB;
 	public AllButtons lockOn = AllButtons.StickD;
 	public AllButtons forwardBoost = AllButtons.XBOX_A;
+    public AllButtons useItem = AllButtons.XBOX_B;
 
-	#region Axes
-	public string Get_HorizontalRotInput ()
+    #region Axes
+    public string Get_HorizontalRotInput ()
 	{
 		return playerNumero.ToString() + "_" + horizontalRotation.ToString() + "_Axis";
 	}
@@ -104,6 +105,11 @@ public class ControllerV3 : MonoBehaviour {
 	{
 		return playerNumero.ToString() + "_" + forwardBoost.ToString();
 	}
-	#endregion
+    public string Get_UseItemInput()
+    {
+        return playerNumero.ToString() + "_" + useItem.ToString();
+    }
+
+    #endregion
 
 }

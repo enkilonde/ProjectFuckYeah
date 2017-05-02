@@ -360,7 +360,7 @@ public class CharacterV3 : MonoBehaviour {
 		//		print(transform.parent.name + " "+  controlerSet.Get_LatLeftBoostInput());
 		if(Input.GetButton(controlerSet.Get_LatLeftBoostInput()))
 		{
-			I_lateralBoostLeft = 1f;
+			//I_lateralBoostLeft = 1f;
 		}
 		//		I_lateralBoostRight = Input.GetAxis(controlerSet.Get_LateralBoostRightInput());
 		//		if(Mathf.Abs(I_lateralBoostRight) > boost_minSensitivity)
@@ -373,7 +373,7 @@ public class CharacterV3 : MonoBehaviour {
 		//		}
 		if(Input.GetButton(controlerSet.Get_LatRightBoostInput()))
 		{
-			I_lateralBoostRight = 1f;
+			//I_lateralBoostRight = 1f;
 		}
         #endregion
 

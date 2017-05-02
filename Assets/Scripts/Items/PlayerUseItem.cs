@@ -21,7 +21,7 @@ public class PlayerUseItem : MonoBehaviour
     void Update ()
     {
 		
-        if(objectCollected != null && Input.GetKeyDown(KeyCode.R)) // use imediatly for now
+        if(objectCollected != null && Input.GetAxisRaw(controlerSet.Get_UseItemInput()) != 0) // use imediatly for now
         {
             objectCollected.UseObjet();
             objectCollected = null;

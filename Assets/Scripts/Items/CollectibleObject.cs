@@ -45,7 +45,7 @@ public class CollectibleObject : MonoBehaviour
     {
 
         if (other.tag != "PlayerCharacter" && itemDisplay != null) return;
-
+        Debug.Log(" collision : " + other.name, other.gameObject);
         item.OnCollect(other.GetComponent<PlayerUseItem>());
         Destroy(itemDisplay);
         itemDisplay = null;
