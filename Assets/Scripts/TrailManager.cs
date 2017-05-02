@@ -14,7 +14,7 @@ public class TrailManager : MonoBehaviour {
 
 	private TrailRenderer trailA;
 	private TrailRenderer trailB;
-    //private ParticleSystem trailReactor;
+    private TrailRenderer trailReactor;
 
     CharacterV3 cv3;
 
@@ -23,7 +23,7 @@ public class TrailManager : MonoBehaviour {
 	void Start () {
 		trailA = transform.Find("L_Trail").GetComponent<TrailRenderer>();
 		trailB = transform.Find("R_Trail").GetComponent<TrailRenderer>();
-        //trailReactor = transform.Find("Reactor_Trail").GetComponent<ParticleSystem>();
+        trailReactor = transform.Find("Reactor_Trail").GetComponent<TrailRenderer>();
         cv3 = GetComponentInParent<CharacterV3>();
     }
 
@@ -37,7 +37,8 @@ public class TrailManager : MonoBehaviour {
 		trailA.widthMultiplier = Mathf.Lerp(minWidth, maxWidth, side);
 		trailB.widthMultiplier = Mathf.Lerp(minWidth, maxWidth, 1 - side);
 
-
+        Color trailColor = (cv3.previous_I_forwardBoost == 1) ? Color.red : Color.blue;
+        trailReactor.material.SetColor("_TintColor", trailColor);
 
     }
 }
