@@ -48,7 +48,7 @@ public class AddPlayers : MonoBehaviour
 	
     public void SceneEndedLoad()
     {
-        GameObject[] GOFromOtherScene = SceneManager.GetSceneByBuildIndex(1).GetRootGameObjects();
+        GameObject[] GOFromOtherScene = SceneManager.GetSceneByName("Players").GetRootGameObjects();
 
 
         PlayerManager pm = null;
