@@ -9,6 +9,8 @@ public class AnimationController : MonoBehaviour
     public Animator anim;
 	CharacterV3 cv3;
 
+    ParticleSystem speedFX;
+
     [Range(0, 1)]
     public float normalizedTime = 0;
 
@@ -16,16 +18,23 @@ public class AnimationController : MonoBehaviour
     {
         anim = gameObject.GetComponent<Animator>();
 		cv3 = transform.parent.parent.GetComponentInChildren<CharacterV3>();
+        speedFX = GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-
-        }
-		normalizedTime = Mathf.InverseLerp(0, cv3.minAltMaxSpeed, cv3.currentFwdSpeed);
+		normalizedTime = cv3.getSpeedRatioWithBoost();
         jumpToTime(currentAnimationName(), normalizedTime);
+
+        if(cv3.previous_I_forwardBoost == 1)
+        {
+            speedFX.Play();
+        }
+        else
+        {
+            speedFX.Stop();
+        }
+
 
     }
 

@@ -28,7 +28,7 @@ public class CharacterV3 : MonoBehaviour {
 	public float maxAltMaxSpeed = 84f;
 	public float minAltAccel = 20f;
 	public float maxAltAccel = 12f;
-	public float deccelNoInput = 5f;
+	public float deccelNoInput = 20f;
 
 	//Lacet
 	private float currentLacetSpeed = 0f;
@@ -66,23 +66,24 @@ public class CharacterV3 : MonoBehaviour {
 	public float transitionTimeToReflectVector = 0.2f;
 
 
-	private Vector3 hit_initialInetry, hit_initialForward;
-	private Vector3 lastNormal = Vector3.right;
-	private Vector3 hitPosition = Vector3.zero;
 	public float maxSpeedRebondForce = 10f;
 	public float minSpeedRebondForce = 2f;
 	[Range(0f, 100f)]
 	public float deccelHitPorcent = 50f;
 
 	//Boost
+    [Header("Boost")]
 	[HideInInspector]
     public float I_forwardBoost = 0f;
+    public float previous_I_forwardBoost = 0;
     public float currentBoostAmountLeft = 0f;
-    private float boostSpeedMultiplier = 5;
+    public float boostSpeedMultiplier = 5;
     public float boostGainedPerSeconds = 0.1f;
+    public float boostUsedPerSeconds = 0.5f;
 
-	//Score
-	[HideInInspector]
+    //Score
+    [Header("Score")]
+    [HideInInspector]
 	public float currentScore = 0f;
 	public float speedScoreGain = 100f;
 
@@ -128,11 +129,7 @@ public class CharacterV3 : MonoBehaviour {
 
     FlagBehaviour flagBehavoirScript; //  /!\ ne marche que si il n'y a que 1 seul flag
 
-
-    public List<Vector3> previousPos = new List<Vector3>(30);
-    float registerPosLastDistance = 0;
-    Vector3 previousP;
-
+    Vector3 collisionRotationVector;
 
 
     void Start () {
@@ -149,7 +146,6 @@ public class CharacterV3 : MonoBehaviour {
         dirToMove = Vector3.zero;
 	}
 
-
     void Update ()
     { 
 
@@ -159,17 +155,10 @@ public class CharacterV3 : MonoBehaviour {
             CheckInputs(); // check inputs for keyboard
     }
 
-
     private void FixedUpdate()
     {
 
         //Debug.Log("displacement = " + (transform.position - previousP).magnitude + " velocity : " + dirToMove.magnitude);
-
-        if ( (registerPosLastDistance += (transform.position - previousP).magnitude ) >= 10)
-        {
-            RegisterPos();
-            registerPosLastDistance = 0;
-        }
 
         dirToMove = Vector3.zero;
 
@@ -189,13 +178,14 @@ public class CharacterV3 : MonoBehaviour {
 
         //Update Altitude
         currentAltitude = transform.position.y;
-
-        previousP = transform.position;
     }
+
+
 
     void computeDirectionHorizontale()
     {
-        I_forwardBoost *= (currentBoostAmountLeft > 0.1f) ? 1f : 0f;    //Reste t'il du boost dans la jauge
+        I_forwardBoost *= ((previous_I_forwardBoost == 1 || currentBoostAmountLeft > 0.25f) && currentBoostAmountLeft > 0) ? 1f : 0f;    //Reste t'il du boost dans la jauge
+        previous_I_forwardBoost = I_forwardBoost;
         currentBoostAmountLeft = Mathf.Clamp(currentBoostAmountLeft +=  boostGainedPerSeconds * ((IsInTrail())?10:1) * Time.fixedDeltaTime, 0, 1);
 
         //Rotate upon Input (LACET)
@@ -280,17 +270,17 @@ public class CharacterV3 : MonoBehaviour {
         {
             currentVerticalForce = 0;
         }
-
+        float suspension = 20; // make a var
         if(currentAltitude < minAltitude && I_verticalBoost == 0 )
         {
             currentVerticalForce = minAltitude - currentAltitude;
-            AdjustTime = 20;
+            AdjustTime = suspension;
         }
 
-        if (downRaycast.transform != null && Vector3.Distance(downRaycast.point, transform.position) < 5)
+        if (downRaycast.transform != null && Vector3.Distance(downRaycast.point, transform.position) < 5 && I_verticalBoost == 0)
         {
             currentVerticalForce = 5 - Vector3.Distance(downRaycast.point, transform.position);
-            AdjustTime = 20;
+            AdjustTime = suspension;
         }
 
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.fixedDeltaTime * AdjustTime);
@@ -370,7 +360,7 @@ public class CharacterV3 : MonoBehaviour {
 		//		print(transform.parent.name + " "+  controlerSet.Get_LatLeftBoostInput());
 		if(Input.GetButton(controlerSet.Get_LatLeftBoostInput()))
 		{
-			I_lateralBoostLeft = 1f;
+			//I_lateralBoostLeft = 1f;
 		}
 		//		I_lateralBoostRight = Input.GetAxis(controlerSet.Get_LateralBoostRightInput());
 		//		if(Mathf.Abs(I_lateralBoostRight) > boost_minSensitivity)
@@ -383,7 +373,7 @@ public class CharacterV3 : MonoBehaviour {
 		//		}
 		if(Input.GetButton(controlerSet.Get_LatRightBoostInput()))
 		{
-			I_lateralBoostRight = 1f;
+			//I_lateralBoostRight = 1f;
 		}
         #endregion
 
@@ -395,31 +385,6 @@ public class CharacterV3 : MonoBehaviour {
 		I_forwardBoost = Input.GetButton(controlerSet.Get_ForwardBoostInput()) ? 1f : 0f;
 		#endregion
 	}
-
-    void CheckInputsKeyboard()
-    {
-        #region accelerate
-        I_accel = 0f;
-        //print(GetKeyboardInputName(controlerSet.Get_AccelAxisInput()));
-        I_accel = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_AccelAxisInput()));
-        #endregion
-
-        #region rotation
-        I_lateralPlayerRot = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_HorizontalRotInput()));
-        if (Mathf.Abs(I_lateralPlayerRot) < horizontalRot_minSensitivity)
-            I_lateralPlayerRot = 0f;
-        #endregion
-
-
-
-        #region vertical boost
-        I_verticalBoost = Input.GetAxisRaw(GetKeyboardInputName(controlerSet.Get_VertcalBoostAxisInput()));
-        #endregion
-
-        #region boost
-        I_forwardBoost = Input.GetButton(GetKeyboardInputName(controlerSet.Get_ForwardBoostInput())) ? 1f : 0f;
-        #endregion
-    }
 
     string GetKeyboardInputName(string inputName)
     {
@@ -436,7 +401,6 @@ public class CharacterV3 : MonoBehaviour {
 		Gizmos.color = Color.green;
 		Debug.DrawRay(transform.position, inertieVector * 10, Color.green);
 		Gizmos.color = Color.blue;
-		Debug.DrawRay(hitPosition, lastNormal);
 	}
 
     IEnumerator rotateFromCollision(Vector3 targetDirection)
@@ -444,23 +408,40 @@ public class CharacterV3 : MonoBehaviour {
 
         float rotSpeed = 10;
         float addedRot = 0.01f;
+        float ntime = 0;
 
-        while (Vector3.Angle(transform.forward, targetDirection) > 1f)
+        while (Vector3.Angle(transform.forward, targetDirection) > 2f && ntime < 0.5f)
         {
             inertieVector = Vector3.Lerp(inertieVector, targetDirection, Time.deltaTime * rotSpeed + addedRot);
 
             transform.LookAt(transform.position + Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * rotSpeed + addedRot));
+
+            ntime += Time.deltaTime;
             yield return null;
         }
-
+        rotateOnCollisionCoroutine = null;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.transform.tag != "Obstacle") return;
+        
 
+
+        if(Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.9f) // Si la face qu'on a touché pointe vers le haut
+        {
+            return;
+        }
+
+        if (rotateOnCollisionCoroutine != null)
+        {
+            StopCoroutine(rotateOnCollisionCoroutine);
+            transform.LookAt(collisionRotationVector);
+            inertieVector = collisionRotationVector;
+        }
 
         Vector3 reflect = Vector3.Reflect(inertieVector, collision.contacts[0].normal);
-        Vector3 newVector = inertieVector;
+        collisionRotationVector = inertieVector;
 
 
         if(Vector3.Angle(-inertieVector, reflect) < 30 && flagBehavoirScript.targetPlayer == this)
@@ -469,17 +450,16 @@ public class CharacterV3 : MonoBehaviour {
             flagBehavoirScript.Drop();
         }
 
-        newVector = Vector3.Cross(collision.contacts[0].normal, Vector3.up);
-        if (Vector3.Angle(inertieVector, newVector) > 90) newVector = -newVector;
+        collisionRotationVector = Vector3.Cross(collision.contacts[0].normal, Vector3.up);
+        if (Vector3.Angle(inertieVector, collisionRotationVector) > 90) collisionRotationVector = -collisionRotationVector;
 
-        newVector = Vector3.RotateTowards(newVector, collision.contacts[0].normal, 5 * Mathf.Deg2Rad, 0.0f);
+        collisionRotationVector = Vector3.RotateTowards(collisionRotationVector, collision.contacts[0].normal, 5 * Mathf.Deg2Rad, 0.0f);
 
         bumbVector = reflect * 100;
 
-        if (rotateOnCollisionCoroutine != null)
-            StopCoroutine(rotateOnCollisionCoroutine);
 
-        rotateOnCollisionCoroutine = StartCoroutine(rotateFromCollision(newVector));
+
+        rotateOnCollisionCoroutine = StartCoroutine(rotateFromCollision(collisionRotationVector));
     }
 
     public void RefillBoost()
@@ -491,28 +471,20 @@ public class CharacterV3 : MonoBehaviour {
     {
         if (flagBehavoirScript.targetPlayer == this || flagBehavoirScript.targetPlayer == null) return false;
 
-        for (int i = 0; i < flagBehavoirScript.targetPlayer.previousPos.Count; i++)
+        for (int i = 0; i < flagBehavoirScript.previousPos.Count; i++)
         {
-            if (Vector3.Distance(transform.position, flagBehavoirScript.targetPlayer.previousPos[i]) < 10) return true;
+            if (Vector3.Distance(transform.position, flagBehavoirScript.previousPos[i]) < Vector3.Distance(flagBehavoirScript.previousPos[i], flagBehavoirScript.targetPlayer.transform.position)) return true;
         }
-
-
         return false;
     }
 
-    public void RegisterPos()
+    public float getSpeedRatio()
     {
-        if (previousPos.Count >= previousPos.Capacity) previousPos.RemoveAt(0);
-
-        previousPos.Add(transform.position);
+        return Mathf.InverseLerp(0, minAltMaxSpeed, currentFwdSpeed);
     }
 
-    private void OnDrawGizmosSelected()
+    public float getSpeedRatioWithBoost()
     {
-        for (int i = 0; i < previousPos.Count; i++)
-        {
-            Gizmos.color = new Color(0, 1, 0, 0.2f);
-            Gizmos.DrawSphere(previousPos[i], 10);
-        }
+        return Mathf.InverseLerp(0, minAltMaxSpeed * boostSpeedMultiplier, currentFwdSpeed);
     }
 }

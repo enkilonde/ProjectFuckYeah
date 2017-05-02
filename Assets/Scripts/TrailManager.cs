@@ -36,12 +36,9 @@ public class TrailManager : MonoBehaviour {
 
 		trailA.widthMultiplier = Mathf.Lerp(minWidth, maxWidth, side);
 		trailB.widthMultiplier = Mathf.Lerp(minWidth, maxWidth, 1 - side);
-        Color oldColor = trailReactor.startColor;
-        Color col = (cv3.I_forwardBoost != 0) ? Color.red : Color.blue;
-        col = Color.Lerp(oldColor, col, Time.deltaTime * 5);
-        trailReactor.startColor = col;
-        //col.a = 0.5f;
-        trailReactor.endColor = col;
+
+        Color trailColor = (cv3.previous_I_forwardBoost == 1) ? Color.red : Color.blue;
+        trailReactor.material.SetColor("_TintColor", trailColor);
 
     }
 }

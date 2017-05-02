@@ -78,10 +78,10 @@ public class CameraV1 : MonoBehaviour {
 
     void GetCameraType()
     {
-        if(flagBeaviourScript.targetPlayer != null && flagBeaviourScript.targetPlayer.transform != transform.parent && Input.GetAxis(controler.Get_LockOnInput()) != 0)
+        if((flagBeaviourScript.targetPlayer == null || flagBeaviourScript.targetPlayer.transform != transform.parent) && Input.GetAxis(controler.Get_LockOnInput()) != 0)
         {
             CameraType = camModes.Hunter;
-            targetToLock = flagBeaviourScript.targetPlayer.transform;
+            targetToLock = flagBeaviourScript.transform;
         }
         else
         {
@@ -103,7 +103,9 @@ public class CameraV1 : MonoBehaviour {
             case camModes.AssCombat:
                 if (transform.parent != character)
                     transform.parent = character;
-                float lateralCamRot = Input.GetAxis(controler.Get_HorizontalCameraInput());
+                //float lateralCamRot = Input.GetAxis(controler.Get_HorizontalCameraInput());
+                float lateralCamRot = 0;
+
                 if (Mathf.Abs(lateralCamRot) > camRot_minSensitivity)
                 {
                     //				print("Lateral cam rot" + lateralCamRot);
@@ -112,7 +114,9 @@ public class CameraV1 : MonoBehaviour {
                 {
                     lateralCamRot = 0;
                 }
-                float verticalCamRot = Input.GetAxis(controler.Get_VerticalCameraInput());
+                //float verticalCamRot = Input.GetAxis(controler.Get_VerticalCameraInput());
+                float verticalCamRot = 0;
+
                 if (Mathf.Abs(verticalCamRot) > camRot_minSensitivity)
                 {
                     //				print("Vertical cam rot" + verticalCamRot);
@@ -129,7 +133,6 @@ public class CameraV1 : MonoBehaviour {
                 transform.position = character.position;
                 if (Input.GetButton(controler.Get_LockOnInput()))
                 {
-                    Debug.Log(targetToLock.name, gameObject);
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetToLock.position - transform.position, Vector3.up), camInputSpeed * Time.deltaTime);
                 }
                 else

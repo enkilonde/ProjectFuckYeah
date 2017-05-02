@@ -1,4 +1,6 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
 Shader "Hidden/SgtCloudsphere"
 {
@@ -84,7 +86,7 @@ Shader "Hidden/SgtCloudsphere"
 					float3 wNormal = normalize(mul((float3x3)unity_ObjectToWorld, i.normal));
 					float3 wNear   = _WorldSpaceCameraPos - wVertex.xyz;
 					
-					o.vertex    = mul(UNITY_MATRIX_MVP, i.vertex);
+					o.vertex    = UnityObjectToClipPos(i.vertex);
 					o.texcoord0 = 1.0f;
 #if LIGHT_0 || LIGHT_1 || LIGHT_2
 					o.texcoord0 *= UNITY_LIGHTMODEL_AMBIENT * 2.0f;

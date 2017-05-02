@@ -1,4 +1,6 @@
-﻿Shader "StandardOutlineBourrin"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "StandardOutlineBourrin"
 {
 	Properties
 	{
@@ -98,7 +100,7 @@
 			v2f vert(appdata v) {
 				// just make a copy of incoming vertex data but scaled according to normal direction
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 			 
 				float3 norm   = mul ((float3x3)UNITY_MATRIX_IT_MV, v.normal);
 				float2 offset = TransformViewToProjection(norm.xy);
@@ -316,7 +318,7 @@
 			v2f vert(appdata v) {
 				// just make a copy of incoming vertex data but scaled according to normal direction
 				v2f o;
-				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos(v.vertex);
 			 
 				float3 norm   = mul ((float3x3)UNITY_MATRIX_IT_MV, v.normal);
 				float2 offset = TransformViewToProjection(norm.xy);

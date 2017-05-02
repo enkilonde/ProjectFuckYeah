@@ -4,13 +4,38 @@ using UnityEngine;
 
 public class FlagBehaviour : MonoBehaviour
 {
-    public const float timeToStealFlag = 2.0f;
+    public const float timeToStealFlag = 0.01f;
+    public const float flagSizeIncrease = 3f;
+    public const float distanceRegisterPos = 5f;
 
     public GameObject ImpulsePrefab;
 
     [HideInInspector] public CharacterV3 targetPlayer;
 
     [HideInInspector] public List<PlayerInfo> PlayersInCollider = new List<PlayerInfo>();
+
+    Vector3 initialSize = Vector3.one;
+
+    ParticleSystem trail;
+
+    float timeSinceLastSteal = 0f;
+
+    public List<Vector3> previousPos = new List<Vector3>(50);
+
+    private void Awake()
+    {
+        initialSize = transform.localScale;
+        trail = transform.Find("Trail").GetComponentInChildren<ParticleSystem>();
+    }
+
+    private void Update()
+    {
+        if(previousPos.Count == 0 || Vector3.Distance(transform.position, previousPos[0]) > distanceRegisterPos)
+        {
+            RegisterPos();
+        }
+
+    }
 
     private void LateUpdate()
     {
@@ -23,16 +48,24 @@ public class FlagBehaviour : MonoBehaviour
             }
 
             PlayersInCollider[i].TimeInCollider += Time.deltaTime;
-            if(PlayersInCollider[i].TimeInCollider >= timeToStealFlag)
+            if(PlayersInCollider[i].TimeInCollider >= timeToStealFlag && timeSinceLastSteal > 1.5f)
             {
                 setPlayerOwner(PlayersInCollider[i].playerTransform);
             }
         }
 
+        transform.localScale = initialSize;
+
+
 
         if (targetPlayer == null) return;
 
+        timeSinceLastSteal += Time.deltaTime;
+
+        transform.localScale = initialSize * flagSizeIncrease;
+
         transform.position = targetPlayer.transform.position;
+        transform.rotation = targetPlayer.transform.rotation;
         targetPlayer.currentScore += targetPlayer.speedScoreGain * Time.deltaTime;    
 
     }
@@ -81,6 +114,8 @@ public class FlagBehaviour : MonoBehaviour
         transform.position = targetPlayer.transform.position;
 
         Instantiate(ImpulsePrefab, transform.position, Quaternion.identity);
+        timeSinceLastSteal = 0f;
+        trail.Play();
     }
 
     public void removePlayerFromList(Transform play)
@@ -109,9 +144,29 @@ public class FlagBehaviour : MonoBehaviour
 
     public void Drop()
     {
-        print("DROP");
         targetPlayer = null;
+        trail.Stop();
+
     }
+
+    public void RegisterPos()
+    {
+        if (previousPos.Count >= previousPos.Capacity) previousPos.RemoveAt(previousPos.Count - 1);
+
+        previousPos.Insert(0, transform.position);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (targetPlayer == null) return;
+
+        for (int i = 0; i < previousPos.Count; i++)
+        {
+            Gizmos.color = new Color(0, 1, 0, 0.2f);
+            Gizmos.DrawSphere(previousPos[i], i );
+        }
+    }
+
 }
 
 [System.Serializable]

@@ -7,12 +7,10 @@ public class PlaneCollisionV3 : MonoBehaviour {
 
 	public float impForce = 2f;
 	CharacterV3 CV3;
-	ChasingState chaseState;
 
 
 	void Start () {
 		CV3 = GetComponent<CharacterV3>();
-		chaseState = GetComponent<ChasingState>();
 	}
 	
 
