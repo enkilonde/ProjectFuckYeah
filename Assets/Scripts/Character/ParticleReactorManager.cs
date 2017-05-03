@@ -22,7 +22,7 @@ public class ParticleReactorManager : MonoBehaviour
     {
 
         
-        reactorEmission.enabled = Input.GetAxisRaw(controlerv3.Get_AccelAxisInput()) != 0;
+        reactorEmission.enabled = controlerv3.Get_AccelAxisInput() != 0;
 
 	}
 }

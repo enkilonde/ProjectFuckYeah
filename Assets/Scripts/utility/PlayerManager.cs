@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XInputDotNetPure;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -39,7 +40,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
-        AttribInputs();
+        //AttribInputs();
     }
 
     public void init(int NumberOfPlayers)
@@ -55,8 +56,12 @@ public class PlayerManager : MonoBehaviour
             characters[i] = player.GetComponentInChildren<CharacterV3>();
             controllers[i] = player.GetComponentInChildren<ControllerV3>();
 
-            characters[0].useKeyboard = true;
-            controllers[0].playerNumero = keyboardIndex;
+            controllers[i].playerNumero = i;
+            controllers[i].state = GamePad.GetState((PlayerIndex)i);
+            characters[i].inputsSet = true;
+
+            //characters[0].useKeyboard = true;
+            //controllers[0].playerNumero = keyboardIndex;
 
             if(i >= NumberOfPlayers)
             {

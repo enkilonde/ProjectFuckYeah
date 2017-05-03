@@ -1,15 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XInputDotNetPure;
 
 public class ControllerV3 : MonoBehaviour {
 
-	[Range(1, 4)]
+    //public static bool[] controllersSet = new bool[] { false, false, false, false}; 
+
+	[Range(0, 3)]
 	public int playerNumero = 1;
 
+    public GamePadState state;
+    //GamePadState prevState;
 
+    public bool useKeyboard = false;
 
-	public enum AllAxis
+    public enum AllAxis
 	{
 		StickG_X,
 		StickG_Y,
@@ -49,67 +55,158 @@ public class ControllerV3 : MonoBehaviour {
 	public AllButtons forwardBoost = AllButtons.XBOX_A;
     public AllButtons useItem = AllButtons.XBOX_B;
 
+    private void Update()
+    {
+
+        state = GamePad.GetState((PlayerIndex)playerNumero);
+    }
+
     #region Axes
-    public string Get_HorizontalRotInput ()
+    public float Get_HorizontalRotInput ()
 	{
-		return playerNumero.ToString() + "_" + horizontalRotation.ToString() + "_Axis";
+        return state.ThumbSticks.Left.X;
+        //return playerNumero.ToString() + "_" + horizontalRotation.ToString() + "_Axis";
 	}
-	public string Get_HorizontalCameraInput()
+
+	public float Get_HorizontalCameraInput()
 	{
-		return playerNumero.ToString() + "_" + horizontalCamera.ToString() + "_Axis";
+        return state.ThumbSticks.Right.X;
+		//return playerNumero.ToString() + "_" + horizontalCamera.ToString() + "_Axis";
 	}
-	public string Get_VerticalCameraInput()
+
+	public float Get_VerticalCameraInput()
 	{
-		return playerNumero.ToString() + "_" + verticalCamera.ToString() + "_Axis";
+        return state.Triggers.Right;
+        //return playerNumero.ToString() + "_" + verticalCamera.ToString() + "_Axis";
 	}
-//	public string Get_LateralBoostLeftInput()
-//	{
-//		return playerNumero.ToString() + "_" + lateralBoostLeft.ToString() + "_Axis";
-//	}
-//	public string Get_LateralBoostRightInput()
-//	{
-//		return playerNumero.ToString() + "_" + lateralBoostRight.ToString() + "_Axis";
-//	}
-	public string Get_AccelAxisInput()
+
+	public float Get_AccelAxisInput()
 	{
-		return playerNumero.ToString() + "_" + accelAxis.ToString() + "_Axis";
+        if (useKeyboard)
+            return Input.GetAxis(PlayerManager.keyboardIndex + "_" + accelAxis.ToString() + "_Axis");
+        return state.Triggers.Right;
+        //return playerNumero.ToString() + "_" + accelAxis.ToString() + "_Axis";
 	}
-	public string Get_VertcalBoostAxisInput()
+
+	public float Get_VertcalBoostAxisInput()
 	{
-		return playerNumero.ToString() + "_" + verticalBoost.ToString() + "_Axis";
+        return state.Triggers.Left;
+		//return playerNumero.ToString() + "_" + verticalBoost.ToString() + "_Axis";
 	}
 	#endregion
 
 	#region buttons
-//	public string Get_AccelButtonInput ()
-//	{
-//		return playerNumero.ToString() + "_" + accelButton.ToString();
-//	}
-//	public string Get_SchockWaveInput ()
-//	{
-//		return playerNumero.ToString() + "_" + shockWave.ToString();
-//	}
-	public string Get_LatLeftBoostInput()
+	public float Get_LatLeftBoostInput()
 	{
-		return playerNumero.ToString() + "_" + LatLeftBoost.ToString();
+        return 1 - (float)state.Buttons.Y;
+        //return playerNumero.ToString() + "_" + LatLeftBoost.ToString();
 	}
-	public string Get_LatRightBoostInput()
+
+	public float Get_LatRightBoostInput()
 	{
-		return playerNumero.ToString() + "_" + LatRightBoost.ToString();
+        return 1 - (float)state.Buttons.Y;
+        //return playerNumero.ToString() + "_" + LatRightBoost.ToString();
 	}
-	public string Get_LockOnInput()
+
+	public float Get_LockOnInput()
 	{
-		return playerNumero.ToString() + "_" + lockOn.ToString();
+        return 1 - (float)state.Buttons.RightStick;
+        //return playerNumero.ToString() + "_" + lockOn.ToString();
 	}
-	public string Get_ForwardBoostInput()
+
+	public float Get_ForwardBoostInput()
 	{
-		return playerNumero.ToString() + "_" + forwardBoost.ToString();
+        return 1 - (float)state.Buttons.A;
+        //return playerNumero.ToString() + "_" + forwardBoost.ToString();
 	}
-    public string Get_UseItemInput()
+
+    public float Get_UseItemInput()
     {
-        return playerNumero.ToString() + "_" + useItem.ToString();
+        return 1 - (float)state.Buttons.B;
+        //return playerNumero.ToString() + "_" + useItem.ToString();
     }
 
     #endregion
 
+    void OnGUI()
+    {
+        //if (playerNumero != 0) return;
+
+
+        string text = "Use left stick to turn the cube, hold A to change color\n";
+        text += string.Format("IsConnected {0} Packet #{1}\n", state.IsConnected, state.PacketNumber);
+        text += string.Format("\tTriggers {0} {1}\n", state.Triggers.Left, state.Triggers.Right);
+        text += string.Format("\tD-Pad {0} {1} {2} {3}\n", state.DPad.Up, state.DPad.Right, state.DPad.Down, state.DPad.Left);
+        text += string.Format("\tButtons Start {0} Back {1} Guide {2}\n", state.Buttons.Start, state.Buttons.Back, state.Buttons.Guide);
+        text += string.Format("\tButtons LeftStick {0} RightStick {1} LeftShoulder {2} RightShoulder {3}\n", state.Buttons.LeftStick, state.Buttons.RightStick, state.Buttons.LeftShoulder, state.Buttons.RightShoulder);
+        text += string.Format("\tButtons A {0} B {1} X {2} Y {3}\n", state.Buttons.A, state.Buttons.B, state.Buttons.X, state.Buttons.Y);
+        text += string.Format("\tSticks Left {0} {1} Right {2} {3}\n", state.ThumbSticks.Left.X, state.ThumbSticks.Left.Y, state.ThumbSticks.Right.X, state.ThumbSticks.Right.Y);
+        GUI.Label(new Rect(0, 0, Screen.width, Screen.height), text);
+    }
+
 }
+
+
+
+//#region Axes
+//public string Get_HorizontalRotInput()
+//{
+//    return playerNumero.ToString() + "_" + horizontalRotation.ToString() + "_Axis";
+//}
+//public string Get_HorizontalCameraInput()
+//{
+//    return playerNumero.ToString() + "_" + horizontalCamera.ToString() + "_Axis";
+//}
+//public string Get_VerticalCameraInput()
+//{
+//    return playerNumero.ToString() + "_" + verticalCamera.ToString() + "_Axis";
+//}
+////	public string Get_LateralBoostLeftInput()
+////	{
+////		return playerNumero.ToString() + "_" + lateralBoostLeft.ToString() + "_Axis";
+////	}
+////	public string Get_LateralBoostRightInput()
+////	{
+////		return playerNumero.ToString() + "_" + lateralBoostRight.ToString() + "_Axis";
+////	}
+//public string Get_AccelAxisInput()
+//{
+//    return playerNumero.ToString() + "_" + accelAxis.ToString() + "_Axis";
+//}
+//public string Get_VertcalBoostAxisInput()
+//{
+//    return playerNumero.ToString() + "_" + verticalBoost.ToString() + "_Axis";
+//}
+//#endregion
+
+//#region buttons
+////	public string Get_AccelButtonInput ()
+////	{
+////		return playerNumero.ToString() + "_" + accelButton.ToString();
+////	}
+////	public string Get_SchockWaveInput ()
+////	{
+////		return playerNumero.ToString() + "_" + shockWave.ToString();
+////	}
+//public string Get_LatLeftBoostInput()
+//{
+//    return playerNumero.ToString() + "_" + LatLeftBoost.ToString();
+//}
+//public string Get_LatRightBoostInput()
+//{
+//    return playerNumero.ToString() + "_" + LatRightBoost.ToString();
+//}
+//public string Get_LockOnInput()
+//{
+//    return playerNumero.ToString() + "_" + lockOn.ToString();
+//}
+//public string Get_ForwardBoostInput()
+//{
+//    return playerNumero.ToString() + "_" + forwardBoost.ToString();
+//}
+//public string Get_UseItemInput()
+//{
+//    return playerNumero.ToString() + "_" + useItem.ToString();
+//}
+
+//#endregion

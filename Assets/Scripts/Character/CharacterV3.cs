@@ -323,24 +323,11 @@ public class CharacterV3 : MonoBehaviour {
 
 		#region accelerate
 		I_accel = 0f;
-		//		I_accel = Input.GetAxis("1_RT_Axis");	//Meme entrer la valeur en dur ça ne marche pas en build oO
-		I_accel = Input.GetAxisRaw(controlerSet.Get_AccelAxisInput());
-		//		print(Input.GetAxis(controlerSet.Get_AccelAxisInput()));
-		//print("Player " + transform.parent.GetComponentInChildren<ControllerV3>().playerNumero + ", speed : " + I_accel);
-		if(I_accel > accel_minSensitivity)
-		{
-			//			print(controlerSet.Get_AccelAxisInput());
-			//			print("Accelerate Axis");
-		}
-        //		if(Input.GetButton(controlerSet.Get_AccelButtonInput()))
-        //		{
-        ////			print("Accelerate Button");
-        //			I_accel = 1f;
-        //		}
+		I_accel = controlerSet.Get_AccelAxisInput();
         #endregion
 
         #region rotation
-        I_lateralPlayerRot = Input.GetAxisRaw(controlerSet.Get_HorizontalRotInput());
+        I_lateralPlayerRot =controlerSet.Get_HorizontalRotInput();
         if (Mathf.Abs(I_lateralPlayerRot) < horizontalRot_minSensitivity)
             I_lateralPlayerRot = 0f; 
         #endregion
@@ -348,41 +335,41 @@ public class CharacterV3 : MonoBehaviour {
         #region lateral boost
         I_lateralBoostLeft = 0f;
 		I_lateralBoostRight = 0f;
-		//		I_lateralBoostLeft = Input.GetAxis(controlerSet.Get_LateralBoostLeftInput());
-		//		if(Mathf.Abs(I_lateralBoostLeft) > boost_minSensitivity)
-		//		{
-		////			print("BoostLeft" + I_lateralBoostLeft);
-		//		}
-		//		else
-		//		{
-		//			I_lateralBoostLeft = 0f;
-		//		}
-		//		print(transform.parent.name + " "+  controlerSet.Get_LatLeftBoostInput());
-		if(Input.GetButton(controlerSet.Get_LatLeftBoostInput()))
-		{
-			//I_lateralBoostLeft = 1f;
-		}
-		//		I_lateralBoostRight = Input.GetAxis(controlerSet.Get_LateralBoostRightInput());
-		//		if(Mathf.Abs(I_lateralBoostRight) > boost_minSensitivity)
-		//		{
-		////			print("BoostRight" + I_lateralBoostRight);
-		//		}
-		//		else
-		//		{
-		//			I_lateralBoostRight = 0f;
-		//		}
-		if(Input.GetButton(controlerSet.Get_LatRightBoostInput()))
-		{
-			//I_lateralBoostRight = 1f;
-		}
+        //I_lateralBoostLeft = Input.GetAxis(controlerSet.Get_LateralBoostLeftInput());
+        //if (Mathf.Abs(I_lateralBoostLeft) > boost_minSensitivity)
+        //{
+        //    //			print("BoostLeft" + I_lateralBoostLeft);
+        //}
+        //else
+        //{
+        //    I_lateralBoostLeft = 0f;
+        //}
+        //print(transform.parent.name + " " + controlerSet.Get_LatLeftBoostInput());
+        //if (Input.GetButton(controlerSet.Get_LatLeftBoostInput()))
+        //{
+        //    I_lateralBoostLeft = 1f;
+        //}
+        //I_lateralBoostRight = Input.GetAxis(controlerSet.Get_LateralBoostRightInput());
+        //if (Mathf.Abs(I_lateralBoostRight) > boost_minSensitivity)
+        //{
+        //    //			print("BoostRight" + I_lateralBoostRight);
+        //}
+        //else
+        //{
+        //    I_lateralBoostRight = 0f;
+        //}
+        //if (Input.GetButton(controlerSet.Get_LatRightBoostInput()))
+        //{
+        //    I_lateralBoostRight = 1f;
+        //}
         #endregion
 
         #region vertical boost
-		I_verticalBoost = Input.GetAxisRaw(controlerSet.Get_VertcalBoostAxisInput());
+        I_verticalBoost = controlerSet.Get_VertcalBoostAxisInput();
 		#endregion
 
 		#region boost
-		I_forwardBoost = Input.GetButton(controlerSet.Get_ForwardBoostInput()) ? 1f : 0f;
+		I_forwardBoost = controlerSet.Get_ForwardBoostInput();
 		#endregion
 	}
 
