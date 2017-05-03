@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour
     public bool[] playersAttribs = new bool[4];
     public bool[] controllersUsed = new bool[4];
 
-    int playerNumber = 0;
+    public int playerNumber = 0;
 
     private void Awake()
     {
@@ -58,7 +58,10 @@ public class PlayerManager : MonoBehaviour
 
             controllers[i].playerNumero = i;
             controllers[i].state = GamePad.GetState((PlayerIndex)i);
+            ControllerV3.controllersSet[i] = true;
             characters[i].inputsSet = true;
+
+            if (i == NumberOfPlayers - 1) controllers[i].useKeyboard = true;
 
             //characters[0].useKeyboard = true;
             //controllers[0].playerNumero = keyboardIndex;

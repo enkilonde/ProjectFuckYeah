@@ -5,9 +5,9 @@ using XInputDotNetPure;
 
 public class ControllerV3 : MonoBehaviour {
 
-    //public static bool[] controllersSet = new bool[] { false, false, false, false}; 
+    public static bool[] controllersSet = new bool[] { false, false, false, false };
 
-	[Range(0, 3)]
+    [Range(0, 3)]
 	public int playerNumero = 1;
 
     public GamePadState state;
@@ -57,73 +57,82 @@ public class ControllerV3 : MonoBehaviour {
 
     private void Update()
     {
-
+        
         state = GamePad.GetState((PlayerIndex)playerNumero);
+
     }
 
     #region Axes
     public float Get_HorizontalRotInput ()
-	{
+    {
+        if (useKeyboard && state.ThumbSticks.Left.X == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + horizontalRotation.ToString() + "_Axis"));
         return state.ThumbSticks.Left.X;
-        //return playerNumero.ToString() + "_" + horizontalRotation.ToString() + "_Axis";
 	}
 
 	public float Get_HorizontalCameraInput()
-	{
+    {
+        if (useKeyboard && state.ThumbSticks.Right.X == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + horizontalCamera.ToString() + "_Axis"));
         return state.ThumbSticks.Right.X;
-		//return playerNumero.ToString() + "_" + horizontalCamera.ToString() + "_Axis";
 	}
 
 	public float Get_VerticalCameraInput()
-	{
+    {
+        if (useKeyboard && state.Triggers.Right == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + verticalCamera.ToString() + "_Axis"));
         return state.Triggers.Right;
-        //return playerNumero.ToString() + "_" + verticalCamera.ToString() + "_Axis";
 	}
 
 	public float Get_AccelAxisInput()
 	{
-        if (useKeyboard)
-            return Input.GetAxis(PlayerManager.keyboardIndex + "_" + accelAxis.ToString() + "_Axis");
+        if (useKeyboard && state.Triggers.Right == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + accelAxis.ToString() + "_Axis"));
         return state.Triggers.Right;
-        //return playerNumero.ToString() + "_" + accelAxis.ToString() + "_Axis";
 	}
 
 	public float Get_VertcalBoostAxisInput()
-	{
+    {
+        if (useKeyboard && state.Triggers.Left == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + verticalBoost.ToString() + "_Axis"));
         return state.Triggers.Left;
-		//return playerNumero.ToString() + "_" + verticalBoost.ToString() + "_Axis";
 	}
 	#endregion
 
 	#region buttons
 	public float Get_LatLeftBoostInput()
-	{
+    {
+        if (useKeyboard && 1 - (float)state.Buttons.Y == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + LatLeftBoost.ToString()));
         return 1 - (float)state.Buttons.Y;
-        //return playerNumero.ToString() + "_" + LatLeftBoost.ToString();
 	}
 
 	public float Get_LatRightBoostInput()
-	{
+    {
+        if (useKeyboard && 1 - (float)state.Buttons.Y == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + LatRightBoost.ToString()));
         return 1 - (float)state.Buttons.Y;
-        //return playerNumero.ToString() + "_" + LatRightBoost.ToString();
 	}
 
 	public float Get_LockOnInput()
-	{
+    {
+        if (useKeyboard && 1 - (float)state.Buttons.RightStick == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + lockOn.ToString()));
         return 1 - (float)state.Buttons.RightStick;
-        //return playerNumero.ToString() + "_" + lockOn.ToString();
 	}
 
 	public float Get_ForwardBoostInput()
-	{
+    {
+        if (useKeyboard && 1 - (float)state.Buttons.A == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + forwardBoost.ToString()));
         return 1 - (float)state.Buttons.A;
-        //return playerNumero.ToString() + "_" + forwardBoost.ToString();
 	}
 
     public float Get_UseItemInput()
     {
+        if (useKeyboard && 1 - (float)state.Buttons.B == 0)
+            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + useItem.ToString()));
         return 1 - (float)state.Buttons.B;
-        //return playerNumero.ToString() + "_" + useItem.ToString();
     }
 
     #endregion
