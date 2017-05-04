@@ -81,8 +81,8 @@ public class ControllerV3 : MonoBehaviour {
     {
         if (useKeyboard && state.Triggers.Right == 0)
             return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + verticalCamera.ToString() + "_Axis"));
-        return state.Triggers.Right;
-	}
+        return state.ThumbSticks.Right.Y;
+    }
 
 	public float Get_AccelAxisInput()
 	{

@@ -37,6 +37,7 @@ public class CameraV1 : MonoBehaviour {
 		character = transform.parent.transform.FindChild("Character").transform;
 		controler = transform.parent.GetComponentInChildren<ControllerV3>();
         flagBeaviourScript = FindObjectOfType<FlagBehaviour>();
+        CameraType = camModes.AssCombat;
 
 		switch(CameraType)
 		{
@@ -83,7 +84,7 @@ public class CameraV1 : MonoBehaviour {
             CameraType = camModes.Hunter;
             targetToLock = flagBeaviourScript.transform;
         }
-        else
+        else if(Mathf.Abs(controler.Get_HorizontalCameraInput()) > 0.5f || Mathf.Abs(controler.Get_VerticalCameraInput()) > 0.5f)
         {
             CameraType = camModes.AssCombat;
         }
@@ -131,14 +132,13 @@ public class CameraV1 : MonoBehaviour {
                 break;
             case camModes.Hunter:
                 transform.position = character.position;
-                if (controler.Get_LockOnInput() != 0)
+                if (true)
                 {
                     transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.LookRotation(targetToLock.position - transform.position, Vector3.up), camInputSpeed * Time.deltaTime);
                 }
                 else
                 {
                     transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.identity, camInputSpeed * Time.deltaTime);
-                    //				transform.localRotation = Quaternion.RotateTowards(transform.localRotation, Quaternion.LookRotation(-cv3.inertieVector.normalized, transform.up), camInputSpeed * Time.deltaTime);
                 }
                 break;
             case camModes.Target:
