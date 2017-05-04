@@ -139,7 +139,7 @@ public class ControllerV3 : MonoBehaviour {
 
     void OnGUI()
     {
-        //if (playerNumero != 0) return;
+        return;
 
 
         string text = "Use left stick to turn the cube, hold A to change color\n";
