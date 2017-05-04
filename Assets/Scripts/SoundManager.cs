@@ -35,7 +35,7 @@ public class SoundManager : MonoBehaviour
         for (int i = 0; i < Controllers.Length; i++)
         {
             float v = Mathf.InverseLerp(0, Controllers[i].minAltMaxSpeed, Controllers[i].currentFwdSpeed);
-            fmod_moving_speed[i].setValue(v);
+            //fmod_moving_speed[0].setValue(v);
         }
 	}
 

@@ -5,17 +5,6 @@ using RobToolsNameSpace;
 
 public class CharacterV3 : MonoBehaviour {
 
-	[Range(0f, 1f)]
-	[Header("Valeur minimale pour prendre en compte l'input pour accelerer")]
-	public float accel_minSensitivity = 0.1f;
-
-	[Range(0f, 1f)]
-	[Header("Valeur minimale pour prendre en compte l'input pour faire une rotation à gauche ou à droite")]
-	public float horizontalRot_minSensitivity = 0.2f;
-	[Range(0f, 1f)]
-	[Header("Valeur minimale pour prendre en compte l'input pour faire un boost latéral")]
-	public float boost_minSensitivity = 0.2f;
-
 	//Private fields references
 	private ControllerV3 controlerSet;
     private new Rigidbody rigidbody;
@@ -29,6 +18,7 @@ public class CharacterV3 : MonoBehaviour {
 	public float minAltAccel = 20f;
 	public float maxAltAccel = 12f;
 	public float deccelNoInput = 20f;
+    public AnimationCurve accelBySpeed;
 
 	//Lacet
 	private float currentLacetSpeed = 0f;
@@ -216,8 +206,8 @@ public class CharacterV3 : MonoBehaviour {
         currentMaxSpeed = Mathf.Lerp(currentMaxSpeed, (I_forwardBoost == 0)?maxSpeed : maxSpeed * 2, Time.fixedDeltaTime);
 
         //CurrentSpeed
-        if (I_accel > accel_minSensitivity || I_forwardBoost != 0f)  //if input : accelerate
-            currentFwdSpeed += (_tempAccel * (1 - gravityImpactOnAcceleration * Mathf.Sign(currentVerticalForce))) * Time.fixedDeltaTime;
+        if (I_accel != 0 || I_forwardBoost != 0f)  //if input : accelerate
+            currentFwdSpeed += (_tempAccel * (1 - gravityImpactOnAcceleration * Mathf.Sign(currentVerticalForce))) * Time.fixedDeltaTime * accelBySpeed.Evaluate(getSpeedRatio());
         else                //else : decelerate
             currentFwdSpeed -= deccelNoInput * Time.fixedDeltaTime;
 
@@ -233,7 +223,7 @@ public class CharacterV3 : MonoBehaviour {
         dirToMove = Vector3.zero;
 
         //Inertie
-        if (I_accel > accel_minSensitivity || I_forwardBoost > 0.5f)
+        if (I_accel != 0 || I_forwardBoost > 0.5f)
         {
             inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.fixedDeltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
         }
@@ -328,8 +318,6 @@ public class CharacterV3 : MonoBehaviour {
 
         #region rotation
         I_lateralPlayerRot =controlerSet.Get_HorizontalRotInput();
-        if (Mathf.Abs(I_lateralPlayerRot) < horizontalRot_minSensitivity)
-            I_lateralPlayerRot = 0f; 
         #endregion
 
         #region lateral boost
