@@ -39,7 +39,6 @@ public class ItemsUtility
 
 }
 
-[Serializable]
 public class CollectibleBase
 {
 
@@ -50,7 +49,7 @@ public class CollectibleBase
     public virtual void OnCollect(PlayerUseItem owner)
     {
         character = owner;
-        owner.objectCollected = this;
+        character.objectCollected = this;
         ItemUI.instance.SetCameraOnItem(PlayerManager.manager.getManagerID(character.cv3), (int)ItemsUtility.GetEnum(name));
         Debug.Log("Collect", character.gameObject);
     }
