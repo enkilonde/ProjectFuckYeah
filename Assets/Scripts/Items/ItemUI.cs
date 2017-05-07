@@ -29,7 +29,6 @@ public class ItemUI : MonoBehaviour {
 
     public void SetCameraOnItem(int playerID, int itemID)
     {
-        Debug.Log(playerID);
         cameras[playerID].transform.position = cameras[playerID].transform.parent.position + new Vector3((itemID+1) * ecart, 0, 0);
     }
     

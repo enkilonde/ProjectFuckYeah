@@ -20,12 +20,19 @@ public class FlagBehaviour : MonoBehaviour
 
     float timeSinceLastSteal = 0f;
 
-    public List<Vector3> previousPos = new List<Vector3>(50);
+    [HideInInspector] public List<Vector3> previousPos = new List<Vector3>(50);
+
+    [HideInInspector] public Transform[] indicators;
+
+    public AnimationCurve indicatorColorByDistance;
+    public Gradient colorGradient;
 
     private void Awake()
     {
         initialSize = transform.localScale;
         trail = transform.Find("Trail").GetComponentInChildren<ParticleSystem>();
+        indicators = new Transform[4] { transform.Find("flagModel").Find("Indicator-1"), transform.Find("flagModel").Find("Indicator-2"), transform.Find("flagModel").Find("Indicator-3"), transform.Find("flagModel").Find("Indicator-4") };
+        ToggleIndicators();
     }
 
     private void Update()
@@ -34,7 +41,7 @@ public class FlagBehaviour : MonoBehaviour
         {
             RegisterPos();
         }
-
+        UpdateIndicators();
     }
 
     private void LateUpdate()
@@ -116,6 +123,7 @@ public class FlagBehaviour : MonoBehaviour
         Instantiate(ImpulsePrefab, transform.position, Quaternion.identity);
         timeSinceLastSteal = 0f;
         trail.Play();
+        ToggleIndicators();
     }
 
     public void removePlayerFromList(Transform play)
@@ -146,7 +154,7 @@ public class FlagBehaviour : MonoBehaviour
     {
         targetPlayer = null;
         trail.Stop();
-
+        ToggleIndicators();
     }
 
     public void RegisterPos()
@@ -164,6 +172,47 @@ public class FlagBehaviour : MonoBehaviour
         {
             Gizmos.color = new Color(0, 1, 0, 0.2f);
             Gizmos.DrawSphere(previousPos[i], i );
+        }
+    }
+
+    private void ToggleIndicators()
+    {
+        for (int i = 0; i < indicators.Length; i++)
+        {
+            if(targetPlayer == null)
+            {
+                indicators[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            if (i >= PlayerManager.manager.playerNumber)
+            {
+                indicators[i].gameObject.SetActive(false);
+                continue;
+            }
+
+            if (targetPlayer.controlerSet.playerNumero == i)
+            {
+                indicators[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                indicators[i].gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void UpdateIndicators()
+    {
+        for (int i = 0; i < PlayerManager.manager.characters.Length; i++)
+        {
+            if (PlayerManager.manager.characters[i] == targetPlayer) continue;
+
+            if (i >= PlayerManager.manager.playerNumber) continue;
+
+            indicators[i].LookAt(PlayerManager.manager.characters[i].transform);
+
+            indicators[i].GetComponentInChildren<Renderer>().material.color = colorGradient.Evaluate(indicatorColorByDistance.Evaluate(Vector3.Distance(transform.position, PlayerManager.manager.characters[i].transform.position)));
         }
     }
 

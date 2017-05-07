@@ -51,7 +51,6 @@ public class CollectibleBase
         character = owner;
         character.objectCollected = this;
         ItemUI.instance.SetCameraOnItem(PlayerManager.manager.getManagerID(character.cv3), (int)ItemsUtility.GetEnum(name));
-        Debug.Log("Collect", character.gameObject);
     }
 
     public virtual void Initialise()

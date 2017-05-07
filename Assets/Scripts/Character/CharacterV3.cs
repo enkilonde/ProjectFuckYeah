@@ -6,7 +6,7 @@ using RobToolsNameSpace;
 public class CharacterV3 : MonoBehaviour {
 
 	//Private fields references
-	private ControllerV3 controlerSet;
+	[HideInInspector]public ControllerV3 controlerSet;
     private new Rigidbody rigidbody;
 
     //Speed
