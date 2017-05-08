@@ -60,6 +60,7 @@ public class CollectibleBase
 
     public virtual void UseObjet()
     {
+        SoundManager.instance.playSoundItemUsed(name);
         OnDestroy(); // change this if whe happen to have item that are not one use only
     }
 

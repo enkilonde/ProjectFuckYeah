@@ -5,40 +5,58 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
 
+    public static SoundManager instance;
+
     CharacterV3[] Controllers;
 
-    List<FMOD.Studio.EventInstance> fmod_moving = new List<FMOD.Studio.EventInstance>();
-    List<FMOD.Studio.ParameterInstance> fmod_moving_speed = new List<FMOD.Studio.ParameterInstance>();
+
+    FMOD.Studio.EventInstance collisionBounce;
+    FMOD.Studio.EventInstance boostSound;
+    FMOD.Studio.EventInstance flagTakenSound;
+    FMOD.Studio.EventInstance itemUsedSound;
+
 
     // Use this for initialization
     void Awake ()
     {
-        Controllers = FindObjectsOfType<CharacterV3>();
-
-        for (int i = 0; i < Controllers.Length; i++)
+        if(instance == null || instance.transform == null)
         {
-            FMOD.Studio.EventInstance moving = FMODUnity.RuntimeManager.CreateInstance("event:/Moving"); // Moving
-            moving.start();
-            fmod_moving.Add(moving);
-
-            FMOD.Studio.ParameterInstance moving_speed; // Moving _ Speed
-            moving.getParameter("Speed", out moving_speed);
-            moving_speed.setValue(0.0f);
-            fmod_moving_speed.Add(moving_speed);
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
         }
 
-	}
-	
-	// Update is called once per frame
-	void Update ()
+
+        collisionBounce = FMODUnity.RuntimeManager.CreateInstance("event:/Collision Bounce");
+        boostSound = FMODUnity.RuntimeManager.CreateInstance("event:/Crash");
+        flagTakenSound = FMODUnity.RuntimeManager.CreateInstance("event:/Target Destruct");
+        itemUsedSound = FMODUnity.RuntimeManager.CreateInstance("event:/Crash");
+
+    }
+
+
+    public void PlaySoundCollision()
     {
-        for (int i = 0; i < Controllers.Length; i++)
-        {
-            float v = Mathf.InverseLerp(0, Controllers[i].minAltMaxSpeed, Controllers[i].currentFwdSpeed);
-            //fmod_moving_speed[0].setValue(v);
-        }
-	}
+        collisionBounce.start();
+    }
 
+    public void PlaySoundFlagCaptured()
+    {
+        flagTakenSound.start();
+
+    }
+
+    public void playSoundBoost()
+    {
+        boostSound.start();
+    }
+
+    public void playSoundItemUsed(string itemName)
+    {
+        itemUsedSound.start();
+    }
 
 
 }

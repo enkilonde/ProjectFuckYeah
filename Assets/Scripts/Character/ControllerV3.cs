@@ -103,35 +103,35 @@ public class ControllerV3 : MonoBehaviour {
 	public float Get_LatLeftBoostInput()
     {
         if (useKeyboard && 1 - (float)state.Buttons.Y == 0)
-            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + LatLeftBoost.ToString()));
+            return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + LatLeftBoost.ToString()));
         return 1 - (float)state.Buttons.Y;
 	}
 
 	public float Get_LatRightBoostInput()
     {
         if (useKeyboard && 1 - (float)state.Buttons.Y == 0)
-            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + LatRightBoost.ToString()));
+            return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + LatRightBoost.ToString()));
         return 1 - (float)state.Buttons.Y;
 	}
 
 	public float Get_LockOnInput()
     {
         if (useKeyboard && 1 - (float)state.Buttons.RightStick == 0)
-            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + lockOn.ToString()));
+            return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + lockOn.ToString()));
         return 1 - (float)state.Buttons.RightStick;
 	}
 
 	public float Get_ForwardBoostInput()
     {
         if (useKeyboard && 1 - (float)state.Buttons.A == 0)
-            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + forwardBoost.ToString()));
+            return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + forwardBoost.ToString()));
         return 1 - (float)state.Buttons.A;
 	}
 
     public float Get_UseItemInput()
     {
         if (useKeyboard && 1 - (float)state.Buttons.B == 0)
-            return (Input.GetAxis(PlayerManager.keyboardIndex + "_" + useItem.ToString()));
+            return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + useItem.ToString()));
         return 1 - (float)state.Buttons.B;
     }
 

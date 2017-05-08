@@ -124,6 +124,7 @@ public class FlagBehaviour : MonoBehaviour
         timeSinceLastSteal = 0f;
         trail.Play();
         ToggleIndicators();
+        SoundManager.instance.PlaySoundFlagCaptured();
     }
 
     public void removePlayerFromList(Transform play)

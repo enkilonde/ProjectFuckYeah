@@ -63,7 +63,6 @@ public class CharacterV3 : MonoBehaviour {
 
 	//Boost
     [Header("Boost")]
-	[HideInInspector]
     public float I_forwardBoost = 0f;
     public float previous_I_forwardBoost = 0;
     public float currentBoostAmountLeft = 0f;
@@ -175,6 +174,8 @@ public class CharacterV3 : MonoBehaviour {
     void computeDirectionHorizontale()
     {
         I_forwardBoost *= ((previous_I_forwardBoost == 1 || currentBoostAmountLeft > 0.25f) && currentBoostAmountLeft > 0) ? 1f : 0f;    //Reste t'il du boost dans la jauge
+        if (previous_I_forwardBoost == 0 && I_forwardBoost == 1) OnStartBoost();
+
         previous_I_forwardBoost = I_forwardBoost;
         currentBoostAmountLeft = Mathf.Clamp(currentBoostAmountLeft +=  boostGainedPerSeconds * ((IsInTrail())?10:1) * Time.fixedDeltaTime, 0, 1);
 
@@ -197,7 +198,7 @@ public class CharacterV3 : MonoBehaviour {
 
 
         //Do we use the boost?
-        if(I_forwardBoost!= 0)
+        if(I_forwardBoost != 0)
         {
             _tempAccel *= boostSpeedMultiplier;
             currentBoostAmountLeft -=  Time.fixedDeltaTime;
@@ -400,8 +401,8 @@ public class CharacterV3 : MonoBehaviour {
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.tag != "Obstacle") return;
-        
 
+        SoundManager.instance.PlaySoundCollision();
 
         if(Vector3.Dot(collision.contacts[0].normal, Vector3.up) > 0.9f) // Si la face qu'on a touché pointe vers le haut
         {
@@ -461,5 +462,10 @@ public class CharacterV3 : MonoBehaviour {
     public float getSpeedRatioWithBoost()
     {
         return Mathf.InverseLerp(0, minAltMaxSpeed * boostSpeedMultiplier, currentFwdSpeed);
+    }
+
+    public void OnStartBoost()
+    {
+        SoundManager.instance.playSoundBoost();
     }
 }
