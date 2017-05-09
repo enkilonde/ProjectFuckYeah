@@ -186,7 +186,7 @@ public class FlagBehaviour : MonoBehaviour
                 continue;
             }
 
-            if (i >= PlayerManager.manager.playerNumber)
+            if (i >= PlayerManager.get().playerNumber)
             {
                 indicators[i].gameObject.SetActive(false);
                 continue;
@@ -205,15 +205,16 @@ public class FlagBehaviour : MonoBehaviour
 
     private void UpdateIndicators()
     {
-        for (int i = 0; i < PlayerManager.manager.characters.Length; i++)
+        if (PlayerManager.get() == null || PlayerManager.get().characters == null) return;
+        for (int i = 0; i < PlayerManager.get().characters.Length; i++)
         {
-            if (PlayerManager.manager.characters[i] == targetPlayer) continue;
+            if (PlayerManager.get().characters[i] == targetPlayer) continue;
 
-            if (i >= PlayerManager.manager.playerNumber) continue;
+            if (i >= PlayerManager.get().playerNumber) continue;
 
-            indicators[i].LookAt(PlayerManager.manager.characters[i].transform);
+            indicators[i].LookAt(PlayerManager.get().characters[i].transform);
 
-            indicators[i].GetComponentInChildren<Renderer>().material.color = colorGradient.Evaluate(indicatorColorByDistance.Evaluate(Vector3.Distance(transform.position, PlayerManager.manager.characters[i].transform.position)));
+            indicators[i].GetComponentInChildren<Renderer>().material.color = colorGradient.Evaluate(indicatorColorByDistance.Evaluate(Vector3.Distance(transform.position, PlayerManager.get().characters[i].transform.position)));
         }
     }
 
