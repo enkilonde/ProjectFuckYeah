@@ -34,7 +34,7 @@ public class ImpulseEpl : MonoBehaviour {
 
     void SendExplosionForce()
     {
-        CharacterV3[] players = PlayerManager.manager.characters;
+        CharacterV3[] players = PlayerManager.get().characters;
 
         for (int i = 0; i < players.Length; i++)
         {

@@ -39,7 +39,6 @@ public class ItemsUtility
 
 }
 
-[Serializable]
 public class CollectibleBase
 {
 
@@ -50,9 +49,8 @@ public class CollectibleBase
     public virtual void OnCollect(PlayerUseItem owner)
     {
         character = owner;
-        owner.objectCollected = this;
-        ItemUI.instance.SetCameraOnItem(PlayerManager.manager.getManagerID(character.cv3), (int)ItemsUtility.GetEnum(name));
-        Debug.Log("Collect", character.gameObject);
+        character.objectCollected = this;
+        ItemUI.instance.SetCameraOnItem(PlayerManager.get().getManagerID(character.cv3), (int)ItemsUtility.GetEnum(name));
     }
 
     public virtual void Initialise()
@@ -62,12 +60,13 @@ public class CollectibleBase
 
     public virtual void UseObjet()
     {
+        SoundManager.instance.playSoundItemUsed(name);
         OnDestroy(); // change this if whe happen to have item that are not one use only
     }
 
     public virtual void OnDestroy()
     {
-        ItemUI.instance.SetCameraOnItem(PlayerManager.manager.getManagerID(character.cv3), -1);
+        ItemUI.instance.SetCameraOnItem(PlayerManager.get().getManagerID(character.cv3), -1);
     }
 
 }

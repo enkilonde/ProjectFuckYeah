@@ -22,9 +22,9 @@ public class PlayerManager : MonoBehaviour
 
     public int playerNumber = 0;
 
-    private void Awake()
+    private void CustomAwake()
     {
-        if (manager == null)
+        if (manager == null || manager == this)
             manager = this;
         else
             Destroy(this);
@@ -38,13 +38,22 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    private void Update()
+
+    public static PlayerManager get()
     {
-        //AttribInputs();
+        if (manager != null)
+            return manager;
+        else
+        {
+            manager = FindObjectOfType<PlayerManager>();
+            return manager;
+        }
     }
 
     public void init(int NumberOfPlayers)
     {
+        CustomAwake();
+
         playerNumber = NumberOfPlayers;
         CurrentSceneGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
 

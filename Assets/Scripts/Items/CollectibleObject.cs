@@ -44,10 +44,15 @@ public class CollectibleObject : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
-        if (other.tag != "PlayerCharacter" && itemDisplay != null) return;
+        if (other.tag != "PlayerCharacter" || itemDisplay == null) return;
         Debug.Log(" collision : " + other.name, other.gameObject);
         item.OnCollect(other.GetComponent<PlayerUseItem>());
         Destroy(itemDisplay);
         itemDisplay = null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawCube(transform.position, transform.localScale * 10);
     }
 }

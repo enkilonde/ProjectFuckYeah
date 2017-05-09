@@ -217,7 +217,6 @@ GameObject:
   - component: {fileID: 20746024920530508}
   - component: {fileID: 92214653372792664}
   - component: {fileID: 124365616516094530}
-  - component: {fileID: 81180642430050474}
   - component: {fileID: 114883292958903140}
   - component: {fileID: 114826942827181496}
   - component: {fileID: 114167373970227428}
@@ -754,7 +753,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1413997976804262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -271.02426, y: 160.04442, z: -397.46213}
+  m_LocalPosition: {x: -466.23212, y: 110.7433, z: -55.556084}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4751429562015508}
@@ -1279,13 +1278,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!81 &81180642430050474
-AudioListener:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1300989496875300}
-  m_Enabled: 0
 --- !u!92 &92214653372792664
 Behaviour:
   m_ObjectHideFlags: 1
@@ -1850,15 +1842,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df1ccca338a4de24c894bed5994f1b09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accel_minSensitivity: 0.1
-  horizontalRot_minSensitivity: 0.415
-  boost_minSensitivity: 0.2
   currentFwdSpeed: 113.621574
   minAltMaxSpeed: 138
   maxAltMaxSpeed: 50
   minAltAccel: 20
   maxAltAccel: 12
   deccelNoInput: 20
+  accelBySpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 2
+      inSlope: -3.271746
+      outSlope: -3.271746
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 1
+      inSlope: -0.002934343
+      outSlope: -0.002934343
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
   maxLacetSpeed: 100
   lacetTransitionSpeed: 250
   currentAltitude: 0
@@ -1908,6 +1915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumero: 1
+  useKeyboard: 0
   horizontalRotation: 0
   horizontalCamera: 2
   verticalCamera: 3
@@ -1917,6 +1925,7 @@ MonoBehaviour:
   LatRightBoost: 5
   lockOn: 7
   forwardBoost: 0
+  useItem: 3
 --- !u!114 &114444146740286002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2375,7 +2384,7 @@ ParticleSystem:
   moveWithTransform: 0
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 2
-  randomSeed: 1166590536
+  randomSeed: -36568798
   InitialModule:
     serializedVersion: 3
     enabled: 1
