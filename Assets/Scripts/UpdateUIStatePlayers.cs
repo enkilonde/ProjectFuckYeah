@@ -19,7 +19,7 @@ public class UpdateUIStatePlayers : MonoBehaviour {
 		//Maj the ui for each player according to it's CharacterV3 script variables
 		for (int i = 0; i < playersData.Length; i++) {
 			CharacterV3 _curCV3 = playersData[i].characterData;
-			playersData[i].heightScroll.size = RobToolsClass.GetNormalizedValue(_curCV3.currentAltitude, _curCV3.minAltitude, _curCV3.maxAltitude);
+            playersData[i].heightScroll.size = _curCV3.getHeightRatio();
 			playersData[i].speedScroll.size = RobToolsClass.GetNormalizedValue(_curCV3.currentFwdSpeed, 0f, _curCV3.minAltMaxSpeed);
 			playersData[i].score.text = Mathf.RoundToInt(_curCV3.currentScore).ToString();
 			playersData[i].boostScroll.size = RobToolsClass.GetNormalizedValue(_curCV3.currentBoostAmountLeft, 0f, 1f);

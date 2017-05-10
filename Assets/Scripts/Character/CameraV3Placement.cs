@@ -105,8 +105,10 @@ public class CameraV3Placement : MonoBehaviour {
 	public void SetTargetAlongLine()
 	{
 		float _currentSpeedLateralDelay = Mathf.Lerp(minSpeedLateralDelay, maxSpeedLateralDelay, _t_recul);
-		currentTargetLookAt = Vector3.Lerp(posA_targetLookAt.position, posB_targetLookAt.position, _t_lookAt);
-		mainCam.transform.LookAt(currentTargetLookAt + (mainCam.transform.right * Mathf.Lerp(-_currentSpeedLateralDelay, _currentSpeedLateralDelay, _t_lateralDelay)));
+        float _pitchNormalized = CV3.currentVerticalForce.Remap(-CV3.maxFallingSpeed, CV3.maxVerticalAscentionSpeed, -1f, 1f); // RobToolsClass.MappedRangeValue(characterv3.currentVerticalForce, -characterv3.maxFallingSpeed, characterv3.maxVerticalAscentionSpeed, -1f, 1f);
+
+        currentTargetLookAt = Vector3.Lerp(posA_targetLookAt.position, posB_targetLookAt.position, _t_lookAt);
+		mainCam.transform.LookAt(currentTargetLookAt + (mainCam.transform.right * Mathf.Lerp(-_currentSpeedLateralDelay, _currentSpeedLateralDelay, _t_lateralDelay)) + (mainCam.transform.up * _pitchNormalized * 5));
 	}
 
 }

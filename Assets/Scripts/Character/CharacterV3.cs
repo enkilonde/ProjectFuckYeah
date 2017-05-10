@@ -186,7 +186,7 @@ public class CharacterV3 : MonoBehaviour {
         transform.Rotate(Vector3.up * currentLacetSpeed * Time.fixedDeltaTime, Space.World);
 
         //Accel en fonction de l'altitude
-        float _t_alti = RobToolsClass.GetNormalizedValue(currentAltitude, minAltitude, maxAltitude);
+        float _t_alti = getHeightRatio();
         float _tempAccel = Mathf.Lerp(minAltAccel, maxAltAccel, _t_alti);
 
         _tempAccel *= I_accel;//If not boost, so we use the accelerate basic axis //Multiply by input
@@ -239,7 +239,7 @@ public class CharacterV3 : MonoBehaviour {
 
         float speedfactor = Mathf.InverseLerp(maxAltMaxSpeed, minAltMaxSpeed, currentFwdSpeed);
 
-        float heightFactor = Mathf.InverseLerp(minAltitude, maxAltitude, currentAltitude);
+        float heightFactor = getHeightRatio();
 
         float effectifMaxHeight = maxAltitude * speedfactor;
 
@@ -462,6 +462,11 @@ public class CharacterV3 : MonoBehaviour {
     public float getSpeedRatioWithBoost()
     {
         return Mathf.InverseLerp(0, minAltMaxSpeed * boostSpeedMultiplier, currentFwdSpeed);
+    }
+
+    public float getHeightRatio()
+    {
+        return Mathf.InverseLerp(minAltitude, maxAltitude, currentAltitude);
     }
 
     public void OnStartBoost()

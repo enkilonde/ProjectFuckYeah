@@ -33,8 +33,8 @@ public class PlayerUI : MonoBehaviour
         //heightDisplay.size = Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude);
         //boostDisplay.size = Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft);
 
-        speedDisplay.sizeDelta = new Vector2(Mathf.InverseLerp(0, charaScript.minAltMaxSpeed, charaScript.currentFwdSpeed) * 100, speedDisplay.sizeDelta.y);
-        heightDisplay.sizeDelta = new Vector2(Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude) * 100, speedDisplay.sizeDelta.y);
+        speedDisplay.sizeDelta = new Vector2(charaScript.getSpeedRatio() * 100, speedDisplay.sizeDelta.y);
+        heightDisplay.sizeDelta = new Vector2(charaScript.getHeightRatio() * 100, speedDisplay.sizeDelta.y);
         boostDisplay.sizeDelta = new Vector2(Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft) * 100, speedDisplay.sizeDelta.y);
 
     }
