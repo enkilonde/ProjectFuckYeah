@@ -20,7 +20,7 @@ public class PauseManagement : MonoBehaviour
 	// Use this for initialization
 	void Awake ()
     {
-        if (manager == null)
+        if (manager == null || manager.transform == null)
             manager = this;
         else
             Destroy(this);
@@ -44,6 +44,11 @@ public class PauseManagement : MonoBehaviour
         paused = state;
 
         pauseCanvas.enabled = state;
+
+        if (state)
+            GameManager.get().currentGameState = GameManager.GameState.Paused;
+        else
+            GameManager.get().currentGameState = GameManager.GameState.Playing;
     }
 
 

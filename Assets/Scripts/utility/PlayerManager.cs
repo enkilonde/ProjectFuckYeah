@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     public const int keyboardIndex = -5;
 
     public static PlayerManager manager;
+    [HideInInspector] public GameManager gameManagerScript;
 
     public GameObject[] Players;
 
@@ -22,12 +23,14 @@ public class PlayerManager : MonoBehaviour
 
     public int playerNumber = 0;
 
+    public static bool loadingEnded = false;
+
     private void CustomAwake()
     {
         if (manager == null || manager == this)
             manager = this;
         else
-            Destroy(this);
+            Destroy(gameObject);
 
         controllersUsed = new bool[4];
         playersAttribs = new bool[4];
@@ -36,6 +39,9 @@ public class PlayerManager : MonoBehaviour
             controllersUsed[i] = false;
             playersAttribs[i] = false;
         }
+
+        gameManagerScript = GetComponent<GameManager>();
+
     }
 
 
@@ -53,6 +59,9 @@ public class PlayerManager : MonoBehaviour
     public void init(int NumberOfPlayers)
     {
         CustomAwake();
+        gameManagerScript.Initianisation();
+
+        GameManager.get().currentGameState = GameManager.GameState.Paused;
 
         playerNumber = NumberOfPlayers;
         CurrentSceneGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
@@ -74,8 +83,9 @@ public class PlayerManager : MonoBehaviour
 
             //characters[0].useKeyboard = true;
             //controllers[0].playerNumero = keyboardIndex;
+            characters[i].init();
 
-            if(i >= NumberOfPlayers)
+            if (i >= NumberOfPlayers)
             {
                 Players[i].SetActive(false);
                 Players[i].transform.position = new Vector3(0, -100, 0);
@@ -89,11 +99,15 @@ public class PlayerManager : MonoBehaviour
                 player.transform.position = pos.transform.position;
                 player.transform.rotation = pos.transform.rotation;
             }
+            characters[i].transform.position = characters[i].transform.parent.position;
+            characters[i].transform.rotation = characters[i].transform.parent.rotation;
 
             SetCamera(player.transform.Find("Character").Find("Camera").GetComponentInChildren<Camera>(), NumberOfPlayers, i);
 
-        }
 
+        }
+        GameManager.get().currentGameState = GameManager.GameState.Playing;
+        loadingEnded = true;
     }
 
     void SetCamera(Camera cam, int numberOfPlayers, int playerIndex)

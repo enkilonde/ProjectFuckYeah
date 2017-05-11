@@ -20,7 +20,7 @@ public class UpdateUIState : MonoBehaviour {
 		if(!CV3 || !heightScroll || !speedScroll)
 			return;
 
-		heightScroll.size = RobToolsClass.GetNormalizedValue(CV3.currentAltitude, CV3.minAltitude, CV3.maxAltitude);
+        heightScroll.size = CV3.getHeightRatio();
 
 		speedScroll.size = RobToolsClass.GetNormalizedValue(CV3.currentFwdSpeed, 0f, CV3.minAltMaxSpeed);
 
