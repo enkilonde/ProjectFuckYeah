@@ -16,7 +16,7 @@ public class FlagBehaviour : MonoBehaviour
 
     Vector3 initialSize = Vector3.one;
 
-    ParticleSystem trail;
+    public ParticleSystem trail;
 
     float timeSinceLastSteal = 0f;
 
@@ -37,7 +37,10 @@ public class FlagBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if(previousPos.Count == 0 || Vector3.Distance(transform.position, previousPos[0]) > distanceRegisterPos)
+        if (GameManager.isPaused()) return;
+
+
+        if (previousPos.Count == 0 || Vector3.Distance(transform.position, previousPos[0]) > distanceRegisterPos)
         {
             RegisterPos();
         }
@@ -46,6 +49,8 @@ public class FlagBehaviour : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (GameManager.isPaused()) return;
+
         for (int i = 0; i < PlayersInCollider.Count; i++)
         {
             if(PlayersInCollider[i].playerTransform == targetPlayer.transform)
@@ -154,8 +159,9 @@ public class FlagBehaviour : MonoBehaviour
     public void Drop()
     {
         targetPlayer = null;
-        trail.Stop();
         ToggleIndicators();
+
+        trail.Stop();
     }
 
     public void RegisterPos()

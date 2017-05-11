@@ -27,13 +27,13 @@ public class ControllerV3 : MonoBehaviour {
 		LT,
 		RT
 	}
-	public AllAxis horizontalRotation = AllAxis.StickG_X;
-//	public AllAxis lateralBoostLeft = AllAxis.LT;
-//	public AllAxis lateralBoostRight = AllAxis.RT;
-	public AllAxis horizontalCamera = AllAxis.StickD_X;
-	public AllAxis verticalCamera = AllAxis.StickD_Y;
-	public AllAxis accelAxis = AllAxis.RT;
-	public AllAxis verticalBoost = AllAxis.LT;
+    private AllAxis horizontalRotation = AllAxis.StickG_X;
+    //	public AllAxis lateralBoostLeft = AllAxis.LT;
+    //	public AllAxis lateralBoostRight = AllAxis.RT;
+    private AllAxis horizontalCamera = AllAxis.StickD_X;
+    private AllAxis verticalCamera = AllAxis.StickD_Y;
+    private AllAxis accelAxis = AllAxis.RT;
+    private AllAxis verticalBoost = AllAxis.LT;
 	public enum AllButtons
 	{
 		XBOX_A,
@@ -49,11 +49,11 @@ public class ControllerV3 : MonoBehaviour {
 	}
 //	public AllButtons accelButton = AllButtons.XBOX_A;
 //	public AllButtons shockWave = AllButtons.XBOX_X;
-	public AllButtons LatLeftBoost = AllButtons.LB;
-	public AllButtons LatRightBoost = AllButtons.RB;
-	public AllButtons lockOn = AllButtons.StickD;
-	public AllButtons forwardBoost = AllButtons.XBOX_A;
-    public AllButtons useItem = AllButtons.XBOX_B;
+	private AllButtons LatLeftBoost = AllButtons.LB;
+    private AllButtons LatRightBoost = AllButtons.RB;
+    private AllButtons lockOn = AllButtons.StickD;
+    private AllButtons forwardBoost = AllButtons.XBOX_A;
+    private AllButtons useItem = AllButtons.XBOX_B;
 
     private void Update()
     {

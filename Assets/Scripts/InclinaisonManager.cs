@@ -19,7 +19,8 @@ public class InclinaisonManager : MonoBehaviour {
 	}
 
 	void Update () {
-	
+        if (GameManager.isPaused()) return;
+
 //		float ternarydoesnotwork = (characterv3.currentVerticalForce > 0f) ? characterv3._verticalBoostInput : -1f;
 		float _pitchNormalized = characterv3.currentVerticalForce.Remap(-characterv3.maxFallingSpeed, characterv3.maxVerticalAscentionSpeed, -1f, 1f); // RobToolsClass.MappedRangeValue(characterv3.currentVerticalForce, -characterv3.maxFallingSpeed, characterv3.maxVerticalAscentionSpeed, -1f, 1f);
 

@@ -7,7 +7,7 @@ public class CharacterV3 : MonoBehaviour {
 
 	//Private fields references
 	[HideInInspector]public ControllerV3 controlerSet;
-    private new Rigidbody rigidbody;
+    [HideInInspector] public new Rigidbody rigidbody;
 
     //Speed
     //	[HideInInspector]
@@ -43,12 +43,12 @@ public class CharacterV3 : MonoBehaviour {
 	public bool straffUseInerty = true;
 
 	//Inertie
-	public bool useInertyFeature = true;
 	[HideInInspector]
 	public Vector3 inertieVector = Vector3.forward;
 	[Header("Transition entre la direction d'inertie actuelle vers la direction de l'avatar en angles/sec")]
 	public float transitionAngleDelta = 45f;
 	public float airResistance = 25f;
+    [HideInInspector] public Vector3? CurrentVelocity = null;
 
 	//Gethit
 
@@ -121,11 +121,12 @@ public class CharacterV3 : MonoBehaviour {
     Vector3 collisionRotationVector;
 
 
-    void Start () {
+
+    public void init () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
         flagBehavoirScript = FindObjectOfType<FlagBehaviour>();
         rigidbody = GetComponent<Rigidbody>();
-
+        rigidbody.velocity = Vector3.zero;
         //Empeche unity de mettre une autre valeur (vu que les public hideininspector semblent ne pas se réinitialiser sur le bouton play)
         currentFwdSpeed = 0f;
 		currentAltitude = 0f;
@@ -133,10 +134,12 @@ public class CharacterV3 : MonoBehaviour {
 		inertieVector = transform.forward;
 		currentScore = 0f;
         dirToMove = Vector3.zero;
+        Debug.Log("init");
 	}
 
     void Update ()
-    { 
+    {
+        if (GameManager.isPaused()) return;
 
         if (inputsSet)
             CheckInputs();      //Check Inputs and assign all values in local floats to play with	//TODO les inputs sont remis à 0 plutot qu elaissé dans leur état actuel
@@ -146,6 +149,20 @@ public class CharacterV3 : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        if (!PlayerManager.loadingEnded) return;
+
+        if (GameManager.isPaused())
+        {
+            if (CurrentVelocity == null)
+                CurrentVelocity = rigidbody.velocity;
+            rigidbody.velocity = Vector3.zero;
+            return;
+        }
+        else if(CurrentVelocity != null)
+        {
+            rigidbody.velocity = (Vector3)CurrentVelocity;
+            CurrentVelocity = null;
+        }
 
         //Debug.Log("displacement = " + (transform.position - previousP).magnitude + " velocity : " + dirToMove.magnitude);
 
@@ -445,6 +462,7 @@ public class CharacterV3 : MonoBehaviour {
 
     public bool IsInTrail()
     {
+        if (flagBehavoirScript == null) return false;
         if (flagBehavoirScript.targetPlayer == this || flagBehavoirScript.targetPlayer == null) return false;
 
         for (int i = 0; i < flagBehavoirScript.previousPos.Count; i++)
