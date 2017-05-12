@@ -52,8 +52,13 @@ public class MenuManager : MonoBehaviour
     public void ChangeNumberOfPlayers(int value)
     {
         AddPlayers.NumberOfPlayers = Mathf.Clamp(AddPlayers.NumberOfPlayers + value, 1, 4);
-        displayNumberOfPlayers.text = "Number of players : " + AddPlayers.NumberOfPlayers;
+        displayNumberOfPlayers.text = "Number of players : <size=19>" + AddPlayers.NumberOfPlayers + "</size>";
 
     }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    } 
 
 }

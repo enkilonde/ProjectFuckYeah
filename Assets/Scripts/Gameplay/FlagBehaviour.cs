@@ -74,7 +74,8 @@ public class FlagBehaviour : MonoBehaviour
 
         timeSinceLastSteal += Time.deltaTime;
 
-        transform.localScale = initialSize * flagSizeIncrease;
+
+        transform.localScale = initialSize * flagSizeIncrease * (1 + Mathf.InverseLerp(0, GameManager.targetScoreToWin, targetPlayer.currentScore) * 5);
 
         transform.position = targetPlayer.transform.position;
         transform.rotation = targetPlayer.transform.rotation;
