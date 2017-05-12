@@ -279,9 +279,9 @@ public class CharacterV3 : MonoBehaviour {
             currentVerticalForce = 0;
         }
         float suspension = 20; // make a var
-        if(currentAltitude < minAltitude && I_verticalBoost == 0 )
+        if(currentAltitude < minAltitude)
         {
-            currentVerticalForce = minAltitude - currentAltitude;
+            currentVerticalForce =  Mathf.Max(currentVerticalForce, minAltitude - currentAltitude);
             AdjustTime = suspension;
         }
 
@@ -290,6 +290,8 @@ public class CharacterV3 : MonoBehaviour {
             currentVerticalForce = 5 - Vector3.Distance(downRaycast.point, transform.position);
             AdjustTime = suspension;
         }
+
+
 
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.fixedDeltaTime * AdjustTime);
         currentVerticalForce = _verticalBoost;
