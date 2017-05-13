@@ -16,6 +16,11 @@ public class PPTManager : MonoBehaviour {
 
     Coroutine fade;
 
+    ControllerV3 controller;
+
+    float timer = 0.25f;
+    float timing = 0;
+
 	// Use this for initialization
 	void Awake ()
     {
@@ -23,22 +28,28 @@ public class PPTManager : MonoBehaviour {
         image = GetComponentInChildren<RawImage>();
         canvas.enabled = true;
         image.color = new Color(1, 1, 1, 0);
+        controller = GetComponent<ControllerV3>();
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
+        timing -= Time.deltaTime;
 
-        if (Input.GetMouseButtonUp(0)) changeSlide(1);
+        if (Input.GetKeyDown(KeyCode.Keypad4) || controller.Get_LatRightBoostInput()!= 0) changeSlide(1);
 
-        if (Input.GetMouseButtonUp(1)) changeSlide(-1);
+        if (Input.GetKeyDown(KeyCode.Keypad6) || controller.Get_LatLeftBoostInput() != 0) changeSlide(-1);
 
-        if (Input.GetMouseButtonUp(2)) TogglePPT(false);
+        if (Input.GetMouseButtonUp(2) || controller.Get_SelectInput() != 0) TogglePPT(false);
 
     }
 
     void changeSlide(int value)
     {
+        if (timing > 0) return;
+
+        timing = timer;
+
         if(pptActivated)
             currentSlide = (int)Mathf.Repeat(currentSlide + value, slides.Count);
 
@@ -69,7 +80,7 @@ public class PPTManager : MonoBehaviour {
         Color coll = image.color;
         coll.a = direction;
         image.color = coll;
-
+        if (GameManager.get() == null) yield break; 
         GameManager.get().currentGameState = (direction == 1)? GameManager.GameState.Paused: GameManager.GameState.Playing;
     }
 

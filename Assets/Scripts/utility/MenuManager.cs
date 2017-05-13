@@ -27,7 +27,7 @@ public class MenuManager : MonoBehaviour
 
     void init()
     {
-        addPlayersScript = SceneManager.GetSceneByName("Common").GetRootGameObjects()[0].GetComponent<AddPlayers>();
+        addPlayersScript = FindObjectOfType<AddPlayers>();
         displayNumberOfPlayers = GameObject.Find("Number of Players").GetComponent<Text>();
         ChangeNumberOfPlayers(0);
     }
@@ -52,7 +52,7 @@ public class MenuManager : MonoBehaviour
     public void ChangeNumberOfPlayers(int value)
     {
         AddPlayers.NumberOfPlayers = Mathf.Clamp(AddPlayers.NumberOfPlayers + value, 1, 4);
-        displayNumberOfPlayers.text = "Number of players : <size=19>" + AddPlayers.NumberOfPlayers + "</size>";
+        displayNumberOfPlayers.text = "number of players : <size=19>" + AddPlayers.NumberOfPlayers + "</size>";
 
     }
 

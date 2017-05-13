@@ -168,8 +168,8 @@ GameObject:
   - component: {fileID: 1145293277}
   - component: {fileID: 1145293276}
   - component: {fileID: 1145293275}
-  - component: {fileID: 1145293274}
   - component: {fileID: 1145293273}
+  - component: {fileID: 1145293278}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -196,22 +196,6 @@ MonoBehaviour:
   - {fileID: 2800000, guid: efed120d7e834054d8e83ffc23440927, type: 3}
   pptActivated: 0
   currentSlide: 0
---- !u!114 &1145293274
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1145293272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1301386320, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &1145293275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,6 +255,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1145293278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1145293272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c57d438840625440b04c80283745914, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNumero: 0
+  useKeyboard: 0
 --- !u!1 &1408364530
 GameObject:
   m_ObjectHideFlags: 0
