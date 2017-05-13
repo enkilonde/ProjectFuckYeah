@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour {
     [HideInInspector] public PlayerManager playerManagerScript;
     bool initDone = false;
 
-    public int targetScoreToWin = 10000;
+    public static int targetScoreToWin = 10000;
 
     public Canvas endGameCanvas;
 
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
         for (int i = 0; i < playerManagerScript.characters.Length; i++)
         {
             float score = playerManagerScript.characters[i].currentScore;
-            if(score >= targetScoreToWin)
+            if(score >= targetScoreToWin && Cheatskaude.canGameEnd)
             {
                 endGame();
             }

@@ -198,12 +198,14 @@ public class CharacterV3 : MonoBehaviour {
 
         //Rotate upon Input (LACET)
         //Update rotation speed
-        currentLacetSpeed = Mathf.MoveTowards(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot, lacetTransitionSpeed * Time.fixedDeltaTime);
+        currentLacetSpeed = Mathf.Lerp(currentLacetSpeed, maxLacetSpeed * I_lateralPlayerRot * ((I_accel == 0) ? 1.5f : 1), lacetTransitionSpeed * Time.fixedDeltaTime);
         //Rotate by speed
         transform.Rotate(Vector3.up * currentLacetSpeed * Time.fixedDeltaTime, Space.World);
 
         //Accel en fonction de l'altitude
         float _t_alti = getHeightRatio();
+        if (Vector3.Distance(downRaycast.point, transform.position) < 5) _t_alti = 0;
+
         float _tempAccel = Mathf.Lerp(minAltAccel, maxAltAccel, _t_alti);
 
         _tempAccel *= I_accel;//If not boost, so we use the accelerate basic axis //Multiply by input
@@ -279,9 +281,9 @@ public class CharacterV3 : MonoBehaviour {
             currentVerticalForce = 0;
         }
         float suspension = 20; // make a var
-        if(currentAltitude < minAltitude && I_verticalBoost == 0 )
+        if(currentAltitude < minAltitude)
         {
-            currentVerticalForce = minAltitude - currentAltitude;
+            currentVerticalForce =  Mathf.Max(currentVerticalForce, minAltitude - currentAltitude);
             AdjustTime = suspension;
         }
 
@@ -289,7 +291,10 @@ public class CharacterV3 : MonoBehaviour {
         {
             currentVerticalForce = 5 - Vector3.Distance(downRaycast.point, transform.position);
             AdjustTime = suspension;
+
         }
+
+
 
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.fixedDeltaTime * AdjustTime);
         currentVerticalForce = _verticalBoost;

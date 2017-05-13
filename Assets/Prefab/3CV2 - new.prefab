@@ -1842,8 +1842,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df1ccca338a4de24c894bed5994f1b09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentFwdSpeed: 113.621574
-  minAltMaxSpeed: 138
+  controlerSet: {fileID: 0}
+  rigidbody: {fileID: 0}
+  currentFwdSpeed: 0
+  minAltMaxSpeed: 200
   maxAltMaxSpeed: 50
   minAltAccel: 20
   maxAltAccel: 12
@@ -1866,8 +1868,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  maxLacetSpeed: 100
-  lacetTransitionSpeed: 250
+  maxLacetSpeed: 75
+  lacetTransitionSpeed: 10
   currentAltitude: 0
   minAltitude: 0
   maxAltitude: 91
@@ -1877,7 +1879,6 @@ MonoBehaviour:
   verticalSpeedTransitionSpeed: 200
   maxLateralSpeed: 50
   straffUseInerty: 1
-  useInertyFeature: 1
   inertieVector: {x: 0.93247175, y: 0, z: -0.33603486}
   transitionAngleDelta: 2
   airResistance: 30
@@ -1916,16 +1917,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNumero: 1
   useKeyboard: 0
-  horizontalRotation: 0
-  horizontalCamera: 2
-  verticalCamera: 3
-  accelAxis: 8
-  verticalBoost: 7
-  LatLeftBoost: 4
-  LatRightBoost: 5
-  lockOn: 7
-  forwardBoost: 0
-  useItem: 3
 --- !u!114 &114444146740286002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2290,10 +2281,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   controlerSet: {fileID: 0}
   cv3: {fileID: 0}
-  objectCollected:
-    character: {fileID: 0}
-    name: 
-    color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &114982905776884464
 MonoBehaviour:
   m_ObjectHideFlags: 1
