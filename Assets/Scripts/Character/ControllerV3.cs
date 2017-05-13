@@ -104,14 +104,14 @@ public class ControllerV3 : MonoBehaviour {
     {
         if (useKeyboard && 1 - (float)state.Buttons.Y == 0)
             return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + LatLeftBoost.ToString()));
-        return 1 - (float)state.Buttons.Y;
+        return 1 - (float)state.Buttons.LeftShoulder;
 	}
 
 	public float Get_LatRightBoostInput()
     {
         if (useKeyboard && 1 - (float)state.Buttons.Y == 0)
             return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + LatRightBoost.ToString()));
-        return 1 - (float)state.Buttons.Y;
+        return 1 - (float)state.Buttons.RightShoulder;
 	}
 
 	public float Get_LockOnInput()
@@ -133,6 +133,16 @@ public class ControllerV3 : MonoBehaviour {
         if (useKeyboard && 1 - (float)state.Buttons.B == 0)
             return (Input.GetAxisRaw(PlayerManager.keyboardIndex + "_" + useItem.ToString()));
         return 1 - (float)state.Buttons.B;
+    }
+
+    public float Get_StartInput()
+    {
+        return 1 - (float)state.Buttons.Start;
+    }
+
+    public float Get_SelectInput()
+    {
+        return 1 - (float)state.Buttons.Back;
     }
 
     #endregion

@@ -134,7 +134,6 @@ public class CharacterV3 : MonoBehaviour {
 		inertieVector = transform.forward;
 		currentScore = 0f;
         dirToMove = Vector3.zero;
-        Debug.Log("init");
 	}
 
     void Update ()
