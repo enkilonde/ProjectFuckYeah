@@ -5,18 +5,16 @@
 [LOG] SystemI::setOutputInternal               : Setting output to type 0
 [LOG] SystemI::setOutputInternal               : Setting output to type 8
 [LOG] SystemI::setOutputInternal               : Setting output to type 8
-[LOG] OutputWASAPI::init                       : Mix Format (WAVEFORMATEX): wFormatTag=0xFFFE, nChannels=2, nSamplesPerSec=192000, nAvgBytesPerSec=1536000, nBlockAlign=8, wBitsPerSample=32, cbSize=22.
+[LOG] OutputWASAPI::init                       : Mix Format (WAVEFORMATEX): wFormatTag=0xFFFE, nChannels=2, nSamplesPerSec=48000, nAvgBytesPerSec=384000, nBlockAlign=8, wBitsPerSample=32, cbSize=22.
 [LOG] OutputWASAPI::init                       : Mix Format (WAVEFORMATEXTENSIBLE): wValidBitsPerSample=32, dwChannelMask=0x00000003, SubFormat=00000003-0000-0010-8000-00AA00389B71.
-[LOG] OutputWASAPI::init                       : Output buffer size: 16384 samples, latency: 7.05ms, period: 10.00ms, DSP buffer: 1024 * 4
-[WRN] SystemI::init                            : Output requires a sample rate of 192000Hz, resampling will occur.
+[LOG] OutputWASAPI::init                       : Output buffer size: 4096 samples, latency: 0.00ms, period: 10.00ms, DSP buffer: 1024 * 4
 [LOG] SystemI::init                            : Create master channel group and master sound group.
 [LOG] SystemI::init                            : Set up emulated output.  256 channels
 [LOG] SystemI::init                            : create the channel pool
 [LOG] SystemI::init                            : create the stream thread
 [LOG] Thread::initThread                       : Init FMOD stream thread. Priority: 2, Stack Size: 65536, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Priority: 3, Stack Size: 49152, Semaphore: No, Sleep Time: 0, Looping: Yes.
-[LOG] AsyncManager::init                       : manager 000000002D87CD78 isAsync 0 updatePeriod 0.02
-[WRN] OutputWASAPI::mixerThread                : Starvation detected in WASAPI output buffer!
+[LOG] AsyncManager::init                       : manager 00000000327B5D18 isAsync 0 updatePeriod 0.02
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
@@ -24,13 +22,73 @@
 [LOG] Thread::initThread                       : Init FMOD Studio bank load thread. Priority: 0, Stack Size: 65536, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] Manager::init                            : done.
 [LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
+[LOG] SystemI::mixerSuspend                    : Suspending output.
+[LOG] SystemI::mixerResume                     : Resuming output.
 [LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
 [LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
-[LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
-[LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
-[LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
-[LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
+[LOG] SoundI::release                          :  (00000000105B83B8)
+[LOG] SoundI::release                          : release subsounds. (00000000105B83B8)
+[LOG] SoundI::release                          :     Kung Fu Old School Hit 07 (000000003238DC68)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B83B8)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105BA918)
+[LOG] SoundI::release                          : release subsounds. (00000000105BA918)
+[LOG] SoundI::release                          :     Kung Fu Old School Hit 08 (000000003238D788)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105BA918)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105B8DC8)
+[LOG] SoundI::release                          : release subsounds. (00000000105B8DC8)
+[LOG] SoundI::release                          :     Kung Fu Old School Hit 09 (000000003238D928)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B8DC8)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105BA078)
+[LOG] SoundI::release                          : release subsounds. (00000000105BA078)
+[LOG] SoundI::release                          :     Kung Fu Old School Hit 01 (000000003238D5E8)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105BA078)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105B8698)
+[LOG] SoundI::release                          : release subsounds. (00000000105B8698)
+[LOG] SoundI::release                          :     Kung Fu Old School Hit 02 (000000003238E7C8)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B8698)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105B7B18)
+[LOG] SoundI::release                          : release subsounds. (00000000105B7B18)
+[LOG] SoundI::release                          :     Game Over 01 (000000003238E488)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B7B18)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105BAD68)
+[LOG] SoundI::release                          : release subsounds. (00000000105BAD68)
+[LOG] SoundI::release                          :     Explosion 02 (000000003238E628)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105BAD68)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105B9668)
+[LOG] SoundI::release                          : release subsounds. (00000000105B9668)
+[LOG] SoundI::release                          :     Explosion 03 (000000003238D2A8)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B9668)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105B9C28)
+[LOG] SoundI::release                          : release subsounds. (00000000105B9C28)
+[LOG] SoundI::release                          :     Explosion 04 (000000003238EB08)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B9C28)
+[LOG] SoundI::release                          : done
+[LOG] SoundI::release                          :  (00000000105B9388)
+[LOG] SoundI::release                          : release subsounds. (00000000105B9388)
+[LOG] SoundI::release                          :     Explosion 01 (000000003238E2E8)
+[LOG] SoundI::release                          :     done
+[LOG] SoundI::release                          : release codec. (00000000105B9388)
+[LOG] SoundI::release                          : done
+[LOG] Thread::callback                         : FMOD Studio update thread finished.
 [LOG] Thread::callback                         : FMOD Studio bank load thread finished.
+[LOG] Profile::disconnectAll                   : Profiler disconnecting all clients
 [LOG] Thread::callback                         : FMOD Studio sample load thread finished.
 [LOG] LiveUpdate::release                      : 
 [LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
@@ -46,4 +104,7 @@
 [LOG] SystemI::close                           : Free channel pool.
 [LOG] SystemI::close                           : done.
 
-[LOG] System::create                           : Header version = 1.09.03. Current version = 1.09.03.
+[LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
+[LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
+[LOG] Manager::readBank                        : fileversion = 88, compatVersion = 86 (oldest = 44, newest = 88)
+[LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
