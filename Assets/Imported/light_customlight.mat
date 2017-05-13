@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: light_customlight
+  m_Shader: {fileID: 4800000, guid: 37a96976b5129414793b574b899e1304, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs: []
+    m_Floats:
+    - first:
+        name: _blendingpower
+      second: 1
+    m_Colors:
+    - first:
+        name: _blending
+      second: {r: 0.47058827, g: 0.40000004, b: 0.2627451, a: 1}
+    - first:
+        name: _color1
+      second: {r: 1, g: 1, b: 0.69803923, a: 1}
+    - first:
+        name: _color2
+      second: {r: 1, g: 0, b: 0, a: 1}
