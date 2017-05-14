@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4356071544829362}
   - component: {fileID: 33231240629285682}
   - component: {fileID: 23811275248380712}
+  - component: {fileID: 64171063007948838}
   m_Layer: 0
   m_Name: Caillou 4
   m_TagString: Obstacle
@@ -63,7 +64,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1198709802024240}
   m_LocalRotation: {x: -0.17255238, y: 0.1725524, z: -0.68573004, w: 0.6857301}
-  m_LocalPosition: {x: -510.40002, y: -261.325, z: -925.5625}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5072721, y: 2, z: 2.7000005}
   m_Children:
   - {fileID: 4356071544829362}
@@ -107,4 +108,18 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1185833544475642}
+  m_Mesh: {fileID: 4300000, guid: c59da7a7fe319fc4fb7dc2645846c564, type: 3}
+--- !u!64 &64171063007948838
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1185833544475642}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: c59da7a7fe319fc4fb7dc2645846c564, type: 3}

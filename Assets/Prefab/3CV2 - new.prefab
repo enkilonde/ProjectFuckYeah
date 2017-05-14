@@ -1634,9 +1634,9 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!92 &92214653372792664
 Behaviour:
   m_ObjectHideFlags: 1
@@ -2238,7 +2238,7 @@ MonoBehaviour:
   rigidbody: {fileID: 0}
   currentFwdSpeed: 0
   minAltMaxSpeed: 200
-  maxAltMaxSpeed: 50
+  maxAltMaxSpeed: 100
   minAltAccel: 20
   maxAltAccel: 12
   deccelNoInput: 20

@@ -36,6 +36,7 @@ GameObject:
   - component: {fileID: 4710093058352680}
   - component: {fileID: 33921895441516794}
   - component: {fileID: 23655978797459698}
+  - component: {fileID: 64459824952391066}
   m_Layer: 0
   m_Name: Caillou 8
   m_TagString: Untagged
@@ -50,7 +51,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1243370889447374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.572525, y: 78.52142, z: 218}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4710093058352680}
@@ -107,4 +108,18 @@ MeshFilter:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1489807313354584}
+  m_Mesh: {fileID: 4300000, guid: 5d64d98829995734aad6f9f6044b79d8, type: 3}
+--- !u!64 &64459824952391066
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489807313354584}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 0
+  m_InflateMesh: 0
+  m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 5d64d98829995734aad6f9f6044b79d8, type: 3}

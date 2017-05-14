@@ -16,8 +16,8 @@ public class PlaneCollisionV3 : MonoBehaviour {
 
 	void OnCollisionEnter(Collision coll)
 	{
-		//print(coll.gameObject.tag);
-
+        //print(coll.gameObject.tag);
+        return;
 		if(coll.gameObject.CompareTag("Obstacle"))
 		{
 //			CV3.inertieVector

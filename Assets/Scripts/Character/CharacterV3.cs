@@ -102,7 +102,7 @@ public class CharacterV3 : MonoBehaviour {
 
     //private float noBoostTimer = 0f;
 
-    private float gravityImpactOnAcceleration = 0.5f;
+    private float gravityImpactOnAcceleration = 1f;
 
     public Vector3 dirToMove;
 
@@ -223,10 +223,11 @@ public class CharacterV3 : MonoBehaviour {
         }
 
         currentMaxSpeed = Mathf.Lerp(currentMaxSpeed, (I_forwardBoost == 0)?maxSpeed : maxSpeed * 2, Time.fixedDeltaTime);
-
+        int isAscending = (I_verticalBoost != 0)?0:-1;
+        if (IsOnGround()) isAscending = 0;
         //CurrentSpeed
         if (I_accel != 0 || I_forwardBoost != 0f)  //if input : accelerate
-            currentFwdSpeed += (_tempAccel * (1 - gravityImpactOnAcceleration * Mathf.Sign(currentVerticalForce))) * Time.fixedDeltaTime * accelBySpeed.Evaluate(getSpeedRatio());
+            currentFwdSpeed += (_tempAccel * (1 - gravityImpactOnAcceleration * isAscending)) * Time.fixedDeltaTime * accelBySpeed.Evaluate(getSpeedRatio());
         else                //else : decelerate
             currentFwdSpeed -= deccelNoInput * Time.fixedDeltaTime;
 
@@ -246,6 +247,7 @@ public class CharacterV3 : MonoBehaviour {
         {
             inertieVector = Vector3.Lerp(inertieVector, transform.forward, Time.fixedDeltaTime * transitionAngleDelta); // bon feeling sur les demis tours, mais bof quand on tourne
         }
+
 
 
         dirToMove = inertieVector * currentFwdSpeed;
@@ -275,12 +277,10 @@ public class CharacterV3 : MonoBehaviour {
             currentVerticalForce = (maxFallingSpeed) * _verticalBoostInput.Remap(0, 1, -1, 1);
 
 
-        if (currentAltitude <= minAltitude && currentVerticalForce < 0)
-        {
-            currentVerticalForce = 0;
-        }
+
         float suspension = 20; // make a var
-        if(currentAltitude < minAltitude)
+
+        if (currentAltitude <= minAltitude)
         {
             currentVerticalForce =  Mathf.Max(currentVerticalForce, minAltitude - currentAltitude);
             AdjustTime = suspension;
@@ -298,6 +298,7 @@ public class CharacterV3 : MonoBehaviour {
         float _verticalBoost = Mathf.Lerp(oldVerticalForce, currentVerticalForce, Time.fixedDeltaTime * AdjustTime);
         currentVerticalForce = _verticalBoost;
         dirToMove.y += _verticalBoost;
+
     }
 
     void raycastDown()
@@ -306,6 +307,10 @@ public class CharacterV3 : MonoBehaviour {
         if( Physics.Raycast(r, out downRaycast, 1000))
         {
             //Debug.Log(Vector3.Distance(downRaycast.point, transform.position), downRaycast.transform.gameObject);
+        }
+        else
+        {
+            downRaycast = new RaycastHit();
         }
         Debug.DrawRay(transform.position, Vector3.down, Color.black);
 
@@ -410,10 +415,12 @@ public class CharacterV3 : MonoBehaviour {
         while (Vector3.Angle(transform.forward, targetDirection) > 2f && ntime < 0.5f)
         {
             inertieVector = Vector3.Lerp(inertieVector, targetDirection, Time.deltaTime * rotSpeed + addedRot);
-
-            transform.LookAt(transform.position + Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * rotSpeed + addedRot));
+            Vector3 lookDir = Vector3.Lerp(transform.forward, targetDirection, Time.deltaTime * rotSpeed + addedRot);
+            lookDir.y = 0;
+            transform.LookAt(transform.position + lookDir);
 
             ntime += Time.deltaTime;
+            Debug.Log("Rotate Collision");
             yield return null;
         }
         rotateOnCollisionCoroutine = null;
@@ -433,7 +440,7 @@ public class CharacterV3 : MonoBehaviour {
         if (rotateOnCollisionCoroutine != null)
         {
             StopCoroutine(rotateOnCollisionCoroutine);
-            transform.LookAt(collisionRotationVector);
+            transform.LookAt(transform.position +  new Vector3(collisionRotationVector.x, 0, collisionRotationVector.z));
             inertieVector = collisionRotationVector;
         }
 
@@ -494,5 +501,16 @@ public class CharacterV3 : MonoBehaviour {
     public void OnStartBoost()
     {
         SoundManager.instance.playSoundBoost();
+    }
+
+    public bool IsOnGround()
+    {
+
+        if (currentAltitude <= minAltitude) return true;
+
+        if (downRaycast.transform != null && downRaycast.distance < 5) return true;
+
+        return false;
+
     }
 }
