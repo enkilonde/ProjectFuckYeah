@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: ScreenSpaceOutlineShader
-  m_Shader: {fileID: 4800000, guid: 0e0389332177f754d9cc91de5582d0cc, type: 3}
+  m_Name: lowPolyGround
+  m_Shader: {fileID: 4800000, guid: 29e909145d8692a4bb104b2f94f2c047, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -16,25 +16,25 @@ Material:
     serializedVersion: 2
     m_TexEnvs:
     - first:
-        name: _BlurTex
+        name: _node_3453
       second:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 466dc6fa2cf2c95458b34f7064bef124, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
-        name: _MainTex
+        name: _node_9849
       second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: 466dc6fa2cf2c95458b34f7064bef124, type: 3}
+        m_Scale: {x: 100, y: 100}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - first:
-        name: _GradientStrengthModifier
-      second: 5
+        name: _Tesselation
+      second: 75
     - first:
-        name: _Solid
-      second: 1
-    m_Colors:
+        name: _Tiling
+      second: 100
     - first:
-        name: _OutlineCol
-      second: {r: 1, g: 1, b: 1, a: 1}
+        name: _bump
+      second: 0.012
+    m_Colors: []

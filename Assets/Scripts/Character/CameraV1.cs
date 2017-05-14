@@ -84,7 +84,7 @@ public class CameraV1 : MonoBehaviour {
             CameraType = camModes.Hunter;
             targetToLock = flagBeaviourScript.transform;
         }
-        else if(Mathf.Abs(controler.Get_HorizontalCameraInput()) > 0.5f || Mathf.Abs(controler.Get_VerticalCameraInput()) > 0.5f)
+        else if(Mathf.Abs(controler.Get_HorizontalCameraInput()) > 0.5f || Mathf.Abs(controler.Get_VerticalCameraInput()) > 0.5f || (flagBeaviourScript.targetPlayer != null && flagBeaviourScript.targetPlayer.transform == transform.parent))
         {
             CameraType = camModes.AssCombat;
         }

@@ -15,6 +15,7 @@ public class FlagBehaviour : MonoBehaviour
     [HideInInspector] public List<PlayerInfo> PlayersInCollider = new List<PlayerInfo>();
 
     Vector3 initialSize = Vector3.one;
+    Vector3 initialPos;
 
     public ParticleSystem trail;
 
@@ -33,6 +34,7 @@ public class FlagBehaviour : MonoBehaviour
         trail = transform.Find("Trail").GetComponentInChildren<ParticleSystem>();
         indicators = new Transform[4] { transform.Find("flagModel").Find("Indicator-1"), transform.Find("flagModel").Find("Indicator-2"), transform.Find("flagModel").Find("Indicator-3"), transform.Find("flagModel").Find("Indicator-4") };
         ToggleIndicators();
+        initialPos = transform.position;
     }
 
     private void Update()
@@ -78,7 +80,8 @@ public class FlagBehaviour : MonoBehaviour
         transform.localScale = initialSize * flagSizeIncrease * (1 + Mathf.InverseLerp(0, GameManager.targetScoreToWin, targetPlayer.currentScore) * 5);
 
         transform.position = targetPlayer.transform.position;
-        transform.rotation = targetPlayer.transform.rotation;
+        //transform.rotation = targetPlayer.transform.rotation;
+        transform.GetChild(2).rotation = targetPlayer.transform.rotation;
         targetPlayer.currentScore += targetPlayer.speedScoreGain * Time.deltaTime;    
 
     }
