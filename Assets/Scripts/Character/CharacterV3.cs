@@ -120,7 +120,7 @@ public class CharacterV3 : MonoBehaviour {
 
     Vector3 collisionRotationVector;
 
-
+    public GameObject ImpactFx;
 
     public void init () {
 		controlerSet = transform.parent.GetComponentInChildren<ControllerV3>();
@@ -461,7 +461,9 @@ public class CharacterV3 : MonoBehaviour {
 
         bumbVector = reflect * 100;
 
-
+        GameObject fx = Instantiate(ImpactFx, collision.contacts[0].point, Quaternion.identity) as GameObject;
+        fx.transform.LookAt(fx.transform.position + reflect.normalized);
+        Destroy(fx, 1f);
 
         rotateOnCollisionCoroutine = StartCoroutine(rotateFromCollision(collisionRotationVector));
     }
