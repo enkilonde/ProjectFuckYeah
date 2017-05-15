@@ -24,7 +24,7 @@ Material:
     m_Floats:
     - first:
         name: _ColorStrenght
-      second: 200
+      second: 305.78
     - first:
         name: _Tesselation
       second: 75
@@ -37,4 +37,4 @@ Material:
     m_Colors:
     - first:
         name: _Color
-      second: {r: 0.6911765, g: 0.5089891, b: 0.116890125, a: 1}
+      second: {r: 0.679, g: 0.26569504, b: 0.114830874, a: 1}

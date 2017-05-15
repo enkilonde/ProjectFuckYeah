@@ -25,10 +25,10 @@ public class AnimRotors : MonoBehaviour {
 
 		for (int i = 1; i < rotors.Length; i++) {
 //			rotors[i].rotation *= Quaternion.AngleAxis(100f * Time.deltaTime, rotors[i].up);
-			rotors[i].Rotate(rotors[i].up * (currentSpeed * anglePerSecond) * Time.deltaTime, Space.World);
+//			rotors[i].Rotate(rotors[i].up * (currentSpeed * anglePerSecond) * Time.deltaTime, Space.World);
 //			rotors[i].localRotation *= Quaternion.Euler(rotors[i].up * 100f);
 //			rotors[i].Rotate(Vector3.up * 100f * Time.deltaTime);
-
+			rotors[i].Rotate(new Vector3(0f, (currentSpeed * anglePerSecond) * Time.deltaTime, 0f));
 		}
 
 
