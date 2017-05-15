@@ -38,9 +38,9 @@ public class VfxManager : MonoBehaviour
     {
         float speedRatio = cv3.getSpeedRatio();
         bool useTurbo = cv3.previous_I_forwardBoost == 1;
-        float flickerSize = 0.5f;
+        float flickerSize = 0.5f * speedRatio;
 
-        float small_Reactor_sizeX = Mathf.Lerp(0, 1.5f, speedRatio);
+        float small_Reactor_sizeX = Mathf.Lerp(0.1f, 1.5f, speedRatio);
         reactor_small_1.transform.localScale = new Vector3(reactor_small_1.transform.localScale.x, reactor_small_1.transform.localScale.y, small_Reactor_sizeX + Random.Range(-flickerSize, flickerSize));
         reactor_small_2.transform.localScale = new Vector3(reactor_small_2.transform.localScale.x, reactor_small_2.transform.localScale.y, small_Reactor_sizeX + Random.Range(-flickerSize, flickerSize));
 
@@ -49,8 +49,8 @@ public class VfxManager : MonoBehaviour
             
         }
 
-        flickerSize = 3f;
-        float big_reactor_size = Mathf.Lerp(0, 8, speedRatio);
+        flickerSize = 3f * speedRatio;
+        float big_reactor_size = Mathf.Lerp(0.1f, 8, speedRatio);
         reactor_big.transform.localScale = new Vector3(reactor_big.transform.localScale.x, reactor_big.transform.localScale.y, big_reactor_size + Random.Range(-flickerSize, flickerSize));
 
         float fadeSpeed = 3;
