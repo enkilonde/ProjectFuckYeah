@@ -459,11 +459,16 @@ public class CharacterV3 : MonoBehaviour {
 
         collisionRotationVector = Vector3.RotateTowards(collisionRotationVector, collision.contacts[0].normal, 5 * Mathf.Deg2Rad, 0.0f);
 
-        bumbVector = reflect * 100;
 
         GameObject fx = Instantiate(ImpactFx, collision.contacts[0].point, Quaternion.identity) as GameObject;
         fx.transform.LookAt(fx.transform.position + reflect.normalized);
         Destroy(fx, 1f);
+
+        bumbVector = reflect * 175 * getSpeedRatio();
+
+        float bumpForce = Mathf.InverseLerp(360, 0, 180 - Vector3.Angle(-inertieVector, reflect));
+        currentFwdSpeed *= bumpForce;
+
 
         rotateOnCollisionCoroutine = StartCoroutine(rotateFromCollision(collisionRotationVector));
     }
