@@ -148,6 +148,8 @@ public class CharacterV3 : MonoBehaviour {
 
     private void FixedUpdate()
     {
+        
+
         if (!PlayerManager.loadingEnded) return;
 
         if (GameManager.isPaused())

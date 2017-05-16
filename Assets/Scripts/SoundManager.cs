@@ -9,11 +9,17 @@ public class SoundManager : MonoBehaviour
 
     CharacterV3[] Controllers;
 
+    public const float musicVolume = 0.1f;
 
     FMOD.Studio.EventInstance collisionBounce;
     FMOD.Studio.EventInstance boostSound;
     FMOD.Studio.EventInstance flagTakenSound;
     FMOD.Studio.EventInstance itemUsedSound;
+    FMOD.Studio.EventInstance inTrail; // not ready to be used
+    FMOD.Studio.EventInstance targetProximity;
+
+
+
     FMOD.Studio.EventInstance musicGameplay;
     FMOD.Studio.EventInstance musicMenu;
 
@@ -35,10 +41,19 @@ public class SoundManager : MonoBehaviour
         boostSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Boost");
         flagTakenSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Pick-Up");
         itemUsedSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Impulse");
+        inTrail = FMODUnity.RuntimeManager.CreateInstance("event:/Events/InTrail");
+        targetProximity = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Target proximity");
 
         musicGameplay = FMODUnity.RuntimeManager.CreateInstance("event:/Musique/Musique InGame");
         musicMenu = FMODUnity.RuntimeManager.CreateInstance("event:/Musique/Musique menu principal");
 
+        musicGameplay.start();
+        musicMenu.start();
+        musicGameplay.setVolume(0);
+        musicMenu.setVolume(0);
+
+        targetProximity.start();
+        targetProximity.setParameterValue("Distance to Pursuer", 0);
 
     }
 
@@ -65,14 +80,16 @@ public class SoundManager : MonoBehaviour
 
     public void OnMenuStart()
     {
-        StartCoroutine(fadeSound(musicGameplay, 1, 0, musicMenu));
+        StartCoroutine(fadeSound(musicGameplay, 1, 0));
+        StartCoroutine(fadeSound(musicMenu, 1, musicVolume, 1));
+
     }
-
-
 
     public void OnGameplayStart()
     {
-        StartCoroutine(fadeSound(musicMenu, 1, 0, musicGameplay));
+        StartCoroutine(fadeSound(musicMenu, 1, 0));
+        StartCoroutine(fadeSound(musicGameplay, 1, musicVolume, 1));
+
     }
 
     public void OnButtonClicked()
@@ -80,37 +97,52 @@ public class SoundManager : MonoBehaviour
         flagTakenSound.start();
     }
 
+    public void FadeGameplaySound(int direction)
+    {
+        StartCoroutine(fadeSound(musicGameplay, 1, direction));
+    }
+
+    public void SetTargetProximityDistance(float distance)
+    {
+        targetProximity.setParameterValue("Distance to Pursuer", distance);
+    }
 
 
-    IEnumerator fadeSound(FMOD.Studio.EventInstance sound, float speed, int direction, FMOD.Studio.EventInstance soundNext = null)
+    IEnumerator fadeSound(FMOD.Studio.EventInstance sound, float speed, float direction, float delay = 0, FMOD.Studio.EventInstance soundNext = null)
     {
         float volume;
         float finalVolume;
         sound.getVolume(out volume, out finalVolume);
 
-        if (direction < 0.5f)
+        yield return new WaitForSeconds(delay);
+
+        if (/*direction < 0.5f*/true)
         {
-            while (volume > 0)
+            while (!Mathf.Approximately(direction, volume))
             {
-                sound.setVolume(volume - Time.deltaTime * speed);
+                //sound.setVolume(volume - Time.deltaTime * speed);
+                sound.setVolume(Mathf.MoveTowards(volume, direction, Time.deltaTime * speed));
                 sound.getVolume(out volume, out finalVolume);
-                //Debug.Log("Volume = " + volume);
                 yield return null;
             }
+            sound.setVolume(direction);
         }
         else
         {
-            while (volume < 1)
+            while (!Mathf.Approximately(1, volume))
             {
                 sound.setVolume(volume + Time.deltaTime * speed);
                 sound.getVolume(out volume, out finalVolume);
                 yield return null;
             }
+            sound.setVolume(1);
+
         }
-        Debug.Log("Fade ended");
-        sound.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-        sound.setVolume(1);
-        if (soundNext != null) soundNext.start();
+
+        if (soundNext != null)
+        {
+            StartCoroutine(fadeSound(soundNext, speed, 1 - direction));
+        }
     }
 
 }

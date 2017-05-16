@@ -178,7 +178,7 @@ public class FlagBehaviour : MonoBehaviour
     {
         targetPlayer = null;
         ToggleIndicators();
-
+        SoundManager.instance.SetTargetProximityDistance(0);
         trail.Stop();
     }
 
@@ -230,6 +230,11 @@ public class FlagBehaviour : MonoBehaviour
     private void UpdateIndicators()
     {
         if (PlayerManager.get() == null || PlayerManager.get().characters == null) return;
+
+        if (targetPlayer == null) return;
+
+        float minDistance = 0;
+
         for (int i = 0; i < PlayerManager.get().characters.Length; i++)
         {
             if (PlayerManager.get().characters[i] == targetPlayer) continue;
@@ -238,8 +243,13 @@ public class FlagBehaviour : MonoBehaviour
 
             indicators[i].LookAt(PlayerManager.get().characters[i].transform);
 
-            indicators[i].GetComponentInChildren<Renderer>().material.color = colorGradient.Evaluate(indicatorColorByDistance.Evaluate(Vector3.Distance(transform.position, PlayerManager.get().characters[i].transform.position)));
+            float dist = indicatorColorByDistance.Evaluate(Vector3.Distance(transform.position, PlayerManager.get().characters[i].transform.position));
+            minDistance = Mathf.Max(minDistance, 1 - dist);
+            indicators[i].GetComponentInChildren<Renderer>().material.color = colorGradient.Evaluate(dist);
         }
+
+        SoundManager.instance.SetTargetProximityDistance(minDistance);
+
     }
 
 }

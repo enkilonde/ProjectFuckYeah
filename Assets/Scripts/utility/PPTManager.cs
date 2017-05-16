@@ -29,12 +29,15 @@ public class PPTManager : MonoBehaviour {
         canvas.enabled = true;
         image.color = new Color(1, 1, 1, 0);
         controller = GetComponent<ControllerV3>();
+        timing = timer;
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
         timing -= Time.deltaTime;
+        if (timing > 0) return;
+
 
         if (Input.GetKeyDown(KeyCode.Keypad4) || controller.Get_LatRightBoostInput()!= 0) changeSlide(1);
 
@@ -46,8 +49,6 @@ public class PPTManager : MonoBehaviour {
 
     void changeSlide(int value)
     {
-        if (timing > 0) return;
-
         timing = timer;
 
         if(pptActivated)
@@ -61,6 +62,8 @@ public class PPTManager : MonoBehaviour {
     void TogglePPT(bool state)
     {
         pptActivated = state;
+
+        SoundManager.instance.FadeGameplaySound((state)?0:1);
 
         if (fade != null) StopCoroutine(fade);
 
