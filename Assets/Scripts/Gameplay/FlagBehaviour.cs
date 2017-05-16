@@ -37,6 +37,7 @@ public class FlagBehaviour : MonoBehaviour
         indicators = new Transform[4] { transform.Find("flagModel").Find("Indicator-1"), transform.Find("flagModel").Find("Indicator-2"), transform.Find("flagModel").Find("Indicator-3"), transform.Find("flagModel").Find("Indicator-4") };
         ToggleIndicators();
         initialPos = transform.position;
+        timer = respawnTime;
     }
 
     private void Update()
@@ -53,7 +54,11 @@ public class FlagBehaviour : MonoBehaviour
         if (targetPlayer == null)
         {
             timer -= Time.deltaTime;
-            if (timer < 0) transform.position = initialPos;
+            if (timer < 0)
+            {
+                transform.position = initialPos;
+                timer = respawnTime;
+            }
         }
 
     }
