@@ -108,6 +108,7 @@ public class PlayerManager : MonoBehaviour
         }
         GameManager.get().currentGameState = GameManager.GameState.Playing;
         loadingEnded = true;
+        SoundManager.instance.OnGameplayStart();
     }
 
     void SetCamera(Camera cam, int numberOfPlayers, int playerIndex)

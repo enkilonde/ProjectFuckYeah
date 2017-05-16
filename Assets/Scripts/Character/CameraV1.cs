@@ -33,6 +33,8 @@ public class CameraV1 : MonoBehaviour {
 	ControllerV3 controler;
     FlagBehaviour flagBeaviourScript;
 
+    public bool buttonLockPressed = false;
+
 	void Start () {
 		character = transform.parent.transform.FindChild("Character").transform;
 		controler = transform.parent.GetComponentInChildren<ControllerV3>();
@@ -79,15 +81,24 @@ public class CameraV1 : MonoBehaviour {
 
     void GetCameraType()
     {
-        if((flagBeaviourScript.targetPlayer == null || flagBeaviourScript.targetPlayer.transform != transform.parent) && controler.Get_LockOnInput() != 0)
+        if ((flagBeaviourScript.targetPlayer == null || flagBeaviourScript.targetPlayer.transform != transform.parent) && controler.Get_LockOnInput() != 0 && CameraType != camModes.Hunter && !buttonLockPressed)
         {
             CameraType = camModes.Hunter;
-            targetToLock = flagBeaviourScript.transform;
+            buttonLockPressed = true;
         }
-        else if(Mathf.Abs(controler.Get_HorizontalCameraInput()) > 0.5f || Mathf.Abs(controler.Get_VerticalCameraInput()) > 0.5f || (flagBeaviourScript.targetPlayer != null && flagBeaviourScript.targetPlayer.transform == transform.parent))
+        else if (CameraType != camModes.AssCombat && (flagBeaviourScript.targetPlayer != null && flagBeaviourScript.targetPlayer.transform == transform.parent) || (controler.Get_LockOnInput() != 0 && !buttonLockPressed))
         {
             CameraType = camModes.AssCombat;
+            buttonLockPressed = true;
         }
+
+        if (controler.Get_LockOnInput() == 0) buttonLockPressed = false;
+
+        targetToLock = flagBeaviourScript.transform;
+        //else if(Mathf.Abs(controler.Get_HorizontalCameraInput()) > 0.5f || Mathf.Abs(controler.Get_VerticalCameraInput()) > 0.5f || (flagBeaviourScript.targetPlayer != null && flagBeaviourScript.targetPlayer.transform == transform.parent))
+        //{
+        //    CameraType = camModes.AssCombat;
+        //}
     }
 
     void ApplyCamera()

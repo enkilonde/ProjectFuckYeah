@@ -420,7 +420,7 @@ public class CharacterV3 : MonoBehaviour {
             transform.LookAt(transform.position + lookDir);
 
             ntime += Time.deltaTime;
-            Debug.Log("Rotate Collision");
+
             yield return null;
         }
         rotateOnCollisionCoroutine = null;
@@ -448,7 +448,7 @@ public class CharacterV3 : MonoBehaviour {
         collisionRotationVector = inertieVector;
 
 
-        if(Vector3.Angle(-inertieVector, reflect) < 30 && flagBehavoirScript.targetPlayer == this)
+        if(Vector3.Angle(-inertieVector, reflect) < 60 && flagBehavoirScript.targetPlayer == this)
         {
             //Crash
             flagBehavoirScript.Drop();
