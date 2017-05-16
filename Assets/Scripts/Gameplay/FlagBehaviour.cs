@@ -16,6 +16,8 @@ public class FlagBehaviour : MonoBehaviour
 
     Vector3 initialSize = Vector3.one;
     Vector3 initialPos;
+    public float respawnTime = 10;
+    float timer;
 
     public ParticleSystem trail;
 
@@ -47,6 +49,13 @@ public class FlagBehaviour : MonoBehaviour
             RegisterPos();
         }
         UpdateIndicators();
+
+        if (targetPlayer == null)
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0) transform.position = initialPos;
+        }
+
     }
 
     private void LateUpdate()

@@ -10,6 +10,9 @@ public class CollectibleObject : MonoBehaviour
 
     GameObject itemDisplay;
 
+    public float respawnTime = 10;
+    float timer;
+
 	// Use this for initialization
 	void Start ()
     { 
@@ -17,12 +20,20 @@ public class CollectibleObject : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		
+        if(itemDisplay == null)
+        {
+            timer -= Time.deltaTime;
+            if (timer < 0) OnChangeObject();
+        }
+
 	}
 
     void OnChangeObject()
     {
+        timer = respawnTime;
         item = ItemsUtility.GetItemFromEnum(itemType);
 
         if (itemDisplay != null) Destroy(itemDisplay);
