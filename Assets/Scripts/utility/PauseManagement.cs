@@ -55,7 +55,7 @@ public class PauseManagement : MonoBehaviour
     public void BackMainMenu()
     {
         TogglePause(false);
-
+        PlayerManager.loadingEnded = false;
         string currentScene = SceneManager.GetActiveScene().name;
         if (SceneManager.GetSceneByName(menuSceneName).isLoaded)
         {

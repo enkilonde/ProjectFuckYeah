@@ -17,6 +17,11 @@ public class VfxManager : MonoBehaviour
     public Transform boostFx;
     Renderer[] turbo_renderers;
 
+    float albedoAlpha = 0;
+    float emissiveAlpha = 0;
+
+    float ColorLerpSpeed = 5;
+
     // Use this for initialization
     void Awake ()
     {
@@ -30,7 +35,8 @@ public class VfxManager : MonoBehaviour
         reactor_big_renderers = reactor_big.GetComponentsInChildren<Renderer>();
         turbo_renderers = boostFx.GetComponentsInChildren<Renderer>();
 
-
+        albedoAlpha = reactor_big_renderers[0].material.color.a;
+        emissiveAlpha = reactor_big_renderers[0].material.GetColor("_EmissionColor").a;
     }
 
     // Update is called once per frame
@@ -44,14 +50,29 @@ public class VfxManager : MonoBehaviour
         reactor_small_1.transform.localScale = new Vector3(reactor_small_1.transform.localScale.x, reactor_small_1.transform.localScale.y, small_Reactor_sizeX + Random.Range(-flickerSize, flickerSize));
         reactor_small_2.transform.localScale = new Vector3(reactor_small_2.transform.localScale.x, reactor_small_2.transform.localScale.y, small_Reactor_sizeX + Random.Range(-flickerSize, flickerSize));
 
+        Color albedoColor = Color.Lerp(reactor_big_renderers[0].material.color, (useTurbo)?Color.red:Color.blue, Time.deltaTime * ColorLerpSpeed);
+        Color emissiveColor = Color.Lerp(reactor_big_renderers[0].material.GetColor("_EmissionColor"), (useTurbo) ? Color.red : Color.blue, Time.deltaTime * ColorLerpSpeed);
+        albedoColor.a = 0.5f;
+        //emissiveColor.a = emissiveAlpha;
+
         for (int i = 0; i < reactor_smalls_renderers.Length; i++)
         {
-            
+            reactor_smalls_renderers[i].material.color = albedoColor;
+            reactor_smalls_renderers[i].material.SetColor("_EmissionColor", albedoColor);
+
         }
 
         flickerSize = 3f * speedRatio;
         float big_reactor_size = Mathf.Lerp(0.1f, 8, speedRatio);
         reactor_big.transform.localScale = new Vector3(reactor_big.transform.localScale.x, reactor_big.transform.localScale.y, big_reactor_size + Random.Range(-flickerSize, flickerSize));
+
+        for (int i = 0; i < reactor_big_renderers.Length; i++)
+        {
+            reactor_big_renderers[i].material.color = albedoColor;
+            reactor_big_renderers[i].material.SetColor("_EmissionColor", albedoColor);
+
+        }
+
 
         float fadeSpeed = 3;
         for (int i = 0; i < turbo_renderers.Length; i++)
