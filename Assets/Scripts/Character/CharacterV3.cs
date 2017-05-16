@@ -420,7 +420,7 @@ public class CharacterV3 : MonoBehaviour {
             transform.LookAt(transform.position + lookDir);
 
             ntime += Time.deltaTime;
-            Debug.Log("Rotate Collision");
+
             yield return null;
         }
         rotateOnCollisionCoroutine = null;

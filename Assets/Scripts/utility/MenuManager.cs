@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour
         addPlayersScript = FindObjectOfType<AddPlayers>();
         displayNumberOfPlayers = GameObject.Find("Number of Players").GetComponent<Text>();
         ChangeNumberOfPlayers(0);
+        SoundManager.instance.OnMenuStart();
     }
 
     public void Play(string levelName)
@@ -37,7 +38,7 @@ public class MenuManager : MonoBehaviour
         nextLevel = levelName;
         
         SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
-        
+        SoundManager.instance.OnButtonClicked();
 
         StartCoroutine(waitForSceneLoad(levelName, setMainScene));
     }
