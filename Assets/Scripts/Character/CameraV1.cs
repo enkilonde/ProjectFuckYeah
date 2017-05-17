@@ -35,9 +35,12 @@ public class CameraV1 : MonoBehaviour {
 
     public bool buttonLockPressed = false;
 
-	void Start () {
-		character = transform.parent.transform.FindChild("Character").transform;
-		controler = transform.parent.GetComponentInChildren<ControllerV3>();
+	public void Init () {
+		if(character == null)
+        {
+            character = transform.parent.transform.FindChild("Character").transform;
+            controler = transform.parent.GetComponentInChildren<ControllerV3>();
+        }
         flagBeaviourScript = FindObjectOfType<FlagBehaviour>();
         CameraType = camModes.AssCombat;
 
@@ -70,7 +73,10 @@ public class CameraV1 : MonoBehaviour {
 
     
 	
-	void LateUpdate () {
+	void LateUpdate ()
+
+    {
+        if (flagBeaviourScript == null) return;
 
         GetCameraType();
         ApplyCamera();
@@ -81,6 +87,7 @@ public class CameraV1 : MonoBehaviour {
 
     void GetCameraType()
     {
+
         if ((flagBeaviourScript.targetPlayer == null || flagBeaviourScript.targetPlayer.transform != transform.parent) && controler.Get_LockOnInput() != 0 && CameraType != camModes.Hunter && !buttonLockPressed)
         {
             CameraType = camModes.Hunter;

@@ -828,7 +828,7 @@ MonoBehaviour:
     type: 2}
   targetPlayer: {fileID: 0}
   PlayersInCollider: []
-  respawnTime: 10
+  respawnTime: 5
   trail: {fileID: 0}
   previousPos: []
   indicators: []

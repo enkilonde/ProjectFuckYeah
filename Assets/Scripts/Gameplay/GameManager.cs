@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour {
     ControllerV3 controller;
 
     static GameManager instance;
+
+    float endGameTimer = 0;
     public static GameManager get()
     {
         if(instance == null || instance.transform == null)
@@ -51,7 +53,15 @@ public class GameManager : MonoBehaviour {
         CheckPlayersScore();
 
         if (currentGameState == GameState.Ended)
-            WaitRestart();
+        {
+            endGameTimer += Time.deltaTime;
+            if(endGameTimer > 2)
+            {
+                WaitRestart();
+            }
+        }
+
+
 	}
 
     void CheckPlayersScore()
@@ -81,9 +91,10 @@ public class GameManager : MonoBehaviour {
                 endGameCanvas.transform.Find("Winner").GetComponent<Text>().text = "Player " + (i+1) + " won!";
 
             endGameCanvas.transform.Find("Scores").GetComponent<Text>().text += "Player " + (i+1) + " : " + (int)score + "\n";
-            
-        }
 
+            playerManagerScript.characters[i].flagBehavoirScript.targetPlayer = null;
+        }
+        SoundManager.instance.SetTargetProximityDistance(0);
     }
 
     void ResetPlayers()

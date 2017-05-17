@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlagBehaviour : MonoBehaviour
 {
     public const float timeToStealFlag = 0.01f;
-    public const float flagSizeIncrease = 3f;
+    public const float flagSizeIncrease = 2f;
     public const float distanceRegisterPos = 5f;
 
     public GameObject ImpulsePrefab;
@@ -66,7 +66,7 @@ public class FlagBehaviour : MonoBehaviour
     private void LateUpdate()
     {
         if (GameManager.isPaused()) return;
-
+        if (targetPlayer == null) return;
         for (int i = 0; i < PlayersInCollider.Count; i++)
         {
             if(PlayersInCollider[i].playerTransform == targetPlayer.transform)

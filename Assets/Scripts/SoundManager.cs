@@ -9,7 +9,7 @@ public class SoundManager : MonoBehaviour
 
     CharacterV3[] Controllers;
 
-    public const float musicVolume = 0.1f;
+    public static float musicVolume = 0.3f;
 
     FMOD.Studio.EventInstance collisionBounce;
     FMOD.Studio.EventInstance boostSound;
@@ -18,7 +18,7 @@ public class SoundManager : MonoBehaviour
     FMOD.Studio.EventInstance inTrail; // not ready to be used
     FMOD.Studio.EventInstance targetProximity;
 
-
+    FMOD.Studio.EventInstance activeMusic;
 
     FMOD.Studio.EventInstance musicGameplay;
     FMOD.Studio.EventInstance musicMenu;
@@ -95,6 +95,7 @@ public class SoundManager : MonoBehaviour
     public void OnMenuStart()
     {
         if (fmodFailed) return;
+        activeMusic = musicMenu;
         StartCoroutine(fadeSound(musicGameplay, 1, 0));
         StartCoroutine(fadeSound(musicMenu, 1, musicVolume, 1));
 
@@ -103,6 +104,7 @@ public class SoundManager : MonoBehaviour
     public void OnGameplayStart()
     {
         if (fmodFailed) return;
+        activeMusic = musicGameplay;
         StartCoroutine(fadeSound(musicMenu, 1, 0));
         StartCoroutine(fadeSound(musicGameplay, 1, musicVolume, 1));
 
@@ -126,6 +128,49 @@ public class SoundManager : MonoBehaviour
         targetProximity.setParameterValue("Distance to Pursuer", distance);
     }
 
+    public void ModifyGameplayMusic(float value)
+    {
+        float vol = 0;
+        float volMax = 0;
+        musicGameplay.getVolume(out vol, out volMax);
+
+        musicGameplay.setVolumeClamped(vol + value, 0, musicVolume);
+
+    }
+
+    public void ModifyMenuMusic(float value)
+    {
+        float vol = 0;
+        float volMax = 0;
+        musicMenu.getVolume(out vol, out volMax);
+
+        musicMenu.setVolumeClamped(vol + value, 0, musicVolume);
+
+    }
+
+    public void UpdateMusic()
+    {
+        float vol = 0;
+        float volMax = 0;
+        musicGameplay.getVolume(out vol, out volMax);
+        if(activeMusic == musicGameplay)
+        {
+            musicGameplay.setVolume(musicVolume);
+        }
+
+
+        musicMenu.getVolume(out vol, out volMax);
+
+        if (activeMusic == musicMenu)
+        {
+            musicMenu.setVolume(musicVolume);
+        }
+            
+    }
+
+
+
+
 
     IEnumerator fadeSound(FMOD.Studio.EventInstance sound, float speed, float direction, float delay = 0, FMOD.Studio.EventInstance soundNext = null)
     {
@@ -141,21 +186,21 @@ public class SoundManager : MonoBehaviour
             while (!Mathf.Approximately(direction, volume))
             {
                 //sound.setVolume(volume - Time.deltaTime * speed);
-                sound.setVolume(Mathf.MoveTowards(volume, direction, Time.deltaTime * speed));
+                sound.setVolumeClamped(Mathf.MoveTowards(volume, direction, Time.deltaTime * speed), 0, musicVolume);
                 sound.getVolume(out volume, out finalVolume);
                 yield return null;
             }
-            sound.setVolume(direction);
+            sound.setVolumeClamped(direction, 0, musicVolume);
         }
         else
         {
             while (!Mathf.Approximately(1, volume))
             {
-                sound.setVolume(volume + Time.deltaTime * speed);
+                sound.setVolumeClamped(volume + Time.deltaTime * speed, 0, musicVolume);
                 sound.getVolume(out volume, out finalVolume);
                 yield return null;
             }
-            sound.setVolume(1);
+            sound.setVolumeClamped(1, 0, musicVolume);
 
         }
 
@@ -163,6 +208,22 @@ public class SoundManager : MonoBehaviour
         {
             StartCoroutine(fadeSound(soundNext, speed, 1 - direction));
         }
+    }
+
+    public void setMusicVolume(float volume, FMOD.Studio.EventInstance sound)
+    {
+        sound.setVolumeClamped(Mathf.Min(volume, musicVolume, 0, musicVolume));
+    }
+
+}
+
+
+public static class soundExtention
+{
+
+    public static void setVolumeClamped (this FMOD.Studio.EventInstance sound, float volume, float min = 0, float max = 1)
+    {
+        sound.setVolume(Mathf.Clamp(volume, min, max));
     }
 
 }

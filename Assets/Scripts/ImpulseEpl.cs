@@ -10,6 +10,8 @@ public class ImpulseEpl : MonoBehaviour {
 	public float endingScale = 15f;
 	public float timeTransition = 10f;
 
+    public float exploForce = 2;
+
 	private float currentScale = 5f;
 
 	void Start()
@@ -44,7 +46,7 @@ public class ImpulseEpl : MonoBehaviour {
             Vector3 explosionDirection = players[i].transform.position - transform.position;
             explosionDirection = explosionDirection.normalized * (endingScale - dist);
 
-            players[i].ReceiveExplosionForce(explosionDirection);
+            players[i].ReceiveExplosionForce(explosionDirection * exploForce);
 
         }
     }
