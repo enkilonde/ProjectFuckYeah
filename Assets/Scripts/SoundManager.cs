@@ -24,6 +24,8 @@ public class SoundManager : MonoBehaviour
     FMOD.Studio.EventInstance musicMenu;
 
 
+    bool fmodFailed = false;
+
     // Use this for initialization
     void Awake ()
     {
@@ -37,49 +39,62 @@ public class SoundManager : MonoBehaviour
         }
 
 
-        collisionBounce = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Collision Bounce");
-        boostSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Boost");
-        flagTakenSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Pick-Up");
-        itemUsedSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Impulse");
-        inTrail = FMODUnity.RuntimeManager.CreateInstance("event:/Events/InTrail");
-        targetProximity = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Target proximity");
+        try
+        {
+            collisionBounce = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Collision Bounce");
+            boostSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Boost");
+            flagTakenSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Pick-Up");
+            itemUsedSound = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Impulse");
+            inTrail = FMODUnity.RuntimeManager.CreateInstance("event:/Events/InTrail");
+            targetProximity = FMODUnity.RuntimeManager.CreateInstance("event:/Events/Target proximity");
 
-        musicGameplay = FMODUnity.RuntimeManager.CreateInstance("event:/Musique/Musique InGame");
-        musicMenu = FMODUnity.RuntimeManager.CreateInstance("event:/Musique/Musique menu principal");
+            musicGameplay = FMODUnity.RuntimeManager.CreateInstance("event:/Musique/Musique InGame");
+            musicMenu = FMODUnity.RuntimeManager.CreateInstance("event:/Musique/Musique menu principal");
 
-        musicGameplay.start();
-        musicMenu.start();
-        musicGameplay.setVolume(0);
-        musicMenu.setVolume(0);
+            musicGameplay.start();
+            musicMenu.start();
+            musicGameplay.setVolume(0);
+            musicMenu.setVolume(0);
 
-        targetProximity.start();
-        targetProximity.setParameterValue("Distance to Pursuer", 0);
+            targetProximity.start();
+            targetProximity.setParameterValue("Distance to Pursuer", 0);
+        }
+        catch
+        {
+            fmodFailed = true;
+            throw;
+        }
 
     }
 
 
     public void PlaySoundCollision()
     {
+        if (fmodFailed) return;
         collisionBounce.start();
     }
 
     public void PlaySoundFlagCaptured()
     {
+        if (fmodFailed) return;
         flagTakenSound.start();
     }
 
     public void playSoundBoost()
     {
+        if (fmodFailed) return;
         boostSound.start();
     }
 
     public void playSoundItemUsed(string itemName)
     {
+        if (fmodFailed) return;
         itemUsedSound.start();
     }
 
     public void OnMenuStart()
     {
+        if (fmodFailed) return;
         StartCoroutine(fadeSound(musicGameplay, 1, 0));
         StartCoroutine(fadeSound(musicMenu, 1, musicVolume, 1));
 
@@ -87,6 +102,7 @@ public class SoundManager : MonoBehaviour
 
     public void OnGameplayStart()
     {
+        if (fmodFailed) return;
         StartCoroutine(fadeSound(musicMenu, 1, 0));
         StartCoroutine(fadeSound(musicGameplay, 1, musicVolume, 1));
 
@@ -94,22 +110,26 @@ public class SoundManager : MonoBehaviour
 
     public void OnButtonClicked()
     {
+        if (fmodFailed) return;
         flagTakenSound.start();
     }
 
     public void FadeGameplaySound(int direction)
     {
+        if (fmodFailed) return;
         StartCoroutine(fadeSound(musicGameplay, 1, direction));
     }
 
     public void SetTargetProximityDistance(float distance)
     {
+        if (fmodFailed) return;
         targetProximity.setParameterValue("Distance to Pursuer", distance);
     }
 
 
     IEnumerator fadeSound(FMOD.Studio.EventInstance sound, float speed, float direction, float delay = 0, FMOD.Studio.EventInstance soundNext = null)
     {
+        if (fmodFailed) yield break;
         float volume;
         float finalVolume;
         sound.getVolume(out volume, out finalVolume);
