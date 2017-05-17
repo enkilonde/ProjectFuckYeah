@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Cheatskaude : MonoBehaviour {
 
@@ -16,6 +17,18 @@ public class Cheatskaude : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.F12)) canGameEnd = !canGameEnd;
 
         if (Input.GetKey(KeyCode.F10) && FindObjectOfType<FlagBehaviour>().targetPlayer) FindObjectOfType<FlagBehaviour>().targetPlayer.currentScore += Time.deltaTime * GameManager.targetScoreToWin / 10;
+
+        if(Input.GetKey(KeyCode.KeypadPlus))
+        {
+            SoundManager.musicVolume = Mathf.Clamp01(SoundManager.musicVolume + Time.deltaTime);
+            SoundManager.instance.UpdateMusic();
+        }
+
+        if (Input.GetKey(KeyCode.KeypadMinus))
+        {
+            SoundManager.musicVolume = Mathf.Clamp01(SoundManager.musicVolume - Time.deltaTime);
+            SoundManager.instance.UpdateMusic();
+        }
 
     }
 
