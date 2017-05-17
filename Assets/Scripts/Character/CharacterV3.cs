@@ -116,7 +116,7 @@ public class CharacterV3 : MonoBehaviour {
 
     RaycastHit downRaycast;
 
-    FlagBehaviour flagBehavoirScript; //  /!\ ne marche que si il n'y a que 1 seul flag
+    [HideInInspector]public FlagBehaviour flagBehavoirScript; //  /!\ ne marche que si il n'y a que 1 seul flag
 
     Vector3 collisionRotationVector;
 
@@ -134,6 +134,14 @@ public class CharacterV3 : MonoBehaviour {
 		inertieVector = transform.forward;
 		currentScore = 0f;
         dirToMove = Vector3.zero;
+
+        CameraV1 cam =  transform.parent.GetComponentInChildren<CameraV1>();
+        if(cam == null)
+        {
+            cam = GetComponentInChildren<CameraV1>();
+        }
+        cam.Init();
+
 	}
 
     void Update ()

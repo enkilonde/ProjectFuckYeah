@@ -11,6 +11,8 @@ public class MenuManager : MonoBehaviour
     private Text displayNumberOfPlayers;
     private string nextLevel;
 
+    bool isLoading = false;
+
     private void Awake()
     {
         StartCoroutine(waitForSceneLoad("Common", init));
@@ -35,6 +37,10 @@ public class MenuManager : MonoBehaviour
 
     public void Play(string levelName)
     {
+        if (isLoading) return;
+
+        isLoading = true;
+
         nextLevel = levelName;
         
         SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);

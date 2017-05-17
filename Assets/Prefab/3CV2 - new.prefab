@@ -1962,7 +1962,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 200dd98fe5c42b14fba280fcd148adac, type: 2}
+  - {fileID: 2100000, guid: ee896e61f428322469ffccac41764010, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2211,7 +2211,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 200dd98fe5c42b14fba280fcd148adac, type: 2}
+  - {fileID: 2100000, guid: ee896e61f428322469ffccac41764010, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2273,7 +2273,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 200dd98fe5c42b14fba280fcd148adac, type: 2}
+  - {fileID: 2100000, guid: ee896e61f428322469ffccac41764010, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2367,7 +2367,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 200dd98fe5c42b14fba280fcd148adac, type: 2}
+  - {fileID: 2100000, guid: ee896e61f428322469ffccac41764010, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2398,7 +2398,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 200dd98fe5c42b14fba280fcd148adac, type: 2}
+  - {fileID: 2100000, guid: ee896e61f428322469ffccac41764010, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2429,7 +2429,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 200dd98fe5c42b14fba280fcd148adac, type: 2}
+  - {fileID: 2100000, guid: ee896e61f428322469ffccac41764010, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4144,7 +4144,7 @@ ParticleSystem:
   moveWithTransform: 1
   moveWithCustomTransform: {fileID: 0}
   scalingMode: 1
-  randomSeed: -2103764408
+  randomSeed: -1505995962
   InitialModule:
     serializedVersion: 3
     enabled: 1

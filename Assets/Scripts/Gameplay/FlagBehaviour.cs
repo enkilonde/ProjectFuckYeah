@@ -66,7 +66,7 @@ public class FlagBehaviour : MonoBehaviour
     private void LateUpdate()
     {
         if (GameManager.isPaused()) return;
-
+        if (targetPlayer == null) return;
         for (int i = 0; i < PlayersInCollider.Count; i++)
         {
             if(PlayersInCollider[i].playerTransform == targetPlayer.transform)
