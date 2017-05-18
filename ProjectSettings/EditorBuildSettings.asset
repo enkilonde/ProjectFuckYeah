@@ -15,9 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Main7.unity
   - enabled: 1
     path: Assets/Scenes/Commons/Pause.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LD.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LDAssetsv2.unity
   - enabled: 1
     path: Assets/Scenes/LDBackup.unity
