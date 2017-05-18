@@ -5,7 +5,7 @@ using UnityEngine;
 public class FlagBehaviour : MonoBehaviour
 {
     public const float timeToStealFlag = 0.01f;
-    public const float flagSizeIncrease = 2f;
+    public const float flagSizeIncrease = 1.5f;
     public const float distanceRegisterPos = 5f;
 
     public GameObject ImpulsePrefab;

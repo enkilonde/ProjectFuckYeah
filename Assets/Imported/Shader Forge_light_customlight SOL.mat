@@ -36,7 +36,7 @@ Material:
     m_Floats:
     - first:
         name: _BlendHeight
-      second: 8
+      second: 7.2
     - first:
         name: _BlendSHarpness
       second: 2
