@@ -25,9 +25,9 @@ public class PlayerUI : MonoBehaviour
 //        speedDisplay = transform.Find("Speed").Find("slider").GetComponent<RectTransform>();
 //        heightDisplay = transform.Find("Height").Find("slider").GetComponent<RectTransform>();
 //        boostDisplay = transform.Find("Boost").Find("slider").GetComponent<RectTransform>();
-		speedDisplay = transform.Find("SpeedJauge").GetComponent<Image>();
-		heightDisplay = transform.Find("AltiJauge").GetComponent<Image>();
-		boostDisplay = transform.Find("BoostJauge").GetComponent<Image>();
+		speedDisplay = transform.Find("SpeedJaugeContainer").Find("SpeedJauge").GetComponent<Image>();
+		heightDisplay = transform.Find("AltiJaugeContainer").Find("AltiJauge").GetComponent<Image>();
+		boostDisplay = transform.Find("BoostJaugeContainer").Find("BoostJauge").GetComponent<Image>();
 		scoreDisplay = transform.Find("ScoreJauge").GetComponent<Image>();
 	}
 

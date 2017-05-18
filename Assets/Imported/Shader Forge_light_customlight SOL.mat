@@ -31,18 +31,18 @@ Material:
         name: _node_7673
       second:
         m_Texture: {fileID: 2800000, guid: e876f78a3dfe5584c95280c0ceb1c3ce, type: 3}
-        m_Scale: {x: 10, y: 10}
+        m_Scale: {x: 15, y: 15}
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - first:
         name: _BlendHeight
-      second: -0.6
+      second: 8
     - first:
         name: _BlendSHarpness
-      second: -0.4
+      second: 2
     - first:
         name: _blendingpower
-      second: 0.989
+      second: 0.944
     m_Colors:
     - first:
         name: _NoiseCOlor

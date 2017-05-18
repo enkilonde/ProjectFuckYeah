@@ -6,19 +6,20 @@ Material:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: ShipMaterial
+  m_Name: Skydome 1(petit)
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _EMISSION _METALLICGLOSSMAP _NORMALMAP
+  m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
   m_LightmapFlags: 1
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
   m_SavedProperties:
     serializedVersion: 2
     m_TexEnvs:
     - first:
         name: _BumpMap
       second:
-        m_Texture: {fileID: 2800000, guid: 2e5cef1e3f4770049998dca812da2381, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -42,19 +43,19 @@ Material:
     - first:
         name: _EmissionMap
       second:
-        m_Texture: {fileID: 2800000, guid: 759d16f6a8d4c6440a42b0288156161e, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MainTex
       second:
-        m_Texture: {fileID: 2800000, guid: 4b118f58473649647b926d36183e5a8f, type: 3}
+        m_Texture: {fileID: 2800000, guid: b3d61c7ba2e8afb4fa941b50c73abb13, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
         name: _MetallicGlossMap
       second:
-        m_Texture: {fileID: 2800000, guid: c6d9a6cc4e018fd44b5b1376ca260a44, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -81,10 +82,10 @@ Material:
       second: 1
     - first:
         name: _DstBlend
-      second: 0
+      second: 10
     - first:
         name: _GlossMapScale
-      second: 0.624
+      second: 1
     - first:
         name: _Glossiness
       second: 0.5
@@ -96,7 +97,7 @@ Material:
       second: 0
     - first:
         name: _Mode
-      second: 0
+      second: 2
     - first:
         name: _OcclusionStrength
       second: 1
@@ -111,17 +112,17 @@ Material:
       second: 1
     - first:
         name: _SrcBlend
-      second: 1
+      second: 5
     - first:
         name: _UVSec
       second: 0
     - first:
         name: _ZWrite
-      second: 1
+      second: 0
     m_Colors:
     - first:
         name: _Color
       second: {r: 1, g: 1, b: 1, a: 1}
     - first:
         name: _EmissionColor
-      second: {r: 1, g: 1, b: 1, a: 1}
+      second: {r: 0, g: 0, b: 0, a: 1}
