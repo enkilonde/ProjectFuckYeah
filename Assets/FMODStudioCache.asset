@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 114931172105786102}
-  - {fileID: 114863643253716388}
-  - {fileID: 114547356002903412}
+  - {fileID: 114196780498589388}
+  - {fileID: 114393303514241402}
   EditorEvents:
   - {fileID: 114386147178081520}
   - {fileID: 114909867094339060}
@@ -28,9 +28,9 @@ MonoBehaviour:
   - {fileID: 114418923505024276}
   - {fileID: 114708148688384976}
   - {fileID: 114032873119977438}
-  MasterBankRef: {fileID: 114547356002903412}
+  MasterBankRef: {fileID: 114393303514241402}
   StringsBankRef: {fileID: 114931172105786102}
-  stringsBankWriteTime: 636305506202140160
+  stringsBankWriteTime: 636305359477287257
   cacheVersion: 2
 --- !u!114 &114000371001714656
 MonoBehaviour:
@@ -106,12 +106,12 @@ MonoBehaviour:
   Path: event:/Events/Target proximity
   guid: e50e4f5fe8aed5499cbe115b0aec0ad3
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114302488362097724}
+  - {fileID: 114390693368126782}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114035750823959610
@@ -658,6 +658,24 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114196780498589388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: C:\Users\enkil\Documents\Unity Projects\ProjectFuckYeah-master\Assets\StreamingAssets\Build\Desktop\Menu.bank
+  lastModified: 636305359491495966
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 589312
+  Exists: 1
 --- !u!114 &114203654114523910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,12 +770,12 @@ MonoBehaviour:
   Path: event:/Events/Boost
   guid: 5855c964d5c5754ca61e710b4842db22
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114967830404418666}
+  - {fileID: 114487209715433840}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114222735771412356
@@ -1272,7 +1290,7 @@ MonoBehaviour:
   Path: event:/Events/Altitude Down
   guid: 67b7d59635ac864dae6eb9b72e943d52
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
@@ -1293,13 +1311,28 @@ MonoBehaviour:
   Path: event:/Musique/Musique menu principal
   guid: 4ab8206ee0feba46a6edaf4468ceda00
   Banks:
-  - {fileID: 114863643253716388}
+  - {fileID: 114196780498589388}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114390693368126782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Distance to Pursuer
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114391053454507430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1321,6 +1354,25 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114393303514241402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Path: C:\Users\enkil\Documents\Unity Projects\ProjectFuckYeah-master\Assets\StreamingAssets\Build\Desktop\Master
+    Bank.bank
+  lastModified: 636305359477257235
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 1737856
+  Exists: 1
 --- !u!114 &114402417989149544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1350,12 +1402,12 @@ MonoBehaviour:
   Path: event:/Events/Moving
   guid: b4d7d74e9f6c1b49b05a07b56cda3dba
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
   Parameters:
-  - {fileID: 114655642039058326}
+  - {fileID: 114939038365816082}
   MinDistance: 0
   MaxDistance: 0
 --- !u!114 &114423270444259638
@@ -1536,6 +1588,21 @@ MonoBehaviour:
   Min: 0
   Max: 1
   Default: 0
+--- !u!114 &114453267099899734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: ReactorPower
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114459937011378784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1671,6 +1738,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Name: Distance to Pursuer
+  Min: 0
+  Max: 1
+  Default: 0
+--- !u!114 &114487209715433840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: EndBoost
   Min: 0
   Max: 1
   Default: 0
@@ -1871,7 +1953,7 @@ MonoBehaviour:
   FileSizes:
   - Name: 
     Value: 1737856
-  Exists: 1
+  Exists: 0
 --- !u!114 &114550411613686382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2020,7 +2102,7 @@ MonoBehaviour:
   Path: event:/Musique/Musique InGame
   guid: 928c5d36c11f7c44b45881177939a209
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 1
   Is3D: 1
   IsOneShot: 0
@@ -2316,7 +2398,7 @@ MonoBehaviour:
   Path: event:/Events/InTrail
   guid: 84ea4d50f087b047bee9ce286efae251
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 0
   IsOneShot: 0
@@ -2400,12 +2482,12 @@ MonoBehaviour:
   Path: event:/Events/Reactor
   guid: 2b7b28ba76a0394ab0844f7e056c1a6d
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 0
   Parameters:
-  - {fileID: 114642409695204176}
+  - {fileID: 114453267099899734}
   MinDistance: 1
   MaxDistance: 20
 --- !u!114 &114703803368031776
@@ -2473,7 +2555,7 @@ MonoBehaviour:
   Path: event:/Events/Collision Bounce
   guid: e411c969a933af40a62c5cd3aca3fe0a
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -2882,7 +2964,7 @@ MonoBehaviour:
   Path: event:/Events/Impulse
   guid: 4596eb12e4013c4d8d8097e816047ab5
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -2979,7 +3061,7 @@ MonoBehaviour:
   FileSizes:
   - Name: 
     Value: 589312
-  Exists: 1
+  Exists: 0
 --- !u!114 &114872529240913868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3009,7 +3091,7 @@ MonoBehaviour:
   Path: event:/Events/Pick-Up
   guid: 2717e66f4ece654e8d030744e807a1f8
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -3097,7 +3179,7 @@ MonoBehaviour:
   Path: event:/Events/Altitude Up
   guid: 036f647fdb54f148b0680697443ab442
   Banks:
-  - {fileID: 114547356002903412}
+  - {fileID: 114393303514241402}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -3159,7 +3241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Path: Assets\StreamingAssets\Build\Desktop\Master Bank.strings.bank
-  lastModified: 636305506202140160
+  lastModified: 636305359477287257
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -3235,6 +3317,21 @@ MonoBehaviour:
   - {fileID: 114308313359264330}
   MinDistance: 1
   MaxDistance: 20
+--- !u!114 &114939038365816082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: Speed
+  Min: 0
+  Max: 1
+  Default: 0
 --- !u!114 &114940591726423208
 MonoBehaviour:
   m_ObjectHideFlags: 0
