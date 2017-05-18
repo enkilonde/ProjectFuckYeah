@@ -7,6 +7,8 @@ public class PlayerUI : MonoBehaviour
 {
     CharacterV3 charaScript;
 
+    public AnimationCurve textBump;
+
     Text scoreText;
 //    RectTransform speedDisplay;
 //    RectTransform heightDisplay;
@@ -16,6 +18,8 @@ public class PlayerUI : MonoBehaviour
 	Image heightDisplay;
 	Image boostDisplay;
 	Image scoreDisplay;
+
+    Vector3 textScale;
 
     // Use this for initialization
     void Awake ()
@@ -29,13 +33,25 @@ public class PlayerUI : MonoBehaviour
 		heightDisplay = transform.Find("AltiJaugeContainer").Find("AltiJauge").GetComponent<Image>();
 		boostDisplay = transform.Find("BoostJaugeContainer").Find("BoostJauge").GetComponent<Image>();
 		scoreDisplay = transform.Find("ScoreJauge").GetComponent<Image>();
+        textScale = scoreText.transform.localScale;
 	}
 
     // Update is called once per frame
     void Update ()
     {
-
+        
         scoreText.text = "Score : " + (int)charaScript.currentScore;
+
+        if(charaScript.flagBehavoirScript != null && charaScript.flagBehavoirScript.targetPlayer != null && charaScript.flagBehavoirScript.targetPlayer == charaScript)
+        {
+            scoreText.color = Color.green;
+            scoreText.transform.localScale = textScale * textBump.Evaluate(Mathf.Repeat(Time.time, 1));
+        }
+        else
+        {
+            scoreText.color = Color.white;
+            scoreText.transform.localScale = textScale;
+        }
 
         //speedDisplay.size = Mathf.InverseLerp(0, charaScript.minAltMaxSpeed, charaScript.currentFwdSpeed);
         //heightDisplay.size = Mathf.InverseLerp(0, charaScript.maxAltitude, charaScript.currentAltitude);
@@ -48,5 +64,8 @@ public class PlayerUI : MonoBehaviour
 		heightDisplay.fillAmount = charaScript.getHeightRatio();
 		boostDisplay.fillAmount = Mathf.InverseLerp(0, 1, charaScript.currentBoostAmountLeft);
 		scoreDisplay.fillAmount = charaScript.currentScore / GameManager.targetScoreToWin;
+
+
+
     }
 }
