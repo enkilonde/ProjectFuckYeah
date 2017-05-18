@@ -39,6 +39,8 @@ public class MenuManager : MonoBehaviour
     {
         if (isLoading) return;
 
+        LoadingScreen.get().LaunchAnim(5, 2);
+
         isLoading = true;
 
         nextLevel = levelName;

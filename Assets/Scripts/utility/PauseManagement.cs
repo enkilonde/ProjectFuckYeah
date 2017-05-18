@@ -57,6 +57,9 @@ public class PauseManagement : MonoBehaviour
         TogglePause(false);
         PlayerManager.loadingEnded = false;
         string currentScene = SceneManager.GetActiveScene().name;
+
+        LoadingScreen.get().LaunchAnim(5, 2);
+
         if (SceneManager.GetSceneByName(menuSceneName).isLoaded)
         {
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(menuSceneName));
