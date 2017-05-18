@@ -38,13 +38,20 @@ public class MenuManager : MonoBehaviour
     public void Play(string levelName)
     {
         if (isLoading) return;
+        StartCoroutine(waitBlackScreen(levelName));
 
-        LoadingScreen.get().LaunchAnim(5, 2);
+    }
+
+    IEnumerator waitBlackScreen(string levelName)
+    {
+        LoadingScreen.get().LaunchAnim(5, 1.5f);
+
+        yield return new WaitForSeconds(0.25f);
 
         isLoading = true;
 
         nextLevel = levelName;
-        
+
         SceneManager.LoadSceneAsync(levelName, LoadSceneMode.Additive);
         SoundManager.instance.OnButtonClicked();
 
