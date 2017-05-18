@@ -39,9 +39,9 @@ public class PPTManager : MonoBehaviour {
         if (timing > 0) return;
 
 
-        if (Input.GetKeyDown(KeyCode.Keypad4) || controller.Get_LatRightBoostInput()!= 0) changeSlide(1);
+        if (Input.GetKeyDown(KeyCode.Keypad6) || controller.Get_LatRightBoostInput()!= 0) changeSlide(1);
 
-        if (Input.GetKeyDown(KeyCode.Keypad6) || controller.Get_LatLeftBoostInput() != 0) changeSlide(-1);
+        if (Input.GetKeyDown(KeyCode.Keypad4) || controller.Get_LatLeftBoostInput() != 0) changeSlide(-1);
 
         if (Input.GetMouseButtonUp(2) || controller.Get_SelectInput() != 0) TogglePPT(false);
 

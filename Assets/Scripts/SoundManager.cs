@@ -181,28 +181,17 @@ public class SoundManager : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
-        if (/*direction < 0.5f*/true)
-        {
-            while (!Mathf.Approximately(direction, volume))
-            {
-                //sound.setVolume(volume - Time.deltaTime * speed);
-                sound.setVolumeClamped(Mathf.MoveTowards(volume, direction, Time.deltaTime * speed), 0, musicVolume);
-                sound.getVolume(out volume, out finalVolume);
-                yield return null;
-            }
-            sound.setVolumeClamped(direction, 0, musicVolume);
-        }
-        else
-        {
-            while (!Mathf.Approximately(1, volume))
-            {
-                sound.setVolumeClamped(volume + Time.deltaTime * speed, 0, musicVolume);
-                sound.getVolume(out volume, out finalVolume);
-                yield return null;
-            }
-            sound.setVolumeClamped(1, 0, musicVolume);
+        direction = Mathf.Clamp(direction, 0, musicVolume);
 
+
+        while (!Mathf.Approximately(direction, volume))
+        {
+            //sound.setVolume(volume - Time.deltaTime * speed);
+            sound.setVolumeClamped(Mathf.MoveTowards(volume, direction, Time.deltaTime * speed), 0, musicVolume);
+            sound.getVolume(out volume, out finalVolume);
+            yield return null;
         }
+        sound.setVolumeClamped(direction, 0, musicVolume);
 
         if (soundNext != null)
         {
