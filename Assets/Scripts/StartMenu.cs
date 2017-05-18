@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class StartMenu : MonoBehaviour {
 
+    public AnimationCurve alpha;
+    public Text texte;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -17,7 +20,7 @@ public class StartMenu : MonoBehaviour {
         {
             Destroy(gameObject);
         }
-
+        texte.color = new Color(texte.color.r, texte.color.g, texte.color.b, alpha.Evaluate(Mathf.Repeat(Time.time / 2, 1)));
 
 
 	}
